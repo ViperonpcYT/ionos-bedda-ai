@@ -28,9 +28,9 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake libssl-dev
-
+          apt-get update
+          apt-get install -y build-essential cmake libssl-dev
+          
       - name: Configure (portable, static, CPU-only)
         run: |
           cmake -B build \

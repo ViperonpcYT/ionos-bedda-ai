@@ -1,0 +1,68 @@
+on:
+  workflow_dispatch:
+    inputs:
+      llama_ref:
+        description: 'llama.cpp git ref to build'
+        required: true
+        default: 'b4279'
+        type: string
+      model_name:
+        description: 'HuggingFace model repo'
+        required: true
+        default: 'Qwen/Qwen2.5-0.5B-Instruct-GGUF'
+        type: string
+      model_file:
+        description: 'GGUF filename'
+        required: true
+        default: 'qwen2.5-0.5b-instruct-q4_k_m.gguf'
+        type: string
+
+jobs:
+  build-binary:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Checkout llama.cpp
+        uses: actions/checkout@v4
+        with:
+          repository: ggerganov/llama.cpp
+          ref: ${{ inputs.llama_ref }}
+      - name: Install build dependencies
+        run: |
+          apt-get update
+          apt-get install -y build-essential ca-certificates cmake git libssl-dev pkg-config file binutils
+      - name: Configure llama.cpp
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=ON -DLLAMA_CUDA=OFF -DLLAMA_METAL=OFF -DLLAMA_VULKAN=OFF -DLLAMA_SYCL=OFF -DLLAMA_CURL=OFF -DBUILD_SHARED_LIBS=OFF -DGGML_BACKEND_DL=OFF -DGGML_NATIVE=OFF
+      - name: Build llama-cli
+        run: cmake --build build --config Release -j$(nproc) --target llama-cli
+      - name: Verify GLIBC compatibility
+        run: |
+          echo "=== GLIBC requirements ==="
+          objdump -T build/bin/llama-cli | grep -o 'GLIBC_[0-9.]*' | sort -u | tee /tmp/glibc.txt || true
+          if grep -E 'GLIBC_2\.(3[2-9]|[4-9][0-9])' /tmp/glibc.txt; then echo "ERROR: binary requires GLIBC > 2.31"; exit 1; fi
+          echo "✅ Compatible with GLIBC 2.31"
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: llama-cli-ionos
+          path: build/bin/llama-cli
+          if-no-files-found: error
+  download-model:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Qwen2.5-0.5B GGUF
+        run: |
+          mkdir -p model-output
+          curl -L -o "model-output/${{ inputs.model_file }}" "https://huggingface.co/${{ inputs.model_name }}/resolve/main/${{ inputs.model_file }}"
+      - name: Verify model file
+        run: ls -lh model-output/ && file model-output/*.gguf
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2.5-0.5b-instruct-q4_k_m
+          path: model-output/${{ inputs.model_file }}
+          if-no-files-found: error

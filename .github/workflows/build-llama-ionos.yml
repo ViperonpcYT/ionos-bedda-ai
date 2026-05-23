@@ -1,0 +1,66 @@
+name: Build llama-cli for Ionos Shared Hosting (GLIBC 2.31)
+
+# This workflow builds a llama-cli binary compatible with Ionos shared hosting,
+# which runs on an older Linux distribution with GLIBC 2.31 and OpenSSL 1.1.1.
+#
+# Trigger: manually from the Actions tab on GitHub
+# Output: artifact named "llama-cli-ionos" containing a single static-ish binary
+
+on:
+  workflow_dispatch:
+    inputs:
+      llama_ref:
+        description: 'llama.cpp git ref (tag/branch/commit) to build'
+        required: true
+        default: 'b4279'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout llama.cpp
+        uses: actions/checkout@v4
+        with:
+          repository: ggerganov/llama.cpp
+          ref: ${{ inputs.llama_ref }}
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libssl-dev
+
+      - name: Configure (portable, static, CPU-only)
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DLLAMA_BUILD_TESTS=OFF \
+            -DLLAMA_BUILD_EXAMPLES=ON \
+            -DLLAMA_CUDA=OFF \
+            -DLLAMA_METAL=OFF \
+            -DLLAMA_VULKAN=OFF \
+            -DLLAMA_SYCL=OFF \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DGGML_BACKEND_DL=OFF \
+            -DGGML_NATIVE=OFF
+
+      - name: Build llama-cli
+        run: cmake --build build --config Release -j$(nproc) --target llama-cli
+
+      - name: Verify binary dependencies
+        run: |
+          echo "=== ldd output ==="
+          ldd build/bin/llama-cli || true
+          echo ""
+          echo "=== GLIBC requirements ==="
+          objdump -T build/bin/llama-cli | grep -o 'GLIBC_[0-9.]*' | sort -u || true
+          echo ""
+          echo "=== File info ==="
+          file build/bin/llama-cli
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: llama-cli-ionos
+          path: build/bin/llama-cli
+          if-no-files-found: error

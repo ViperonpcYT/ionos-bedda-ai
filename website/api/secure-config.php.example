@@ -1,0 +1,24 @@
+<?php
+/**
+ * EXAMPLE ONLY — Bedda uses `api/secure-config.php` (same folder as customer-auth.php).
+ *
+ * On Ionos: edit the REAL secure-config.php with values from Ionos → Databases + Stripe + hCaptcha.
+ * Do not commit real secrets to git.
+ *
+ * If APIs return "DB config missing", the file exists but MySQL fields inside are empty or wrong.
+ */
+
+declare(strict_types=1);
+
+return [
+    'DB_HOST' => 'YOUR_DB_HOST.hosting-data.io',
+    'DB_NAME' => 'YOUR_DATABASE_NAME',
+    'DB_USER' => 'YOUR_DATABASE_USER',
+    'DB_PASS' => 'YOUR_DATABASE_PASSWORD',
+    'DB_CHARSET' => 'utf8mb4',
+    'STRIPE_SECRET_KEY' => 'sk_test_or_sk_live_...',
+    'STRIPE_WEBHOOK_SECRET' => 'whsec_...',
+    'HCAPTCHA_SECRET' => 'YOUR_HCAPTCHA_SECRET',
+    'MAIL_FROM' => 'orders@bedda.ca',
+    'SITE_URL' => 'https://bedda.ca',
+];

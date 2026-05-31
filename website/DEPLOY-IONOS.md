@@ -1,5 +1,48 @@
 # Fix Bedda production (bedda.ca)
 
+## Urgent: all `/api/*` return Apache 500 HTML
+
+If the browser shows generic **“500 Internal Server Error”** HTML (not JSON), the whole `api/` folder is broken at the **Apache** layer — usually a bad **`api/.htaccess`** (forbidden `php_value` / `php_flag` or broken `RewriteRule` on Ionos).
+
+### Fix (5 minutes)
+
+1. Ionos → **File Manager** → `api/`
+2. **Delete** the current `api/.htaccess` (or rename to `.htaccess.broken`)
+3. Upload the new **`website/api/.htaccess`** from this repo (minimal, Ionos-safe)
+4. Upload **`website/api/health.php`** and test:
+
+```text
+https://bedda.ca/api/health.php
+```
+
+Expected: JSON like `{"ok":true,"db_configured":true,...}` — **not** HTML 500.
+
+5. Then test auth:
+
+```text
+https://bedda.ca/api/customer-auth.php?action=me
+```
+
+Expected: JSON `401` for guests — **not** HTML 500.
+
+6. Test logging:
+
+```bash
+curl -sS -X POST https://bedda.ca/api/log-event.php \
+  -H "Content-Type: application/json" \
+  -d '{"events":[{"event_type":"ping","session_id":"test","user_id":"test","page":"/","data":{}}]}'
+```
+
+Expected: `{"success":true,"stored":1}` (or `stored:0` if DB down — still JSON 200).
+
+### PHP files on the server
+
+If APIs already worked before (you saw JSON like `"DB config missing"`), **do not replace** your existing PHP endpoints — only fix `.htaccess` first.
+
+If `api/` is missing PHP files, upload everything under `website/api/` **except** `secure-config.test.php` and `data/`.
+
+---
+
 ## The config file (correct name)
 
 Your project uses:
@@ -8,46 +51,49 @@ Your project uses:
 
 (on your PC: `Ionos Bedda Website\api\secure-config.php`)
 
-That is the right file — **not** `config.local.php` (that was my mistake).
+Legacy name `config.local.php` is still supported as a fallback.
 
-On the live server, `secure-config.php` **already exists** (browser gets 403 Forbidden, which is normal — secrets must not be public). The error **`DB config missing`** means PHP can’t load **valid database credentials from that file** — usually because:
+On the live server, `secure-config.php` **must not** be public (browser should get **403 Forbidden** — that is correct).
 
-1. The copy on Ionos has **empty or placeholder** DB host/name/user/password  
-2. Your **local** file is correct but **was never uploaded** (or an old version is on the server)  
-3. Values don’t match **Ionos → Databases** (wrong host, database name, or user)  
-4. File **permissions** on Ionos stop PHP from reading it (try 640, owner = web user)
+The error **`DB config missing`** (JSON **503**) means PHP runs but MySQL fields inside `secure-config.php` are empty or wrong:
 
-## Fix on Ionos
+1. Copy on Ionos has **placeholder** DB host/name/user/password
+2. **Local** file was never uploaded
+3. Values don’t match **Ionos → Databases**
+4. File **permissions** block PHP (try `640`)
+
+### Fix database config on Ionos
 
 1. Open **Ionos → File Manager → `api/`**
-2. Open **`secure-config.php`** on the server and your local copy side by side
-3. Ensure the **MySQL section** matches Ionos database panel exactly:
-   - Host (often `dbXXXXXXXX.hosting-data.io`, not always `localhost`)
-   - Database name  
-   - Username  
-   - Password  
-4. Ensure **Stripe secret key** and **hCaptcha secret** are filled (not placeholders)
-5. **Save** and re-upload if you edited locally
-6. Test:
+2. Edit **`secure-config.php`** with values from Ionos **Databases** + Stripe + hCaptcha
+3. Save and re-test `customer-auth.php?action=me`
 
-```text
-https://bedda.ca/api/customer-auth.php?action=me
+---
+
+## Run API tests locally (before uploading)
+
+From the repo:
+
+```bash
+chmod +x website/scripts/test-api.sh
+./website/scripts/test-api.sh
 ```
 
-Should return JSON like `{"success":false,...}` or guest 401 — **not** `"DB config missing"`.
+This starts PHP’s built-in server and verifies `health.php`, `log-event.php`, and `customer-auth.php`.
 
-## Other fixes in `website/` (frontend)
+---
 
-Upload to web root if not already on Ionos:
+## Other frontend files in `website/`
 
-| File | Fix |
-|------|-----|
-| `bedda-ai.js` | FAQ answers when backend is down |
-| `main.js` | Cart modal + `?openCart=1` |
-| `cart.html`, `.htaccess` | `/cart` no longer 404 |
-| Legal `*-policy.html` pages | Were missing |
-| Updated `*.html` footers | Links to legal pages |
+Upload to web root when changed:
+
+| File | Purpose |
+|------|---------|
+| `bedda-ai.js` | AI widget + offline FAQ fallback |
+| `main.js` | Cart, auth, checkout |
+| `cart.html`, `.htaccess` | `/cart` redirect |
+| Legal `*-policy.html` | Policy pages |
 
 ## Best setup for Cursor
 
-Open the **`Ionos Bedda Website`** folder in Cursor (not `ionos-bedda-ai`) so agents can read `secure-config.php` structure and deploy safely.
+Open the **`Ionos Bedda Website`** folder (full PHP tree) **or** this repo after `website/api/` is committed, so agents can edit and test APIs safely.

@@ -2898,9 +2898,16 @@ async function checkAuthStatus() {
                 if (!cached) updateLoginButtonState(false);
                 return;
             }
+            if (response.status === 500) {
+                console.warn('Auth API unavailable (server error). Using cached session if available.');
+                if (!cached) updateLoginButtonState(false);
+                return;
+            }
             const errText = await response.text();
-            console.error('Server error response:', errText);
-            throw new Error(`HTTP ${response.status}: ${errText}`);
+            const preview = errText.startsWith('<!DOCTYPE') ? 'HTML error page' : errText.slice(0, 200);
+            console.error('Server error response:', preview);
+            if (!cached) updateLoginButtonState(false);
+            return;
         }
 
         const data = await response.json();
@@ -2916,7 +2923,7 @@ async function checkAuthStatus() {
             updateLoginButtonState(false);
         }
     } catch (err) {
-        console.error('Auth check error:', err);
+        console.warn('Auth check unavailable:', err.message || err);
         if (!cached) updateLoginButtonState(false);
     }
 }

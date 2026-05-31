@@ -1,0 +1,22 @@
+# Bedda API — Ionos shared hosting
+#
+# IMPORTANT: Do NOT add php_value, php_flag, or RewriteRule blocks here.
+# Those commonly cause Apache 500 for the entire /api/ directory on Ionos.
+#
+# If every URL under /api/ returns generic "500 Internal Server Error" HTML,
+# replace this file on the server (delete the old api/.htaccess first).
+
+Options -Indexes
+
+# Block direct access to secret config files (403 Forbidden is expected)
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(secure-config|config\.local)\.php$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <FilesMatch "^(secure-config|config\.local)\.php$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

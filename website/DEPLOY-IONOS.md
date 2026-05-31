@@ -6,9 +6,10 @@ If the browser shows generic **“500 Internal Server Error”** HTML (not JSON)
 
 ### Fix (5 minutes)
 
-1. Ionos → **File Manager** → `api/`
-2. **Delete** the current `api/.htaccess` (or rename to `.htaccess.broken`)
-3. Upload the new **`website/api/.htaccess`** from this repo (minimal, Ionos-safe)
+**Cause:** The old `api/.htaccess` included `php_flag` / `php_value` under `<IfModule mod_php.c>` — Ionos returns **500 for the whole `/api/` folder** when those are present.
+
+1. Ionos → **File Manager** or FileZilla → `api/`
+2. **Replace** `api/.htaccess` with **`website/api/.htaccess`** from this repo (same security rules, no PHP directives in `.htaccess`)
 4. Upload **`website/api/health.php`** and test:
 
 ```text

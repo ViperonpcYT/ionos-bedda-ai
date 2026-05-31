@@ -1,0 +1,15 @@
+# EMERGENCY FALLBACK — use only if .htaccess still causes 500 on Ionos
+# Upload as api/.htaccess (rename/replace the main file temporarily)
+
+Options -Indexes
+
+<FilesMatch "^(secure-config|config\.local|\.env)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(logs|rate-limits|spam-logs|orders|includes)/ - [F,L]
+</IfModule>

@@ -1,0 +1,32 @@
+<?php
+/**
+ * Bedda production secrets — Ionos shared hosting
+ *
+ * 1. Copy this file to `api/config.local.php` on your Ionos server (same folder as config.php).
+ * 2. Fill in values from Ionos → Hosting → Databases (MySQL) and Stripe Dashboard.
+ * 3. Never commit `config.local.php` to git.
+ *
+ * This file is REQUIRED. Without it every API returns: {"success":false,"message":"DB config missing"}
+ */
+
+declare(strict_types=1);
+
+return [
+    // --- MySQL (Ionos database panel) ---
+    'DB_HOST' => 'YOUR_DB_HOST.hosting-data.io',  // e.g. db123456789.hosting-data.io
+    'DB_NAME' => 'YOUR_DATABASE_NAME',
+    'DB_USER' => 'YOUR_DATABASE_USER',
+    'DB_PASS' => 'YOUR_DATABASE_PASSWORD',
+    'DB_CHARSET' => 'utf8mb4',
+
+    // --- Stripe (Dashboard → Developers → API keys) ---
+    'STRIPE_SECRET_KEY' => 'sk_test_or_sk_live_...',
+    'STRIPE_WEBHOOK_SECRET' => 'whsec_...',
+
+    // --- hCaptcha (matches main-security.js site key) ---
+    'HCAPTCHA_SECRET' => 'YOUR_HCAPTCHA_SECRET',
+
+    // --- Email / site ---
+    'MAIL_FROM' => 'orders@bedda.ca',
+    'SITE_URL' => 'https://bedda.ca',
+];

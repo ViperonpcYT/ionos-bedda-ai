@@ -12,6 +12,7 @@ This repository defines **GitHub Actions workflows** that build a portable **lla
 | `.github/workflows/build-llama-qwen-ionos.yml` | CI: build binary + download GGUF artifact |
 | `.dev/llama.cpp` | Local clone of [ggerganov/llama.cpp](https://github.com/ggerganov/llama.cpp) at ref `b4279` (not committed) |
 | `.dev/llama.cpp/build/bin/llama-cli` | Locally built CLI |
+| `.dev/llama.cpp/build/bin/llama-server` | HTTP server + built-in web UI (for VM/browser testing) |
 | `.dev/models/` | Optional GGUF files for local inference tests (not committed) |
 
 ### System packages (one-time on a fresh VM)
@@ -46,7 +47,7 @@ cmake -B build \
   -DBUILD_SHARED_LIBS=OFF \
   -DGGML_BACKEND_DL=OFF \
   -DGGML_NATIVE=OFF
-cmake --build build --config Release -j"$(nproc)" --target llama-cli
+cmake --build build --config Release -j"$(nproc)" --target llama-cli llama-server
 ```
 
 Verify the binary:
@@ -74,6 +75,29 @@ curl -L -o .dev/models/qwen2.5-0.5b-instruct-q4_k_m.gguf \
   -p "Say hello in one short sentence." \
   -n 32
 ```
+
+### Browser / human testing (llama-server)
+
+This repo has **no website frontend** of its own. For manual browser tests on a Cloud VM, use **llama.cpp’s bundled server** (not Ionos production code).
+
+Start in tmux (keeps running after the agent session):
+
+```bash
+SESSION_NAME=llama-server
+tmux -f /exec-daemon/tmux.portal.conf has-session -t "=$SESSION_NAME" 2>/dev/null || \
+  tmux -f /exec-daemon/tmux.portal.conf new-session -d -s "$SESSION_NAME" -c /workspace/.dev/llama.cpp/build/bin -- \
+  ./llama-server -m /workspace/.dev/models/qwen2.5-0.5b-instruct-q4_k_m.gguf --host 0.0.0.0 --port 8080
+```
+
+In **Cursor Cloud**, open the **Desktop** pane (VM display), then visit:
+
+- Web chat UI: http://localhost:8080
+- Health: http://localhost:8080/health → `{"status":"ok"}`
+- OpenAI-compatible API: `POST http://localhost:8080/v1/chat/completions`
+
+The stock web UI may show a JavaScript error after sending a message; the model still responds (dismiss the dialog). Prefer the API for stable automation.
+
+Attach to logs: `tmux -f /exec-daemon/tmux.portal.conf attach-session -t llama-server`
 
 ### Lint / test
 

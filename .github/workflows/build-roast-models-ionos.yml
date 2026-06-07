@@ -1,109 +1,110 @@
-name: Build Roast Judge Model for Ionos (GLIBC 2.31)
-
-# Agent 4 local judge: Qwen2.5-1.5B-Instruct Q4_K_M + llama-cli
-# Agents 1–3 use cloud APIs only (Groq → OpenRouter) — no VLM on shared hosting.
-
-on:
-  workflow_dispatch:
-    inputs:
-      llama_ref:
-        description: 'llama.cpp git ref'
-        required: true
-        default: 'b5289'
-        type: string
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:20.04
-    env:
-      DEBIAN_FRONTEND: noninteractive
-    steps:
-      - name: Checkout llama.cpp
-        uses: actions/checkout@v4
-        with:
-          repository: ggml-org/llama.cpp
-          ref: ${{ inputs.llama_ref }}
-
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y build-essential ca-certificates cmake git libssl-dev pkg-config file python3 python3-pip curl
-
-      - name: Install huggingface-hub
-        run: pip3 install huggingface-hub
-
-      - name: Configure llama.cpp (CPU portable)
-        run: |
-          cmake -B build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DLLAMA_BUILD_TESTS=OFF \
-            -DLLAMA_BUILD_EXAMPLES=ON \
-            -DLLAMA_CUDA=OFF \
-            -DLLAMA_METAL=OFF \
-            -DBUILD_SHARED_LIBS=OFF \
-            -DGGML_BACKEND_DL=OFF \
-            -DGGML_NATIVE=OFF
-
-      - name: Build llama-cli
-        run: cmake --build build --config Release -j$(nproc) --target llama-cli
-
-      - name: Download Qwen2.5-1.5B judge GGUF
-        run: |
-          mkdir -p models
-          python3 <<'PY'
-          from huggingface_hub import hf_hub_download
-          hf_hub_download(
-              repo_id="Qwen/Qwen2.5-1.5B-Instruct-GGUF",
-              filename="qwen2.5-1.5b-instruct-q4_k_m.gguf",
-              local_dir="models",
-              local_dir_use_symlinks=False,
-          )
-          PY
-          ls -la models/
-
-      - name: Verify GLIBC
-        run: |
-          objdump -T build/bin/llama-cli | grep -o 'GLIBC_[0-9.]*' | sort -u | tee /tmp/glibc.txt
-          if grep -E 'GLIBC_2\.(3[2-9]|[4-9])' /tmp/glibc.txt; then
-            echo "ERROR: GLIBC too new for Ionos"
-            exit 1
-          fi
-
-      - name: Upload llama-cli
-        uses: actions/upload-artifact@v4
-        with:
-          name: roast-llama-cli-ionos
-          path: build/bin/llama-cli
-          if-no-files-found: error
-
-      - name: Upload judge model
-        uses: actions/upload-artifact@v4
-        with:
-          name: roast-judge-model-ionos
-          path: models/qwen2.5-1.5b-instruct-q4_k_m.gguf
-          if-no-files-found: error
-
-      - name: Write manifest
-        run: |
-          cat > models/ROAST-DEPLOY-MANIFEST.txt <<'EOF'
-          Upload to Ionos:
-            /htdocs/llama-b9285/llama-cli
-            /htdocs/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
-
-          api/.env:
-          ROAST_PIPELINE_MODE=cloud_first
-          ROAST_GROQ_API_KEY=gsk_...
-          ROAST_OPENROUTER_API_KEY=sk-or-...
-          ROAST_JUDGE_GGUF=/homepages/.../htdocs/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
-
-          Vision (Agents 1-3): Groq llama-3.2-11b-vision-preview
-          Judge (Agent 4): local Qwen2.5-1.5B → Groq llama-3.1-8b-instant → OpenRouter qwen-2.5-1.5b
-          EOF
-
-      - name: Upload manifest
-        uses: actions/upload-artifact@v4
-        with:
-          name: roast-deploy-manifest
-          path: models/ROAST-DEPLOY-MANIFEST.txt
+name: Build Roast Judge Model for Ionos (GLIBC 2.31)
+
+# Agent 4 local judge: Qwen2.5-1.5B-Instruct Q4_K_M + llama-cli
+# Agents 1–3 use cloud APIs only (Groq → OpenRouter) — no VLM on shared hosting.
+
+on:
+  workflow_dispatch:
+    inputs:
+      llama_ref:
+        description: 'llama.cpp git ref'
+        required: true
+        default: 'b5289'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Checkout llama.cpp
+        uses: actions/checkout@v4
+        with:
+          repository: ggml-org/llama.cpp
+          ref: ${{ inputs.llama_ref }}
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y build-essential ca-certificates cmake git libssl-dev libcurl4-openssl-dev pkg-config file python3 python3-pip curl
+
+      - name: Install huggingface-hub
+        run: pip3 install huggingface-hub
+
+      - name: Configure llama.cpp (CPU portable)
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DLLAMA_BUILD_TESTS=OFF \
+            -DLLAMA_BUILD_EXAMPLES=ON \
+            -DLLAMA_CUDA=OFF \
+            -DLLAMA_METAL=OFF \
+            -DLLAMA_CURL=OFF \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DGGML_BACKEND_DL=OFF \
+            -DGGML_NATIVE=OFF
+
+      - name: Build llama-cli
+        run: cmake --build build --config Release -j$(nproc) --target llama-cli
+
+      - name: Download Qwen2.5-1.5B judge GGUF
+        run: |
+          mkdir -p models
+          python3 <<'PY'
+          from huggingface_hub import hf_hub_download
+          hf_hub_download(
+              repo_id="Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+              filename="qwen2.5-1.5b-instruct-q4_k_m.gguf",
+              local_dir="models",
+              local_dir_use_symlinks=False,
+          )
+          PY
+          ls -la models/
+
+      - name: Verify GLIBC
+        run: |
+          objdump -T build/bin/llama-cli | grep -o 'GLIBC_[0-9.]*' | sort -u | tee /tmp/glibc.txt
+          if grep -E 'GLIBC_2\.(3[2-9]|[4-9])' /tmp/glibc.txt; then
+            echo "ERROR: GLIBC too new for Ionos"
+            exit 1
+          fi
+
+      - name: Upload llama-cli
+        uses: actions/upload-artifact@v4
+        with:
+          name: roast-llama-cli-ionos
+          path: build/bin/llama-cli
+          if-no-files-found: error
+
+      - name: Upload judge model
+        uses: actions/upload-artifact@v4
+        with:
+          name: roast-judge-model-ionos
+          path: models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+          if-no-files-found: error
+
+      - name: Write manifest
+        run: |
+          cat > models/ROAST-DEPLOY-MANIFEST.txt <<'EOF'
+          Upload to Ionos:
+            /htdocs/llama-b9285/llama-cli
+            /htdocs/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+
+          api/.env:
+          ROAST_PIPELINE_MODE=cloud_first
+          ROAST_GROQ_API_KEY=gsk_...
+          ROAST_OPENROUTER_API_KEY=sk-or-...
+          ROAST_JUDGE_GGUF=/homepages/.../htdocs/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+
+          Vision (Agents 1-3): Groq llama-3.2-11b-vision-preview
+          Judge (Agent 4): local Qwen2.5-1.5B → Groq llama-3.1-8b-instant → OpenRouter qwen-2.5-1.5b
+          EOF
+
+      - name: Upload manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: roast-deploy-manifest
+          path: models/ROAST-DEPLOY-MANIFEST.txt

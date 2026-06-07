@@ -21,7 +21,7 @@ jobs:
       DEBIAN_FRONTEND: noninteractive
     steps:
       - name: Workflow version marker
-        run: echo "roast-ionos-build v3 — LLAMA_CURL=OFF + libcurl4-openssl-dev"
+        run: echo "roast-ionos-build v4 — fixed GLIBC check (was false-positive on 2.4/2.7)"
 
       - name: Checkout llama.cpp
         uses: actions/checkout@v4
@@ -68,13 +68,17 @@ jobs:
           PY
           ls -la models/
 
-      - name: Verify GLIBC
+      - name: Verify GLIBC (Ionos max 2.31)
         run: |
           objdump -T build/bin/llama-cli | grep -o 'GLIBC_[0-9.]*' | sort -u | tee /tmp/glibc.txt
-          if grep -E 'GLIBC_2\.(3[2-9]|[4-9])' /tmp/glibc.txt; then
-            echo "ERROR: GLIBC too new for Ionos"
+          echo "Required GLIBC symbols:"
+          cat /tmp/glibc.txt
+          # Fail only on 2.32+ (not 2.4 / 2.7 — old regex was a false positive)
+          if grep -E 'GLIBC_2\.(3[2-9]|[4-9][0-9])' /tmp/glibc.txt; then
+            echo "ERROR: GLIBC too new for Ionos (needs <= 2.31)"
             exit 1
           fi
+          echo "OK: binary compatible with Ionos GLIBC 2.31"
 
       - name: Upload llama-cli
         uses: actions/upload-artifact@v4

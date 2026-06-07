@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       llama_ref:
-        description: 'llama.cpp git ref'
+        description: 'llama.cpp git ref (b4279 = Ionos-proven; use Run workflow, not Re-run failed jobs)'
         required: true
-        default: 'b5289'
+        default: 'b4279'
         type: string
 
 jobs:
@@ -20,6 +20,9 @@ jobs:
     env:
       DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: Workflow version marker
+        run: echo "roast-ionos-build v3 — LLAMA_CURL=OFF + libcurl4-openssl-dev"
+
       - name: Checkout llama.cpp
         uses: actions/checkout@v4
         with:
@@ -36,6 +39,7 @@ jobs:
 
       - name: Configure llama.cpp (CPU portable)
         run: |
+          echo "CMake flags include -DLLAMA_CURL=OFF"
           cmake -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DLLAMA_BUILD_TESTS=OFF \

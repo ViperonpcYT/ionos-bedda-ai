@@ -1,5 +1,3 @@
-name: Build llama-cli + Qwen2.5-0.5B for Ionos
-
 on:
   workflow_dispatch:
     inputs:

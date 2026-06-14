@@ -1,0 +1,106 @@
+{
+  "version": "1.0",
+  "source": "bedda.ca public pages",
+  "sections": [
+    {
+      "id": "company",
+      "keywords": ["who", "about", "founder", "josie", "story", "mother", "beautiful", "bedda mean", "name", "legacy", "family"],
+      "content": "Bedda is a Sicilian-Italian word meaning 'beautiful.' Founded by Josie Chaves in Mississauga, Ontario. Josie grew up in a Canadian-Sicilian home where 'bedda' was how her mom poured love into every conversation. Josie's mother passed away at 69. Josie is now a mother to three children. Her youngest has special needs. She created Bedda to honor her mother's legacy — a line of gentle, non-toxic products that heal, nurture, and celebrate natural beauty. Philosophy: Transparency First, Skin Health Focus, Science-Backed."
+    },
+    {
+      "id": "process",
+      "keywords": ["how", "made", "process", "cold process", "cure", "curing", "method", "craft", "handmade"],
+      "content": "Our soaps are made using the traditional cold process method, preserving the beneficial properties of each ingredient. Each soap bar cures for 4-6 weeks, allowing for optimal hardness and gentleness on the skin. Small-batch production in Mississauga."
+    },
+    {
+      "id": "shipping",
+      "keywords": ["ship", "shipping", "delivery", "how long", "arrive", "tracking", "mail", "send", "canada", "vancouver", "toronto", "pickup", "local"],
+      "content": "We ship Canada-wide via ChitChats, usually within 2-7 business days. Local pickup is available in Mississauga by appointment after order confirmation. Contact: orders@bedda.ca."
+    },
+    {
+      "id": "ingredients_overview",
+      "keywords": ["ingredient", "tallow", "beef", "oil", "olive", "coconut", "essential oil", "vitamin", "natural", "what's in", "made of"],
+      "content": "Our soaps use tallow (beef tallow), olive oil (olivate), coconut oil (sodium cocate), and essential oils. Tallow has a fatty acid profile similar to human sebum, containing oleic, stearic, and palmitic acids that reinforce the skin barrier. It creates a hard, long-lasting bar with creamy lather that doesn't strip natural oils. Vitamins A, D, E, and K do not survive saponification, but beneficial unsaponified fatty acids remain, providing moisturizing and barrier-supporting benefits."
+    },
+    {
+      "id": "product_plain_jane",
+      "keywords": ["plain jane", "unscented", "eczema", "rosacea", "sensitive", "dry skin", "gentle", "baby"],
+      "content": "Plain Jane - Unscented Tallow Soap. $5.60 for 100g bar. SKU: BEDDA-PLAINJANE-LOAF. Designed for dry skin, eczema, and rosacea. Handcrafted in Mississauga. Moisturizes without stripping natural oils. No scent, no essential oils. Olivate (olive oil), tallowate (beef tallow), sodium cocate (coconut oil)."
+    },
+    {
+      "id": "product_uni",
+      "keywords": ["uni", "cinnamon", "lemon", "lavender", "exfoliating", "unisex", "rough", "smooth", "tone"],
+      "content": "Uni - Exfoliating Soap. $5.60 for 100g bar. SKU: BEDDA-UNI-EXFOL. Best Seller. Unisex. Smooths rough patches and evens skin tone with natural cinnamon exfoliation. Lemon and lavender oils provide a refreshing feel. Ingredients: olivate (olive oil), tallowate (beef tallow), sodium cocate (coconut oil), lemon essential oil, lavender essential oil, organic cinnamon."
+    },
+    {
+      "id": "product_he_man",
+      "keywords": ["he-man", "he man", "rosemary", "cedarwood", "patchouli", "men", "mens", "workout", "muscle", "beard", "face", "body"],
+      "content": "He-Man - Exfoliating Soap. $5.99 for 100g bar. SKU: BEDDA-HEMAN-EXFOL. Premium. Men's. Top Rated. Natural rosemary exfoliation helps improve skin elasticity. Cedarwood, lavender, and patchouli essential oils provide a balanced scent that soothes muscles. Reduces post-workout odor while calming tired muscles. Ideal for face, body, and beard. Ingredients: olivate (olive oil), tallowate (beef tallow), sodium cocate (coconut oil), cedarwood essential oil, lavender essential oil, patchouli essential oil, rosemary."
+    },
+    {
+      "id": "product_she_ra",
+      "keywords": ["she-ra", "she ra", "turmeric", "orange", "women", "womens", "brighten", "dull", "glow"],
+      "content": "She-Ra - Exfoliating Soap. $5.75 for 100g bar. SKU: BEDDA-SHERA-EXFOL. New. Women's. Just Launched. Brightens dull skin and promotes a healthy glow with turmeric and orange essential oils. Gentle enough for daily use. Ingredients: olivate (olive oil), tallowate (beef tallow), sodium cocate (coconut oil), turmeric essential oil, orange essential oil."
+    },
+    {
+      "id": "product_massager",
+      "keywords": ["massager", "massage", "muscle tension", "sore", "textured", "muscle", "relief"],
+      "content": "The Massager - Textured Soap. $6.25 for 100g bar. SKU: BEDDA-MASSAGER. Features a unique textured design that massages sore muscles and relieves tension. Infused with lavender essential oil for relaxation. Ingredients: olivate (olive oil), tallowate (beef tallow), sodium cocate (coconut oil), lavender essential oil."
+    },
+    {
+      "id": "product_special_occasion",
+      "keywords": ["special occasion", "gift", "heart", "design", "lemon", "lavender", "rubia", "cordifolia", "present"],
+      "content": "Special Occasion Soap. $8.99 for 100g bar. SKU: BEDDA-SPECIAL. Features a hidden heart design inside the bar. Scented with lemon and lavender essential oils. Contains Rubia Cordifolia (Manjistha) for its skin-brightening properties. Perfect as a gift."
+    },
+    {
+      "id": "product_whipped_balm",
+      "keywords": ["whipped", "balm", "moisturizer", "night", "nightly", "dry", "normal", "rich"],
+      "content": "Whipped Tallow Balm. Rich nightly moisturizer for dry to normal skin. Made with grass-fed beef tallow, olive oil, and essential oils. Deeply nourishing for overnight repair."
+    },
+    {
+      "id": "product_lavender_lotion",
+      "keywords": ["lavender lotion", "lotion", "daily", "lighter", "moisturizer", "day"],
+      "content": "Lavender Tallow Lotion. Lighter daily moisturizer. Perfect for daytime use. Contains tallow, olive oil, coconut oil, and lavender essential oil. Absorbs quickly without greasiness."
+    },
+    {
+      "id": "product_herbal_bundle",
+      "keywords": ["herbal bundle", "herbal", "bar", "oily", "acne", "prone", "clarifying"],
+      "content": "Herbal Bundle Bar. For oily and acne-prone skin. Clarifying blend of herbs and essential oils that help balance oil production without over-drying."
+    },
+    {
+      "id": "product_lip_balm",
+      "keywords": ["lip balm", "beeswax", "lips", "chapstick", "lip"],
+      "content": "Beeswax Lip Balm. Nourishing lip balm made with beeswax, tallow, and essential oils. Protects and hydrates dry, chapped lips."
+    },
+    {
+      "id": "bundles",
+      "keywords": ["bundle", "set", "kit", "routine", "save", "discount", "gift set"],
+      "content": "We offer curated bundles for different needs. Bundles include combinations of soaps, balms, and lotions. Save 10-30% when you buy bundles compared to individual items. Check bedda.ca/bundles.html for current bundle offerings."
+    },
+    {
+      "id": "build_loaf",
+      "keywords": ["build", "loaf", "custom", "choose", "create your own", "mix", "match"],
+      "content": "Build Your Own Loaf allows you to create a custom soap loaf with your choice of scents and ingredients. Perfect for gifts or personal use. Visit bedda.ca/build-loaf.html to create yours."
+    },
+    {
+      "id": "sensitive_skin_faq",
+      "keywords": ["eczema", "rosacea", "sensitive", "allergy", "irritation", "rash", "reaction", "safe", "dermatitis", "psoriasis"],
+      "content": "Many customers with eczema, rosacea, and allergen-sensitive skin use our Plain Jane (unscented) formula successfully. Tallow's skin-identical lipids help repair the moisture barrier without common irritants like sulfates, synthetic fragrances, or preservatives. Always patch-test first and consult your dermatologist for medical advice. We do not claim to cure or treat any medical condition."
+    },
+    {
+      "id": "contact",
+      "keywords": ["contact", "email", "phone", "reach", "message", "help", "support", "question"],
+      "content": "Contact us at orders@bedda.ca. We are based in Mississauga, Ontario. Local pickup available by appointment after order confirmation."
+    },
+    {
+      "id": "routine_recommendations",
+      "keywords": ["routine", "recommend", "suggest", "complete", "combination", "together", "pair", "best with"],
+      "content": "ROUTINE RECOMMENDATIONS: For dry skin repair, pair The Massager with Holy Grail Balm. For exfoliation, combine Uni and She-Ra soaps with Holy Grail Balm for after-exfoliation repair. For sensitive skin, Plain Jane Soap with Plain Jane Face & Body Balm is ideal. For complete skincare, most customers use a soap for cleansing followed by a balm for moisturizing. Top-selling combinations: Massager + Holy Grail, Uni + Holy Grail, She-Ra + Holy Grail."
+    },
+    {
+      "id": "upsell_guidance",
+      "keywords": ["add to cart", "buy", "purchase", "order", "get", "try"],
+      "content": "When customers express interest in a product, suggest complementary items to complete their routine. For example: if they like Uni, suggest Holy Grail Balm. If they like The Massager, suggest Holy Grail Balm for repair. If they like balms, suggest exfoliating soaps for prep. Frame suggestions as helpful advice for better results, not as sales pressure. Use phrases like 'For best results, consider adding' or 'Many customers pair this with'."
+    }
+  ]
+}

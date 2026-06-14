@@ -1,0 +1,42 @@
+# IDE / local
+.cursor/
+*.code-workspace
+_ProviderRestore/
+
+# Secrets (never commit)
+.env
+api/.env
+api/secure-config.php
+api/config/
+
+# Runtime / logs / caches
+api/rate-limits/
+api/orders/
+api/spam-logs/
+api/logs/
+api/ai-logs/
+api/ai-cache/
+api/cache/roast-tmp/
+ai-logs/
+logs/
+*.log
+test-results*.log
+sftp.log
+
+# Large binaries — deploy to Ionos separately (FileZilla)
+llama-b9285/
+llama-cli/
+llama-cli-new/
+models/
+roast-llama-cli-ionos/
+data/
+extracted/
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Backup / local noise
+*.bak
+.htaccess.fortress.bak
+"Build llama-cli + Qwen2.5-0.5B for Ionos.bak"

@@ -1,0 +1,51 @@
+# OnlyBikes — IONOS WebCron paste sheet
+# 1) Add the two lines under "api/.env on server" (generate secrets once).
+# 2) Copy each URL into IONOS → Cron → WebCron → HTTP GET (name: no spaces).
+# 3) Upload api/secure-config.php and api/.env after editing.
+
+=== STEP 1 — paste into api/.env on Ionos (two new lines) ===
+
+VALID_API_KEYS=onlybikes-reconcile-PASTE_32_CHARS_HERE
+CRON_SECRET=PASTE_64_HEX_FROM_openssl_rand_hex_32
+
+Generate on your PC:
+  openssl rand -hex 16
+  openssl rand -hex 32
+
+Use the first output for VALID_API_KEYS value (after onlybikes-reconcile-).
+Use the second output for CRON_SECRET (full string, no prefix).
+
+=== STEP 2 — IONOS cron jobs (HTTP GET URL field only) ===
+
+Name: email-queue
+Schedule: */5 * * * *
+URL:
+https://onlybikes.shop/email-admin/cron-send.php
+
+Name: payment-reconcile
+Schedule: */15 * * * *
+URL:
+https://onlybikes.shop/api/reconcile-payments.php?key=onlybikes-reconcile-PASTE_32_CHARS_HERE
+
+Name: points-audit
+Schedule: 0 * * * *
+URL:
+https://onlybikes.shop/api/cron-reconcile-points.php?key=PASTE_64_HEX_FROM_openssl_rand_hex_32
+
+Name: points-fix-weekly
+Schedule: 0 4 * * 0
+URL:
+https://onlybikes.shop/api/cron-reconcile-points.php?key=PASTE_64_HEX_FROM_openssl_rand_hex_32&fix=1
+
+=== STEP 3 — browser tests (must not say Unauthorized / Forbidden) ===
+
+https://onlybikes.shop/api/reconcile-payments.php?key=onlybikes-reconcile-PASTE_32_CHARS_HERE&hours=72
+
+https://onlybikes.shop/api/cron-reconcile-points.php?key=PASTE_64_HEX_FROM_openssl_rand_hex_32
+
+=== What each secret is (not an IONOS panel setting) ===
+
+VALID_API_KEYS  →  read from api/.env  →  used by reconcile-payments.php ?key=
+CRON_SECRET     →  read from api/.env  →  used by cron-reconcile-points.php ?key=
+
+Both are defined in api/secure-config.php from your .env file.

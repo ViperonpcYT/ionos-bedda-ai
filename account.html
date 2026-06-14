@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6865501266103199" crossorigin="anonymous"></script>
+    <title>My Account | OnlyBikes Rewards</title>
+    <meta name="description" content="Manage your OnlyBikes account, rewards points, and orders.">
+    <link rel="icon" href="images/onlybikes-logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/onlybikes.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .font-display { font-family: 'Archivo Black', Inter, sans-serif; letter-spacing: -0.04em; }
+        .hero-bg { background: radial-gradient(circle at top, rgba(34,197,94,.18), transparent 45%), #050507; }
+        #mobile-menu { display: none; max-height: calc(100dvh - 4rem); overflow-y: auto; }
+        #mobile-menu.open { display: block; }
+    </style>
+</head>
+<body class="ob-mobile-safe ob-account pt-16 bg-zinc-950 text-zinc-100">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-zinc-950/95 backdrop-blur-md z-50 border-b border-zinc-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2"><img src="images/onlybikes-logo.svg" alt="OnlyBikes" class="h-9 w-auto"></a>
+      <div class="hidden md:flex items-center gap-7">
+        <a href="index.html" class="ob-nav-link">Home</a>
+        <div class="relative group">
+          <button class="ob-nav-link flex items-center gap-1" type="button" aria-haspopup="true">Shop <svg class="h-3.5 w-3.5 opacity-70" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg></button>
+          <div class="absolute left-0 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+            <div class="w-60 rounded-xl border border-zinc-800 bg-zinc-950 shadow-2xl p-2" role="menu" aria-label="Shop">
+              <a href="products.html?bike=surron" class="block rounded-lg px-4 py-3 text-sm text-zinc-200 hover:bg-zinc-900" role="menuitem">Surron parts</a>
+              <a href="products.html?bike=talaria" class="block rounded-lg px-4 py-3 text-sm text-zinc-200 hover:bg-zinc-900" role="menuitem">Talaria parts</a>
+              <a href="products.html?bike=eride" class="block rounded-lg px-4 py-3 text-sm text-zinc-200 hover:bg-zinc-900" role="menuitem">E-Ride parts</a>
+              <a href="products.html" class="block rounded-lg px-4 py-3 text-sm font-bold text-green-300 hover:bg-zinc-900" role="menuitem">All parts</a>
+            </div>
+          </div>
+        </div>
+        <a href="bundles.html" class="ob-nav-link">Kits</a>
+        <a href="roast-pvp.html" class="ob-nav-link text-green-300">Live PvP</a>
+        <a href="contact.html" class="ob-nav-link">Support</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="login-btn" class="hidden sm:inline-flex ob-btn ob-btn-ghost px-4" type="button">Account</button>
+        <button id="cart-btn" class="relative ob-btn ob-btn-primary px-4" type="button">Bag <span id="cart-count" class="ml-2 rounded-full bg-zinc-950 px-2 py-0.5 text-xs text-white">0</span></button>
+        <button id="mobile-menu-btn" class="md:hidden rounded-lg border border-zinc-700 p-2 text-zinc-100" type="button" aria-label="Open menu" aria-expanded="false"><svg id="menu-icon" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg></button>
+      </div>
+    </div>
+  </div>
+  <div id="mobile-menu" class="md:hidden border-t border-zinc-800 bg-zinc-950">
+    <div class="space-y-1 px-4 py-4">
+      <a href="products.html?bike=surron" class="block rounded-lg px-3 py-3 text-zinc-100">Surron parts</a>
+      <a href="products.html?bike=talaria" class="block rounded-lg px-3 py-3 text-zinc-100">Talaria parts</a>
+      <a href="products.html?bike=eride" class="block rounded-lg px-3 py-3 text-zinc-100">E-Ride parts</a>
+      <a href="products.html" class="block rounded-lg px-3 py-3 text-green-300 font-bold">All parts</a>
+      <a href="bundles.html" class="block rounded-lg px-3 py-3 text-zinc-100">Kits</a>
+      <a href="roast-pvp.html" class="block rounded-lg px-3 py-3 text-green-300 font-bold">Live PvP</a>
+      <a href="contact.html" class="block rounded-lg px-3 py-3 text-zinc-100">Support</a>
+      <a href="account.html" class="block rounded-lg px-3 py-3 text-zinc-100">Account</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Account Hero -->
+<section class="pt-24 pb-12 hero-bg">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="font-display text-4xl md:text-5xl uppercase mb-3 text-white" id="account-welcome">My Account</h1>
+            <p class="text-zinc-400 text-lg" id="account-subtitle">Manage your OnlyBikes Rewards and profile</p>
+        </div>
+    </div>
+</section>
+
+<!-- Account Content -->
+<section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Account Skeleton Loading State -->
+        <div id="account-skeleton" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 ob-card p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="skeleton skeleton-circle"></div>
+                    <div class="flex-1">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text medium"></div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                        <div class="skeleton skeleton-text short" style="width:120px"></div>
+                        <div class="skeleton skeleton-text short" style="width:80px"></div>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <div class="skeleton skeleton-text short" style="width:120px"></div>
+                        <div class="skeleton skeleton-text short" style="width:60px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ob-card p-6">
+                <div class="skeleton skeleton-title mb-4"></div>
+                <div class="skeleton skeleton-box rounded-xl mb-4"></div>
+                <div class="skeleton skeleton-text long"></div>
+                <div class="skeleton skeleton-text medium"></div>
+            </div>
+            <div class="col-span-1 md:col-span-3 mt-2 ob-card p-6">
+                <div class="skeleton skeleton-title mb-4"></div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actual Account Content (hidden until loaded) -->
+        <div id="account-content" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 ob-card p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div id="account-avatar" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold font-display"></div>
+                    <div>
+                        <h2 class="font-display text-2xl uppercase" id="account-name">OnlyBikes Member</h2>
+                        <p class="text-zinc-400" id="account-email"></p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between py-3 border-b border-zinc-800">
+                        <span class="text-zinc-400">Member Since</span>
+                        <span class="font-medium text-zinc-100" id="account-since">-</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-zinc-400">Reward Points</span>
+                        <span class="font-bold text-green-400 text-lg" id="account-points">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-card p-6" id="rewards">
+                <h3 class="font-display text-xl uppercase mb-4">Rewards</h3>
+                <div class="space-y-4">
+                    <div class="ob-rewards-highlight">
+                        <p class="text-sm text-green-300 font-semibold mb-1">Current Discount Value</p>
+                        <p class="text-3xl font-bold text-green-400" id="account-discount">$0.00</p>
+                        <p class="text-xs text-zinc-400 mt-1">Available to use at checkout</p>
+                    </div>
+                    <div class="text-sm text-zinc-400 space-y-2">
+                        <p>Earn <strong class="text-zinc-200">1 point</strong> for every $1 spent.</p>
+                        <p>1 point = <strong class="text-green-400">$0.05</strong> towards your next order.</p>
+                        <p>Check <strong class="text-zinc-200">Pay with Points</strong> at checkout to redeem.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-1 md:col-span-3 mt-2 ob-card p-6" id="roast-credits-section">
+                <h3 class="font-display text-xl uppercase mb-1">Roast Credits</h3>
+                <p class="text-sm text-zinc-400 mb-4">Separate from shop reward points — used for solo roasts and Live PvP matches.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="ob-rewards-highlight">
+                        <p class="text-sm text-green-300 font-semibold mb-1">PvP Credits</p>
+                        <p class="text-3xl font-bold text-green-400" id="account-pvp-credits">0</p>
+                        <a href="roast-pvp.html" class="text-xs text-green-300 underline mt-2 inline-block">Play Live PvP</a>
+                    </div>
+                    <div class="ob-rewards-highlight">
+                        <p class="text-sm text-green-300 font-semibold mb-1">Solo Credits</p>
+                        <p class="text-3xl font-bold text-green-400" id="account-solo-credits">0</p>
+                        <a href="roast-limited.html" class="text-xs text-green-300 underline mt-2 inline-block">Solo roast</a>
+                    </div>
+                </div>
+                <p class="text-xs text-zinc-500 mt-4">Earn more by shopping (every $10 CAD) or watching ad bonuses when signed in on roast pages.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 ob-card p-6">
+            <h3 class="font-display text-xl uppercase mb-1">Rewards Milestones</h3>
+            <p class="text-sm text-zinc-400 mb-4">The more you shop, the more you earn. Points convert directly to dollar value.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="ob-tier" id="tier-50">
+                    <p class="ob-tier-points text-2xl font-bold text-zinc-500">50</p>
+                    <p class="text-xs text-zinc-500 uppercase tracking-wide">points</p>
+                    <p class="text-lg font-bold text-zinc-100 mt-1">$2.50</p>
+                </div>
+                <div class="ob-tier" id="tier-100">
+                    <p class="ob-tier-points text-2xl font-bold text-zinc-500">100</p>
+                    <p class="text-xs text-zinc-500 uppercase tracking-wide">points</p>
+                    <p class="text-lg font-bold text-zinc-100 mt-1">$5.00</p>
+                </div>
+                <div class="ob-tier" id="tier-200">
+                    <p class="ob-tier-points text-2xl font-bold text-zinc-500">200</p>
+                    <p class="text-xs text-zinc-500 uppercase tracking-wide">points</p>
+                    <p class="text-lg font-bold text-zinc-100 mt-1">$10.00</p>
+                </div>
+                <div class="ob-tier" id="tier-450">
+                    <p class="ob-tier-points text-2xl font-bold text-zinc-500">450+</p>
+                    <p class="text-xs text-zinc-500 uppercase tracking-wide">points</p>
+                    <p class="text-lg font-bold text-zinc-100 mt-1">$22.50+</p>
+                </div>
+            </div>
+            <div id="tier-next" class="mt-4 text-sm text-zinc-400 bg-zinc-900 rounded-lg p-3 border border-zinc-800 hidden"></div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <a href="products.html" class="ob-card ob-action p-5 block transition-all group">
+                <div class="w-10 h-10 ob-action-icon rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <h4 class="font-semibold text-zinc-100">Shop Products</h4>
+                <p class="text-sm text-zinc-400 mt-1">Browse parts &amp; upgrades</p>
+            </a>
+            <a href="bundles.html" class="ob-card ob-action p-5 block transition-all group">
+                <div class="w-10 h-10 ob-action-icon rounded-lg flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <h4 class="font-semibold text-zinc-100">Kits</h4>
+                <p class="text-sm text-zinc-400 mt-1">Save with upgrade kits</p>
+            </a>
+            <a href="contact.html" class="ob-card ob-action p-5 block transition-all group">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-3 bg-zinc-800 text-zinc-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </div>
+                <h4 class="font-semibold text-zinc-100">Contact support</h4>
+                <p class="text-sm text-zinc-400 mt-1">Fitment and order help</p>
+            </a>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="page-logout-btn" type="button" class="ob-btn ob-btn-ghost px-6">
+                Log Out
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-zinc-950 text-white py-12 border-t border-zinc-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <div class="font-display text-3xl uppercase mb-4">OnlyBikes</div>
+            <p class="text-zinc-400 mb-6">Ships from Canada.</p>
+            <div class="border-t border-zinc-800 pt-6">
+                <p class="text-zinc-500 text-sm">
+                    &copy; 2026 OnlyBikes. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Analytics Logger -->
+<script src="site-config.js"></script>
+<script src="main-security.js"></script>
+<script src="logger.js"></script>
+<script src="main.js"></script>
+<script src="onlybikes-ui.js" defer></script><script src="site-layout.js" defer></script><script src="conversion.js" defer></script>
+
+<!-- Login/Register Modal -->
+<div id="auth-modal" class="fixed inset-0 bg-black/70 z-[100] hidden flex items-center justify-center p-4">
+    <div class="rounded-2xl max-w-md w-full p-6 relative border border-zinc-800">
+        <button id="close-auth-modal" class="absolute top-4 right-4 text-zinc-400 hover:text-green-300" type="button" aria-label="Close">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+
+        <div id="auth-login-view">
+            <h2 class="text-2xl font-display uppercase mb-2">Welcome Back</h2>
+            <p class="text-zinc-400 mb-6">Sign in to access your OnlyBikes Rewards points</p>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-zinc-300 mb-1">Email</label>
+                    <input type="email" id="login-email" required class="w-full px-4 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-zinc-300 mb-1">Password</label>
+                    <input type="password" id="login-password" required class="w-full px-4 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                </div>
+                <button type="submit" class="w-full ob-btn ob-btn-primary">Sign In</button>
+            </form>
+
+            <p class="text-center mt-4 text-sm text-zinc-400">
+                Don't have an account? <button id="show-register" type="button" class="text-green-400 font-semibold hover:underline">Create one</button>
+            </p>
+        </div>
+
+        <div id="auth-register-view" class="hidden">
+            <h2 class="text-2xl font-display uppercase mb-2">Create Account</h2>
+            <p class="text-zinc-400 mb-6">Join OnlyBikes Rewards — earn 1 point per $1 spent ($0.05 value each).</p>
+
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-zinc-300 mb-1">First Name</label>
+                    <input type="text" id="register-first-name" required class="w-full px-4 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-zinc-300 mb-1">Last Name</label>
+                    <input type="text" id="register-last-name" required class="w-full px-4 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-zinc-300 mb-1">Email</label>
+                    <input type="email" id="register-email" required class="w-full px-4 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-zinc-300 mb-1">Password (min 8 characters)</label>
+                    <input type="password" id="register-password" required minlength="8" class="w-full px-4 py-2 border border-zinc-700 rounded-lg bg-zinc-900">
+                </div>
+                <button type="submit" class="w-full ob-btn ob-btn-primary">Create Account</button>
+            </form>
+
+            <p class="text-center mt-4 text-sm text-zinc-400">
+                Already have an account? <button id="show-login" type="button" class="text-green-400 font-semibold hover:underline">Sign in</button>
+            </p>
+        </div>
+
+        <div id="auth-loading" class="hidden py-6">
+            <div class="skeleton skeleton-title mb-4"></div>
+            <div class="skeleton skeleton-text long mb-2"></div>
+            <div class="skeleton skeleton-text medium mb-6"></div>
+            <div class="skeleton skeleton-input"></div>
+            <div class="skeleton skeleton-input"></div>
+            <div class="skeleton skeleton-button"></div>
+            <div class="skeleton skeleton-text short mx-auto mt-4" style="width:120px"></div>
+        </div>
+
+        <div id="auth-error" class="hidden mt-4 p-3 bg-red-950/40 border border-red-900/50 rounded-lg text-red-200 text-sm"></div>
+    </div>
+</div>
+
+<script>
+// Dynamic Rewards logic (Linear: 1 point = $0.05)
+function getDiscountFromPoints(points) {
+    return (points * 0.05).toFixed(2);
+}
+
+// Populate account page from current user data
+function populateAccountPage() {
+    const skeleton = document.getElementById('account-skeleton');
+    const content = document.getElementById('account-content');
+    if (skeleton) skeleton.classList.add('hidden');
+    if (content) content.classList.remove('hidden');
+
+    const user = window.currentUser;
+    if (!user) return;
+    const first = user.first_name || '';
+    const last = user.last_name || '';
+    const initials = ((first[0] || '') + (last[0] || '')).toUpperCase();
+    const points = user.points || 0;
+    const discount = getDiscountFromPoints(points);
+    const pvpCredits = user.pvp_credits != null ? user.pvp_credits : 0;
+    const soloCredits = user.solo_credits != null ? user.solo_credits : 0;
+
+    document.getElementById('account-welcome').textContent = first ? `Welcome, ${first}` : 'My Account';
+    document.getElementById('account-name').textContent = first && last ? `${first} ${last}` : (first || 'OnlyBikes Member');
+    document.getElementById('account-email').textContent = user.email || '';
+    document.getElementById('account-points').textContent = points;
+    document.getElementById('account-avatar').textContent = initials || 'B';
+    document.getElementById('account-discount').textContent = '$' + discount;
+    const pvpEl = document.getElementById('account-pvp-credits');
+    const soloEl = document.getElementById('account-solo-credits');
+    if (pvpEl) pvpEl.textContent = String(pvpCredits);
+    if (soloEl) soloEl.textContent = String(soloCredits);
+
+    // Highlight active tier
+    const tiers = [
+        { id: 'tier-50', points: 50 },
+        { id: 'tier-100', points: 100 },
+        { id: 'tier-200', points: 200 },
+        { id: 'tier-450', points: 450 },
+    ];
+    tiers.forEach(t => {
+        const el = document.getElementById(t.id);
+        if (!el) return;
+        el.classList.toggle('is-active', points >= t.points);
+        const ptsEl = el.querySelector('.ob-tier-points');
+        if (ptsEl && points < t.points) ptsEl.className = 'ob-tier-points text-2xl font-bold text-zinc-500';
+    });
+    const nextEl = document.getElementById('tier-next');
+    if (nextEl) {
+        const next = tiers.find(t => t.points > points);
+        if (next) {
+            nextEl.textContent = `You're ${next.points - points} points away from the next rewards milestone.`;
+            nextEl.className = 'mt-4 text-sm text-zinc-400 bg-zinc-900 rounded-lg p-3 border border-zinc-800';
+            nextEl.classList.remove('hidden');
+        } else if (points >= 450) {
+            nextEl.textContent = `You've hit the top milestone tier — points keep stacking on every order.`;
+            nextEl.className = 'mt-4 text-sm text-green-300 bg-green-950/30 rounded-lg p-3 border border-green-900/40';
+            nextEl.classList.remove('hidden');
+        }
+    }
+}
+
+// Logout button on this page
+document.getElementById('page-logout-btn').addEventListener('click', () => {
+    if (typeof logoutUser === 'function') logoutUser();
+});
+
+// Wait for auth check, then populate
+// main.js initAuth runs on DOMContentLoaded; we wait a tick then check
+setTimeout(() => {
+    if (!window.currentUser) {
+        location.href = 'index.html';
+        return;
+    }
+    populateAccountPage();
+}, 300);
+</script>
+
+</body>
+</html>
+
+

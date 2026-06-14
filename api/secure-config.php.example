@@ -1,0 +1,275 @@
+<?php
+/**
+ * EXAMPLE — copy to api/secure-config.php on IONOS. Do not commit the real file.
+ * Loads api/.env and wires all five enterprise databases (Bedda layout).
+ */
+declare(strict_types=1);
+
+if (!function_exists('onlybikes_load_env')) {
+    function onlybikes_load_env(): void
+    {
+        static $loaded = false;
+        if ($loaded) {
+            return;
+        }
+        $loaded = true;
+        $envFile = __DIR__ . '/.env';
+        if (!is_readable($envFile)) {
+            return;
+        }
+        foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            $line = trim($line);
+            if ($line === '' || $line[0] === '#') {
+                continue;
+            }
+            if (strpos($line, '=') === false) {
+                continue;
+            }
+            [$key, $value] = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value, " \t\"'");
+            if ($key !== '' && getenv($key) === false) {
+                putenv("$key=$value");
+            }
+        }
+    }
+}
+
+onlybikes_load_env();
+
+require_once __DIR__ . '/lib/security-helpers.php';
+
+if (!function_exists('onlybikes_env')) {
+    function onlybikes_env(string $key, string $default = ''): string
+    {
+        $val = getenv($key);
+        return ($val !== false && $val !== '') ? (string) $val : $default;
+    }
+}
+
+if (!function_exists('onlybikes_pdo')) {
+  /** @return PDO */
+    function onlybikes_pdo(string $prefix): PDO
+    {
+        $host = onlybikes_env("{$prefix}_DB_HOST");
+        $name = onlybikes_env("{$prefix}_DB_NAME");
+        $user = onlybikes_env("{$prefix}_DB_USER");
+        $pass = onlybikes_env("{$prefix}_DB_PASS");
+        $port = onlybikes_env("{$prefix}_DB_PORT", '3306');
+        if ($host === '' || $name === '' || $user === '') {
+            throw new PDOException("Missing {$prefix}_DB_* in api/.env");
+        }
+        $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
+        return new PDO($dsn, $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ]);
+    }
+}
+
+// --- Site / mail / Stripe (from .env) ---
+if (!defined('SITE_ORIGIN')) {
+    define('SITE_ORIGIN', onlybikes_env('SITE_ORIGIN', 'https://onlybikes.example'));
+}
+if (!defined('SUPPORT_EMAIL')) {
+    define('SUPPORT_EMAIL', onlybikes_env('SUPPORT_EMAIL', onlybikes_env('ADMIN_EMAIL', 'support@onlybikes.shop')));
+}
+if (!defined('ADMIN_EMAIL')) {
+    define('ADMIN_EMAIL', onlybikes_env('ADMIN_EMAIL', SUPPORT_EMAIL));
+}
+if (!defined('SMTP_HOST')) {
+    define('SMTP_HOST', onlybikes_env('SMTP_HOST', 'smtp.ionos.com'));
+}
+if (!defined('SMTP_PORT')) {
+    define('SMTP_PORT', (int) onlybikes_env('SMTP_PORT', '587'));
+}
+if (!defined('SMTP_USERNAME')) {
+    define('SMTP_USERNAME', onlybikes_env('SMTP_USERNAME', ''));
+}
+if (!defined('SMTP_PASSWORD')) {
+    define('SMTP_PASSWORD', onlybikes_env('SMTP_PASSWORD', ''));
+}
+if (!defined('SMTP_FROM_EMAIL')) {
+    define('SMTP_FROM_EMAIL', onlybikes_env('SMTP_FROM_EMAIL', SUPPORT_EMAIL));
+}
+if (!defined('SMTP_FROM_NAME')) {
+    define('SMTP_FROM_NAME', onlybikes_env('SMTP_FROM_NAME', 'OnlyBikes'));
+}
+if (!defined('SMTP_ENCRYPTION')) {
+    define('SMTP_ENCRYPTION', onlybikes_env('SMTP_ENCRYPTION', 'tls'));
+}
+
+require_once __DIR__ . '/lib/mail.php';
+
+// --- Stripe (secret key server-only; publishable key exposed via public-config.php) ---
+if (!defined('STRIPE_PUBLISHABLE_KEY')) {
+    define('STRIPE_PUBLISHABLE_KEY', onlybikes_env('STRIPE_PUBLISHABLE_KEY'));
+}
+if (!defined('STRIPE_SECRET_KEY')) {
+    define('STRIPE_SECRET_KEY', onlybikes_env('STRIPE_SECRET_KEY'));
+}
+if (!defined('STRIPE_WEBHOOK_SECRET')) {
+    define(
+        'STRIPE_WEBHOOK_SECRET',
+        onlybikes_env('STRIPE_WEBHOOK_SECRET', onlybikes_env('WEBHOOK_KEY'))
+    );
+}
+if (!defined('STRIPE_CURRENCY')) {
+    define('STRIPE_CURRENCY', strtolower(onlybikes_env('STRIPE_CURRENCY', 'cad')));
+}
+if (!defined('STRIPE_LIVE_MODE')) {
+    define('STRIPE_LIVE_MODE', str_starts_with(STRIPE_PUBLISHABLE_KEY, 'pk_live_'));
+}
+
+if (!function_exists('loadStripe')) {
+    function loadStripe(): bool
+    {
+        static $loaded = false;
+        if ($loaded) {
+            return true;
+        }
+        $paths = [
+            __DIR__ . '/vendor/autoload.php',
+            dirname(__DIR__) . '/stripe-php-master/init.php',
+            __DIR__ . '/../stripe-php-master/init.php',
+        ];
+        foreach ($paths as $path) {
+            if (is_readable($path)) {
+                require_once $path;
+                $loaded = true;
+                return true;
+            }
+        }
+        error_log('[OnlyBikes] Stripe PHP SDK not found. Upload stripe-php-master/ or run composer require stripe/stripe-php.');
+        return false;
+    }
+}
+
+if (!function_exists('getStripe')) {
+    /** @return \Stripe\StripeClient|null */
+    function getStripe()
+    {
+        if (!loadStripe() || STRIPE_SECRET_KEY === '') {
+            return null;
+        }
+        static $client = null;
+        if ($client === null) {
+            $client = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
+        }
+        return $client;
+    }
+}
+
+// --- Five database connections (enterprise) ---
+if (!function_exists('getAnalyticsDatabase')) {
+    function getAnalyticsDatabase(): PDO
+    {
+        static $pdo;
+        return $pdo ??= onlybikes_pdo('ANALYTICS');
+    }
+}
+
+if (!function_exists('getOrderDatabase')) {
+    function getOrderDatabase(): PDO
+    {
+        static $pdo;
+        return $pdo ??= onlybikes_pdo('ORDERS');
+    }
+}
+
+if (!function_exists('getNewsletterDatabase')) {
+    function getNewsletterDatabase(): PDO
+    {
+        static $pdo;
+        return $pdo ??= onlybikes_pdo('NEWSLETTER');
+    }
+}
+
+if (!function_exists('getCouponDatabase')) {
+    function getCouponDatabase(): PDO
+    {
+        static $pdo;
+        return $pdo ??= onlybikes_pdo('COUPON');
+    }
+}
+
+if (!defined('CUSTOMERS_DB_HOST')) {
+    define('CUSTOMERS_DB_HOST', onlybikes_env('CUSTOMERS_DB_HOST'));
+    define('CUSTOMERS_DB_NAME', onlybikes_env('CUSTOMERS_DB_NAME'));
+    define('CUSTOMERS_DB_USER', onlybikes_env('CUSTOMERS_DB_USER'));
+    define('CUSTOMERS_DB_PASS', onlybikes_env('CUSTOMERS_DB_PASS'));
+}
+
+if (!function_exists('getCustomersDatabase')) {
+    function getCustomersDatabase(): PDO
+    {
+        static $pdo;
+        return $pdo ??= onlybikes_pdo('CUSTOMERS');
+    }
+}
+
+if (!function_exists('getRuntimeCreditsDatabase')) {
+    function getRuntimeCreditsDatabase(): PDO
+    {
+        static $pdo;
+        if ($pdo instanceof PDO) {
+            return $pdo;
+        }
+        $host = onlybikes_env('RUNTIME_CREDITS_DB_HOST', '');
+        if ($host === '') {
+            return getCustomersDatabase();
+        }
+        return $pdo = onlybikes_pdo('RUNTIME_CREDITS');
+    }
+}
+
+/**
+ * Mail queue / process-queue.php — newsletter DB (Bedda convention).
+ */
+if (!function_exists('getDatabase')) {
+    function getDatabase(): PDO
+    {
+        return getNewsletterDatabase();
+    }
+}
+
+if (!function_exists('cfg')) {
+    function cfg(string $key, string $default = ''): string
+    {
+        return onlybikes_env($key, $default);
+    }
+}
+
+if (!function_exists('beddaIsLocalRequest')) {
+    function beddaIsLocalRequest(): bool
+    {
+        $h = strtolower($_SERVER['HTTP_HOST'] ?? '');
+        return in_array($h, ['localhost', '127.0.0.1'], true) || PHP_SAPI === 'cli-server';
+    }
+}
+
+// --- Chit Chats shipping (OnlyBikes account — set in api/.env) ---
+if (!defined('CHITCHATS_CLIENT_ID')) {
+    define('CHITCHATS_CLIENT_ID', onlybikes_env('CHITCHATS_CLIENT_ID'));
+}
+if (!defined('CHITCHATS_ACCESS_TOKEN')) {
+    define('CHITCHATS_ACCESS_TOKEN', onlybikes_env('CHITCHATS_ACCESS_TOKEN'));
+}
+if (!defined('CHITCHATS_API_BASE')) {
+    $onlybikesCcId = onlybikes_env('CHITCHATS_CLIENT_ID');
+    define(
+        'CHITCHATS_API_BASE',
+        $onlybikesCcId !== ''
+            ? 'https://chitchats.com/api/v1/clients/' . $onlybikesCcId
+            : ''
+    );
+}
+
+// --- AI inference (llama-cli) — optional; ai-inference.php reads these from .env ---
+if (!defined('AI_BINARY_PATH')) {
+    define('AI_BINARY_PATH', onlybikes_env('AI_BINARY_PATH'));
+}
+if (!defined('AI_MODEL_PATH')) {
+    define('AI_MODEL_PATH', onlybikes_env('AI_MODEL_PATH'));
+}

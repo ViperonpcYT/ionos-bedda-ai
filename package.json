@@ -1,0 +1,17 @@
+{
+  "name": "onlybikes-website",
+  "private": true,
+  "description": "OnlyBikes — local dev & checkout tests",
+  "scripts": {
+    "dev": "php -c dev/php.ini -S localhost:8080 dev/router.php",
+    "test": "npm run test:local",
+    "test:local": "cross-env BASE_URL=http://localhost:8080 node scripts/test-checkout.mjs",
+    "test:live": "cross-env BASE_URL=https://onlybikes.example node scripts/test-checkout.mjs",
+    "test:security": "cross-env BASE_URL=https://onlybikes.example node scripts/attack-test.mjs",
+    "test:prelaunch": "cross-env BASE_URL=http://localhost:8080 TEST_EMAIL=test@example.com node scripts/prelaunch-test.mjs"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "stripe": "^17.7.0"
+  }
+}

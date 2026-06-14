@@ -1,0 +1,109 @@
+# OnlyBikes - Apache Security Configuration
+# Place this file in your /api/ directory
+
+# ============================================================================
+# PROTECT SENSITIVE FILES
+# ============================================================================
+
+# Protect .env and sensitive files
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ".env.example">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<FilesMatch "\.md$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(log|err)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+Options -Indexes
+
+# Deny access to .env file
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Deny access to .env.example (for reference only)
+<Files ".env.example">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Deny access to all .md files
+<FilesMatch "\.md$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to log files
+<FilesMatch "\.(log|err)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to SQL files
+<FilesMatch "\.sql$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to backup files
+<FilesMatch "\.(bak|backup|old|orig|save)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ============================================================================
+# DIRECTORY PROTECTION
+# ============================================================================
+
+# Disable directory browsing
+Options -Indexes
+
+# Protect sensitive directories
+RewriteEngine On
+
+# Block access to directories that shouldn't be accessed directly
+RewriteRule ^(logs|rate-limits|spam-logs|orders|includes)/ - [F,L]
+
+# ============================================================================
+# SECURITY HEADERS
+# ============================================================================
+
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Prevent clickjacking
+    Header always set X-Frame-Options "DENY"
+    
+    # XSS Protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Permissions Policy
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ============================================================================
+# PHP SETTINGS (if using mod_php)
+# ============================================================================
+
+<IfModule mod_php.c>
+    php_flag display_errors off
+    php_flag log_errors on
+    php_value error_log logs/php-errors.log
+</IfModule>

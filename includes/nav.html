@@ -1,0 +1,46 @@
+<!-- OnlyBikes shared nav reference for static pages. -->
+<nav class="fixed top-0 w-full bg-zinc-950/95 backdrop-blur-md z-50 border-b border-zinc-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2" aria-label="OnlyBikes home">
+        <img src="images/onlybikes-logo.svg" alt="OnlyBikes" class="h-9 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-7">
+        <a href="index.html" class="ob-nav-link">Home</a>
+        <div class="relative group">
+          <button class="ob-nav-link flex items-center gap-1" type="button" aria-haspopup="true">Shop <svg class="h-3.5 w-3.5 opacity-70" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg></button>
+          <div class="absolute left-0 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+            <div class="w-60 rounded-xl border border-zinc-800 bg-zinc-950 shadow-2xl p-2" role="menu" aria-label="Shop">
+              <a href="products.html?bike=surron" class="block rounded-lg px-4 py-3 text-sm text-zinc-200 hover:bg-zinc-900" role="menuitem">Surron parts</a>
+              <a href="products.html?bike=talaria" class="block rounded-lg px-4 py-3 text-sm text-zinc-200 hover:bg-zinc-900" role="menuitem">Talaria parts</a>
+              <a href="products.html?bike=eride" class="block rounded-lg px-4 py-3 text-sm text-zinc-200 hover:bg-zinc-900" role="menuitem">E-Ride parts</a>
+              <a href="products.html" class="block rounded-lg px-4 py-3 text-sm font-bold text-green-300 hover:bg-zinc-900" role="menuitem">All parts</a>
+            </div>
+          </div>
+        </div>
+        <a href="bundles.html" class="ob-nav-link">Kits</a>
+        <a href="roast-pvp.html" class="ob-nav-link text-green-300">Live PvP</a>
+        <a href="contact.html" class="ob-nav-link">Support</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="login-btn" class="hidden sm:inline-flex ob-btn ob-btn-ghost px-4" type="button">Account</button>
+        <button id="cart-btn" class="relative ob-btn ob-btn-primary px-4" type="button">Bag <span id="cart-count" class="ml-2 rounded-full bg-zinc-950 px-2 py-0.5 text-xs text-white">0</span></button>
+        <button id="mobile-menu-btn" class="md:hidden rounded-lg border border-zinc-700 p-2 text-zinc-100" type="button" aria-label="Open menu" aria-expanded="false">
+          <svg id="menu-icon" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="mobile-menu" class="md:hidden border-t border-zinc-800 bg-zinc-950">
+    <div class="space-y-1 px-4 py-4">
+      <a href="products.html?bike=surron" class="block rounded-lg px-3 py-3 text-zinc-100">Surron parts</a>
+      <a href="products.html?bike=talaria" class="block rounded-lg px-3 py-3 text-zinc-100">Talaria parts</a>
+      <a href="products.html?bike=eride" class="block rounded-lg px-3 py-3 text-zinc-100">E-Ride parts</a>
+      <a href="products.html" class="block rounded-lg px-3 py-3 text-green-300 font-bold">All parts</a>
+      <a href="bundles.html" class="block rounded-lg px-3 py-3 text-zinc-100">Kits</a>
+      <a href="roast-pvp.html" class="block rounded-lg px-3 py-3 text-green-300 font-bold">Live PvP</a>
+      <a href="contact.html" class="block rounded-lg px-3 py-3 text-zinc-100">Support</a>
+      <a href="account.html" class="block rounded-lg px-3 py-3 text-zinc-100">Account</a>
+    </div>
+  </div>
+</nav>

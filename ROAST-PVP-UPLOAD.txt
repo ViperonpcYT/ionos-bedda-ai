@@ -1,0 +1,54 @@
+ROAST PvP — UPLOAD (onlybikes.shop)
+===================================
+
+Your console errors ("unreliable OpenRelay", ICE stuck) mean the LIVE site
+still has an OLD roast-pvp.html. Local repo has v20 fixes — upload below.
+
+UPLOAD (FileZilla → IONOS htdocs):
+
+  roast-pvp.html              → /htdocs/roast-pvp.html  (OVERWRITE entire file)
+  roast-credits-ui.js         → /htdocs/roast-credits-ui.js
+  api/lib/roast-pvp.php       → /htdocs/api/lib/roast-pvp.php
+  api/roast-limited/pvp.php   → /htdocs/api/roast-limited/pvp.php
+  .htaccess                   → /htdocs/.htaccess
+
+VERIFY DEPLOY (do this every time):
+
+  1. Cloudflare → Caching → Purge Everything (or purge roast-pvp.html URL)
+  2. Open https://onlybikes.shop/roast-pvp.html
+  3. Hard refresh: Ctrl+Shift+R
+  4. Console must show:
+     [Roast PvP] DEPLOY CHECK — build=pvp-inline-v20
+  5. Lobby stamp: Build: pvp-inline-v20
+  6. View Source — search "pvp-inline-v20" (NOT v15/v18)
+
+  ICE API check (browser):
+  https://onlybikes.shop/api/roast-limited/pvp.php?action=ice
+  → turn_source should be "openrelay_api" after TURN key below
+  → or "stun_only" until key added (same Wi-Fi only)
+
+TURN FOR STRANGER VIDEO (phone vs PC / different networks):
+
+  Metered bills relayed bytes (not direct peer-to-peer on same Wi-Fi).
+  Defaults cap video at 450 kbps → ~6–7 MB/min relayed (both peers via TURN).
+
+  BANDWIDTH BUDGET (20 GB / month, both peers relayed):
+    ~6.5 MB per minute of match time
+    ~19 MB per 3-min round (180s)
+    ~1,050 full rounds/month at default caps
+    Lower PVP_WEBRTC_MAX_VIDEO_KBPS in api/.env to stretch further.
+
+  AD ALIGNMENT (guest = 1 ad per round, ~15s):
+    Need working display/push ads (Monetag vignette + AdSense when approved).
+    Signed-in users with shop credits skip ads but still use TURN — fund via parts sales.
+
+  1. https://www.metered.ca/tools/openrelay/ OR your onlybikes.metered.live project
+  2. htdocs/api/.env (ON THE SERVER):
+     PVP_TURN_APP=onlybikes
+     PVP_TURN_SECRET_KEY=your_Developers_tab_Secret_Key
+     (Do NOT use Secret Key as PVP_TURN_API_KEY — old code failed that way.)
+     Alternative: TURN → Add Credential → Show API Key → PVP_TURN_API_KEY
+  3. Test ICE URL — success:
+     turnConfigured: true, turnSource: metered_secret (or metered_api)
+
+DO NOT run dev/inline-roast-pvp.js on the uploaded html file.

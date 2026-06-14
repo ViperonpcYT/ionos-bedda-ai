@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-[#050507] text-zinc-100 antialiased;
+    font-family: Inter, system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: 'Archivo Black', Inter, system-ui, sans-serif;
+    letter-spacing: -0.04em;
+  }
+
+  .ob-card {
+    @apply rounded-2xl border border-zinc-800 bg-gradient-to-b from-white/[0.055] to-white/[0.025] transition-all duration-300;
+  }
+
+  .ob-card:hover {
+    @apply -translate-y-1.5 border-green-500/65 shadow-[0_24px_70px_rgba(0,0,0,0.35)];
+  }
+
+  .ob-btn {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full px-5 py-3 text-sm font-extrabold transition-transform duration-200;
+  }
+
+  .ob-btn:hover {
+    @apply -translate-y-px;
+  }
+
+  .ob-btn-primary {
+    @apply bg-accent text-zinc-950;
+  }
+
+  .ob-btn-ghost {
+    @apply border border-zinc-800 bg-white/[0.03] text-zinc-100;
+  }
+
+  .ob-badge {
+    @apply inline-flex items-center rounded-full border border-green-500/35 bg-green-500/10 px-2.5 py-1 text-[0.72rem] font-extrabold uppercase tracking-wider text-accent-2;
+  }
+
+  .ob-nav-link {
+    @apply text-sm font-bold text-zinc-300 transition-colors hover:text-accent-2;
+  }
+
+  .ob-legal-banner {
+    @apply rounded-xl border border-red-500/35 bg-red-500/10 p-4 text-sm leading-relaxed text-red-200;
+  }
+
+  .ob-legal-banner a {
+    @apply text-accent-2 underline;
+  }
+
+  .product-details-toggle {
+    @apply mt-2 text-left text-xs font-bold text-green-400 transition-colors hover:text-green-300;
+  }
+
+  .ob-scroll-tabs {
+    @apply flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] md:flex-wrap;
+  }
+
+  .ob-scroll-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-pill-active {
+    @apply border-green-400 bg-green-500 text-zinc-950;
+  }
+
+  .ob-timer-hand {
+    transform-origin: center;
+    animation: ob-timer-spin 8s linear infinite;
+  }
+
+  .ob-timer-needle {
+    transform-origin: 32px 32px;
+    animation: ob-timer-tick 2s steps(12) infinite;
+  }
+}
+
+@keyframes ob-timer-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ob-timer-tick {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .ob-timer-hand,
+  .ob-timer-needle {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .ob-mobile-safe {
+    padding-bottom: 5.5rem;
+  }
+}

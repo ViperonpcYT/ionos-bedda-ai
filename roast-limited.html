@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6865501266103199" crossorigin="anonymous"></script>
+  <title>Bike Roast — Limited Event | OnlyBikes</title>
+  <meta name="description" content="Upload your e-moto photo. Get an AI shame score and a cynical mechanic roast. Entertainment only — not a mechanical inspection.">
+  <link rel="canonical" href="https://onlybikes.shop/roast-limited.html">
+  <link rel="icon" href="images/onlybikes-logo.svg" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/onlybikes.css">
+</head>
+<body class="ob-mobile-safe pt-16 text-zinc-100 bg-zinc-950">
+  <nav class="fixed top-0 w-full bg-zinc-950/95 backdrop-blur-md z-50 border-b border-zinc-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2" aria-label="OnlyBikes home"><img src="images/onlybikes-logo.svg" alt="OnlyBikes" class="h-9 w-auto"></a>
+        <div class="hidden md:flex items-center gap-7">
+          <a href="index.html" class="ob-nav-link">Home</a>
+          <a href="products.html" class="ob-nav-link">Shop</a>
+          <a href="roast-pvp.html" class="ob-nav-link text-green-300">Live PvP</a>
+          <a href="contact.html" class="ob-nav-link">Support</a>
+        </div>
+        <a href="products.html" class="ob-btn ob-btn-primary px-4 text-sm">Shop parts</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-xl mx-auto px-4 py-10">
+    <p class="ob-badge">Limited event</p>
+    <h1 class="font-display text-4xl uppercase mt-4">Get judged.</h1>
+    <p class="mt-4 text-zinc-400 text-sm leading-relaxed" id="roast-event-meta">Upload a clear side photo of your e-moto. Our AI reads it for fun — not certification.</p>
+
+    <div id="roast-credits-mount" class="mt-4"></div>
+
+    <div class="mt-4 rounded-lg border border-amber-900/50 bg-amber-950/30 px-4 py-3 text-xs text-amber-100/90 leading-relaxed">
+      <strong class="text-amber-200">AI visual interpretation</strong> — not a mechanical inspection or certification.
+      Possible mods are guesses. Verify fitment on <a href="fitment.html" class="text-green-300 underline">Fitment Guide</a> before you buy parts.
+    </div>
+
+    <section id="roast-upload-section" class="mt-8 ob-card p-6">
+      <label class="block text-sm font-bold text-zinc-200 mb-2" for="roast-image">Bike photo</label>
+      <input type="file" id="roast-image" accept="image/jpeg,image/png,image/webp" class="block w-full text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-500 file:text-zinc-950 file:font-bold">
+      <p class="mt-2 text-xs text-zinc-500">Max 8MB. Side profile works best.</p>
+
+      <details class="mt-4 text-sm">
+        <summary class="cursor-pointer text-zinc-400 hover:text-zinc-200">Optional: confirm make &amp; model if AI is unsure</summary>
+        <div class="mt-3 grid grid-cols-2 gap-3">
+          <input type="text" id="roast-make-override" placeholder="Make (Surron)" class="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm">
+          <input type="text" id="roast-model-override" placeholder="Model (Light Bee X)" class="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm">
+        </div>
+      </details>
+
+      <details class="mt-4 text-sm">
+        <summary class="cursor-pointer text-zinc-500 hover:text-zinc-300">Dev: bypass daily limit</summary>
+        <input type="password" id="roast-bypass-key" autocomplete="off" placeholder="Bypass key" class="mt-2 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm">
+      </details>
+
+      <button type="button" id="roast-submit" class="ob-btn ob-btn-primary w-full mt-6">Submit for judgment</button>
+      <a href="roast-pvp.html" class="ob-btn ob-btn-ghost w-full mt-3 block text-center">Live head-to-head PvP</a>
+    </section>
+
+    <section id="roast-loading-section" class="mt-8 ob-card p-6 hidden" aria-live="polite">
+      <div class="flex items-center justify-between gap-4 mb-4">
+        <p id="roast-step-label" class="text-sm font-bold text-green-300">Reading frame geometry…</p>
+        <span id="roast-step-pct" class="text-xs text-zinc-500">0%</span>
+      </div>
+      <div class="h-2 rounded-full bg-zinc-800 overflow-hidden mb-4">
+        <div id="roast-progress-bar" class="h-full bg-green-500 transition-all duration-500 ease-out" style="width:0%"></div>
+      </div>
+      <div id="roast-ad-container" class="space-y-2 min-h-[80px]">
+        <!-- ad slots injected from includes or JS -->
+      </div>
+    </section>
+
+    <section id="roast-result-section" class="mt-8 hidden space-y-4" aria-live="polite">
+      <div class="ob-card p-6 text-center">
+        <p class="text-xs uppercase tracking-widest text-zinc-500">Cred score</p>
+        <p id="roast-score-display" class="font-display text-6xl text-green-400 mt-2">—</p>
+        <p id="roast-score-caption" class="text-sm text-zinc-400 mt-2">100 = stock hero. Lower = more roast fuel.</p>
+      </div>
+      <div class="ob-card p-6">
+        <p class="text-xs uppercase tracking-widest text-zinc-500 mb-2">Identity (AI guess)</p>
+        <p id="roast-identity" class="text-zinc-200 font-semibold"></p>
+      </div>
+      <div class="ob-card p-6">
+        <p class="text-xs uppercase tracking-widest text-zinc-500 mb-2">Possible visual differences (AI guess)</p>
+        <ul id="roast-mods" class="text-sm text-zinc-300 space-y-1 list-disc pl-5"></ul>
+        <p id="roast-no-mods" class="text-sm text-zinc-500 hidden">Nothing obvious flagged — stock-ish or too blurry to tell.</p>
+      </div>
+      <div class="ob-card p-6 border-green-900/40">
+        <p class="text-xs uppercase tracking-widest text-zinc-500 mb-2">The roast</p>
+        <p id="roast-text" class="text-zinc-100 leading-relaxed italic"></p>
+      </div>
+      <p id="roast-interpretation-notice" class="text-xs text-zinc-500 text-center"></p>
+      <a href="roast-pvp.html" class="ob-btn ob-btn-primary w-full text-center block">Live head-to-head PvP</a>
+      <button type="button" id="roast-try-again" class="ob-btn ob-btn-ghost w-full">Judge another bike</button>
+    </section>
+
+    <section id="roast-error-section" class="mt-8 ob-card p-6 hidden border-red-900/40" aria-live="assertive">
+      <p class="text-red-300 font-bold" id="roast-error-message"></p>
+      <button type="button" id="roast-retry-btn" class="ob-btn ob-btn-primary w-full mt-4 hidden">Try again</button>
+    </section>
+  </main>
+
+  <footer class="border-t border-zinc-800 bg-zinc-950 py-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 text-sm text-zinc-500 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <p>&copy; 2026 OnlyBikes. Entertainment only.</p>
+      <div class="flex flex-wrap gap-4">
+        <a class="hover:text-green-300" href="fitment.html">Fitment</a>
+        <a class="hover:text-green-300" href="terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="roast-credits-ui.js?v=19" defer></script>
+  <script src="roast-limited.js" defer></script>
+</body>
+</html>

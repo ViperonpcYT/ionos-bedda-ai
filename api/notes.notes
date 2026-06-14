@@ -1,0 +1,3686 @@
+invoice.paid
+viperonpcyt@gmail.com's invoice for CAD 55.21 was paid
+8:07:37 PM
+invoice.finalized
+A draft invoice for CAD 55.21 to viperonpcyt@gmail.com was finalized
+8:07:37 PM
+invoice.updated
+viperonpcyt@gmail.com's invoice has changed
+8:07:37 PM
+customer.updated
+viperonpcyt@gmail.com's details were updated
+8:07:37 PM
+payment_intent.created
+A new payment pi_3TYxfdKGzcdqHESC0rOVWynM for CAD 55.21 was created
+8:07:37 PM
+payment_intent.succeeded
+The payment pi_3TYxfdKGzcdqHESC0rOVWynM for CAD 55.21 has succeeded
+8:07:36 PM
+charge.succeeded
+viperonpcyt@gmail.com was charged CAD 55.21
+8:07:36 PM
+customer.subscription.updated
+viperonpcyt@gmail.com's subscription has changed
+8:07:30 PM
+invoice.created
+A draft invoice was created
+8:07:30 PM
+invoice.upcoming
+viperonpcyt@gmail.com has an upcoming invoice scheduled for automatic payment in 61 days
+8:07:28 PM
+test_helpers.test_clock.advancing
+The billing clock with ID clock_1TYxNkKGzcdqHESCa9Chvt4k is currently advancing.
+8:07:25 PM
+customer.subscription.updated
+viperonpcyt@gmail.com's subscription has changed
+8:05:50 PM
+payment_intent.canceled
+A payment pi_3TYc5kKGzcdqHESC1YXQ0r5r for CAD 55.21 was canceled
+8:05:50 PM
+invoice.voided
+viperonpcyt@gmail.com's invoice A03YR0SL-0006 was voided
+8:05:50 PM
+invoice.updated
+viperonpcyt@gmail.com's invoice has changed
+8:05:50 PM
+customer.subscription.updated
+viperonpcyt@gmail.com's subscription has changed
+8:05:47 PM
+payment_intent.canceled
+A payment pi_3TYc5iKGzcdqHESC0S0AMwh7 for CAD 55.21 was canceled
+8:05:47 PM
+invoice.voided
+viperonpcyt@gmail.com's invoice A03YR0SL-0005 was voided
+8:05:47 PM
+invoice.updated
+viperonpcyt@gmail.com's invoice has changed
+8:05:47 PM
+customer.subscription.updated
+viperonpcyt@gmail.com's subscription has changed
+8:01:58 PM
+
+Transactions
+
+$55.21
+
+cad
+
+Succeeded
+
+
+
+Charged to alex c
+
+
+
+Refund
+
+Recent activity
+
+
+
+Add note
+
+
+
+Payment succeeded
+
+May 19, 8:07 PM
+
+
+
+Payment started
+
+May 19, 8:07 PM
+
+Payment breakdown
+
+Payment amount
+
+$55.21 CAD
+
+Stripe processing fees
+
+Learn more
+
+- $2.34 CAD
+
+Net amount
+
+$52.87 CAD
+
+Payment method
+
+ID
+
+pm_1TYxLwKGzcdqHESCK4jFmNQC
+
+Number
+
+•••• 4242
+
+Fingerprint
+
+zLC3ZhtSdESQ3wQJ
+
+Expires
+
+04 / 2044
+
+Type
+
+Visa credit card
+
+Issuer
+
+Stripe Payments UK Limited
+
+Owner
+
+alex c
+
+Owner email
+
+viperonpcyt@gmail.com
+
+Address
+
+1526 cuthbert ave
+
+mississauga, ON, L5M 3R5, CA
+
+Origin
+
+United States
+
+
+
+CVC check
+
+Passed
+
+
+
+Street check
+
+Passed
+
+
+
+ZIP check
+
+Passed
+
+
+
+Reusable payment ID
+
+
+
+pi_3TYxLjKGzcdqHESC1bcO6KpQ
+
+Allowed payment methods
+
+Card, Klarna, Link
+
+Tax calculation
+
+
+
+Calculate tax on your subscriptions using Stripe. Learn more
+
+Risk analysisNormal
+
+Risk factorsRisk scoresNew
+
+Risk insights are only available for live data.
+
+Related payments
+
+Risk
+
+Amount
+
+Source Type
+
+Customer
+
+Client
+
+Date
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY3SHABEZlDtWP
+
+
+
+
+
+May 19, 7:55 PM
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY3SHABEZlDtWP
+
+
+
+
+
+May 19, 7:47 PM
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY1ww94y9ogvJ7
+
+
+
+
+
+May 19, 6:57 PM
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY1ww94y9ogvJ7
+
+
+
+
+
+May 19, 6:44 PM
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY1ww94y9ogvJ7
+
+
+
+
+
+May 19, 6:15 PM
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY1ww94y9ogvJ7
+
+
+
+
+
+May 19, 6:12 PM
+
+0
+
+$55.21
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+cus_UY1ZAmlkzg15SY
+
+
+
+
+
+May 19, 5:52 PM
+
+0
+
+$54.72
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+
+
+
+
+
+
+May 18, 9:51 PM
+
+0
+
+$25.11
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+
+
+
+
+
+
+May 13, 10:27 PM
+
+0
+
+$25.11
+
+Succeeded
+
+
+
+
+
+•••• 4242
+
+
+
+
+
+
+
+May 13, 10:17 PM
+
+Showing 1–10 of about 50 items
+
+Previous
+
+Next
+
+Related objects
+
+Latest charge
+
+
+
+ch_3TYxfdKGzcdqHESC0lx7kKCp
+
+Invoice
+
+YSQY0MBB-0003
+
+Paid
+
+Subscription
+
+sub_1TYxLiKGzcdqHESCZr1bdbUi
+
+Created May 19
+
+Receipt history
+
+View receipt
+
+
+
+No receipts sent
+
+Events
+
+A new payment pi_3TYxfdKGzcdqHESC0rOVWynM for CA$55.21 was created
+
+
+
+5/19/26, 8:07:37 PM
+
+The payment pi_3TYxfdKGzcdqHESC0rOVWynM for CA$55.21 has succeeded
+
+
+
+5/19/26, 8:07:36 PM
+
+ch_3TYxfdKGzcdqHESC0lx7kKCp was charged CA$55.21
+
+
+
+5/19/26, 8:07:36 PM
+
+no emails, nor has it been seen its still at 71 invoices.
+
+
+
+=== BEDDA RECONCILIATION TEST ===
+
+Time: 2026-05-19 20:07:55
+
+
+
+[OK] Database connected.
+
+
+
+=== FETCHING ALL INVOICES (no filter) ===
+
+
+
+=== DIRECT FETCH OF RENEWAL INVOICES ===
+
+ID: in_1TYvunKGzcdqHESC7mWdCo2c
+
+Status: paid
+
+Billing reason: subscription_cycle
+
+Subscription: sub_1TYvsGKGzcdqHESC6ju5BaAX
+
+Customer email: viperonpcyt@gmail.com
+
+Created: 2026-06-19 18:12:28
+
+
+
+ID: in_1TYwZJKGzcdqHESCDvemASpe
+
+Status: paid
+
+Billing reason: subscription_cycle
+
+Subscription: sub_1TYvsGKGzcdqHESC6ju5BaAX
+
+Customer email: viperonpcyt@gmail.com
+
+Created: 2026-08-19 18:12:28
+
+
+
+Invoice #1
+
+  ID: in_1TYxLiKGzcdqHESC0ylVqDml
+
+  Status: paid
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779234418
+
+  Created (date): 2026-05-19 19:46:58
+
+
+
+Invoice #2
+
+  ID: in_1TYxLdKGzcdqHESCQQ9IgATB
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779234413
+
+  Created (date): 2026-05-19 19:46:53
+
+
+
+Invoice #3
+
+  ID: in_1TYvsGKGzcdqHESCJMFAqjxC
+
+  Status: paid
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779228748
+
+  Created (date): 2026-05-19 18:12:28
+
+
+
+Invoice #4
+
+  ID: in_1TYvbdKGzcdqHESC7dzgng4b
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227717
+
+  Created (date): 2026-05-19 17:55:17
+
+
+
+Invoice #5
+
+  ID: in_1TYvbdKGzcdqHESCCGtlqADJ
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227717
+
+  Created (date): 2026-05-19 17:55:17
+
+
+
+Invoice #6
+
+  ID: in_1TYvWcKGzcdqHESC4FKKvJFr
+
+  Status: paid
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227406
+
+  Created (date): 2026-05-19 17:50:06
+
+
+
+Invoice #7
+
+  ID: in_1TYvVoKGzcdqHESCdcFa6NPI
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227356
+
+  Created (date): 2026-05-19 17:49:16
+
+
+
+Invoice #8
+
+  ID: in_1TYvVnKGzcdqHESCOxTIv1YL
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227355
+
+  Created (date): 2026-05-19 17:49:15
+
+
+
+Invoice #9
+
+  ID: in_1TYvVFKGzcdqHESCjKCTNt4J
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227321
+
+  Created (date): 2026-05-19 17:48:41
+
+
+
+Invoice #10
+
+  ID: in_1TYvVEKGzcdqHESCRVFgY2Tg
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779227320
+
+  Created (date): 2026-05-19 17:48:40
+
+
+
+Invoice #11
+
+  ID: in_1TYvLnKGzcdqHESCHfjOSaES
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779226735
+
+  Created (date): 2026-05-19 17:38:55
+
+
+
+Invoice #12
+
+  ID: in_1TYvLmKGzcdqHESCj6RkmOf6
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779226734
+
+  Created (date): 2026-05-19 17:38:54
+
+
+
+Invoice #13
+
+  ID: in_1TYvFhKGzcdqHESCSJYqyO6F
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779226357
+
+  Created (date): 2026-05-19 17:32:37
+
+
+
+Invoice #14
+
+  ID: in_1TYvFVKGzcdqHESCDb2UGPRY
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779226345
+
+  Created (date): 2026-05-19 17:32:25
+
+
+
+Invoice #15
+
+  ID: in_1TYvFOKGzcdqHESCS10d1BpN
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779226338
+
+  Created (date): 2026-05-19 17:32:18
+
+
+
+Invoice #16
+
+  ID: in_1TYv9RKGzcdqHESCPhJF3wUr
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779225969
+
+  Created (date): 2026-05-19 17:26:09
+
+
+
+Invoice #17
+
+  ID: in_1TYv9QKGzcdqHESCzndxQNpT
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779225968
+
+  Created (date): 2026-05-19 17:26:08
+
+
+
+Invoice #18
+
+  ID: in_1TYv2jKGzcdqHESCyDJCFipw
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779225553
+
+  Created (date): 2026-05-19 17:19:13
+
+
+
+Invoice #19
+
+  ID: in_1TYv2iKGzcdqHESCbnPZcn0d
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779225552
+
+  Created (date): 2026-05-19 17:19:12
+
+
+
+Invoice #20
+
+  ID: in_1TYuuzKGzcdqHESCUgzRK207
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779225073
+
+  Created (date): 2026-05-19 17:11:13
+
+
+
+Invoice #21
+
+  ID: in_1TYuooKGzcdqHESCLXa4mXf2
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779224690
+
+  Created (date): 2026-05-19 17:04:50
+
+
+
+Invoice #22
+
+  ID: in_1TYuomKGzcdqHESCTxqiHHES
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779224688
+
+  Created (date): 2026-05-19 17:04:48
+
+
+
+Invoice #23
+
+  ID: in_1TYuhNKGzcdqHESCO25QpLjD
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779224229
+
+  Created (date): 2026-05-19 16:57:09
+
+
+
+Invoice #24
+
+  ID: in_1TYuhMKGzcdqHESCZgaYZ54v
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779224228
+
+  Created (date): 2026-05-19 16:57:08
+
+
+
+Invoice #25
+
+  ID: in_1TYudLKGzcdqHESCONd7uhLt
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779223979
+
+  Created (date): 2026-05-19 16:52:59
+
+
+
+Invoice #26
+
+  ID: in_1TYudKKGzcdqHESCDwevaQvp
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779223978
+
+  Created (date): 2026-05-19 16:52:58
+
+
+
+Invoice #27
+
+  ID: in_1TYuQrKGzcdqHESCbwN2knEa
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779223205
+
+  Created (date): 2026-05-19 16:40:05
+
+
+
+Invoice #28
+
+  ID: in_1TYuQpKGzcdqHESCbjMRQVTP
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779223203
+
+  Created (date): 2026-05-19 16:40:03
+
+
+
+Invoice #29
+
+  ID: in_1TYu9LKGzcdqHESCgguVpyGk
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779222119
+
+  Created (date): 2026-05-19 16:21:59
+
+
+
+Invoice #30
+
+  ID: in_1TYu9EKGzcdqHESCuzgOP37x
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779222112
+
+  Created (date): 2026-05-19 16:21:52
+
+
+
+Invoice #31
+
+  ID: in_1TYu9CKGzcdqHESCQdJTqhHH
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779222110
+
+  Created (date): 2026-05-19 16:21:50
+
+
+
+Invoice #32
+
+  ID: in_1TYu8VKGzcdqHESCGOB6Y0Rm
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779222067
+
+  Created (date): 2026-05-19 16:21:07
+
+
+
+Invoice #33
+
+  ID: in_1TYu8TKGzcdqHESCbWGL75gH
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779222065
+
+  Created (date): 2026-05-19 16:21:05
+
+
+
+Invoice #34
+
+  ID: in_1TYtzIKGzcdqHESCZSwPT4lv
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779221496
+
+  Created (date): 2026-05-19 16:11:36
+
+
+
+Invoice #35
+
+  ID: in_1TYtzGKGzcdqHESC8YU9GadB
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779221494
+
+  Created (date): 2026-05-19 16:11:34
+
+
+
+Invoice #36
+
+  ID: in_1TYto2KGzcdqHESCosYA1oN3
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779220798
+
+  Created (date): 2026-05-19 15:59:58
+
+
+
+Invoice #37
+
+  ID: in_1TYto0KGzcdqHESCKFGKo3FQ
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779220796
+
+  Created (date): 2026-05-19 15:59:56
+
+
+
+Invoice #38
+
+  ID: in_1TYtdxKGzcdqHESCKXPgchDW
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779220173
+
+  Created (date): 2026-05-19 15:49:33
+
+
+
+Invoice #39
+
+  ID: in_1TYtduKGzcdqHESCpMzoVVhB
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779220170
+
+  Created (date): 2026-05-19 15:49:30
+
+
+
+Invoice #40
+
+  ID: in_1TYtZXKGzcdqHESCMLeAlzKP
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779219899
+
+  Created (date): 2026-05-19 15:44:59
+
+
+
+Invoice #41
+
+  ID: in_1TYtZWKGzcdqHESCNQW33ONr
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779219897
+
+  Created (date): 2026-05-19 15:44:57
+
+
+
+Invoice #42
+
+  ID: in_1TYtV5KGzcdqHESCw1ylzJri
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779219623
+
+  Created (date): 2026-05-19 15:40:23
+
+
+
+Invoice #43
+
+  ID: in_1TYtV3KGzcdqHESCnnXptUQb
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779219621
+
+  Created (date): 2026-05-19 15:40:21
+
+
+
+Invoice #44
+
+  ID: in_1TYdWdKGzcdqHESCaL9TpxhE
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: josiechaves03@gmail.com
+
+  Created (timestamp): 1779158215
+
+  Created (date): 2026-05-18 22:36:55
+
+
+
+Invoice #45
+
+  ID: in_1TYdWZKGzcdqHESC8VGiAiE5
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: josiechaves03@gmail.com
+
+  Created (timestamp): 1779158211
+
+  Created (date): 2026-05-18 22:36:51
+
+
+
+Invoice #46
+
+  ID: in_1TYdWXKGzcdqHESCVQlppx7j
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: josiechaves03@gmail.com
+
+  Created (timestamp): 1779158209
+
+  Created (date): 2026-05-18 22:36:49
+
+
+
+Invoice #47
+
+  ID: in_1TYdW2KGzcdqHESC8ZjNOaGj
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779158177
+
+  Created (date): 2026-05-18 22:36:17
+
+
+
+Invoice #48
+
+  ID: in_1TYdVzKGzcdqHESClKivPDZ9
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779158175
+
+  Created (date): 2026-05-18 22:36:15
+
+
+
+Invoice #49
+
+  ID: in_1TYdU7KGzcdqHESCU1itSQii
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779158059
+
+  Created (date): 2026-05-18 22:34:19
+
+
+
+Invoice #50
+
+  ID: in_1TYdU4KGzcdqHESC9CvWLHAV
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779158056
+
+  Created (date): 2026-05-18 22:34:16
+
+
+
+Invoice #51
+
+  ID: in_1TYdL2KGzcdqHESCKnBFDjDF
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779157496
+
+  Created (date): 2026-05-18 22:24:56
+
+
+
+Invoice #52
+
+  ID: in_1TYdKxKGzcdqHESCBREUb3B7
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779157491
+
+  Created (date): 2026-05-18 22:24:51
+
+
+
+Invoice #53
+
+  ID: in_1TYdKvKGzcdqHESC83eE1DoO
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779157489
+
+  Created (date): 2026-05-18 22:24:49
+
+
+
+Invoice #54
+
+  ID: in_1TYdKMKGzcdqHESCBrzwdLxN
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779157454
+
+  Created (date): 2026-05-18 22:24:14
+
+
+
+Invoice #55
+
+  ID: in_1TYdKJKGzcdqHESCzhM9RZze
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779157451
+
+  Created (date): 2026-05-18 22:24:11
+
+
+
+Invoice #56
+
+  ID: in_1TYcoMKGzcdqHESCUqjb9P2Y
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779155470
+
+  Created (date): 2026-05-18 21:51:10
+
+
+
+Invoice #57
+
+  ID: in_1TYco1KGzcdqHESCslsgvbdT
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779155449
+
+  Created (date): 2026-05-18 21:50:49
+
+
+
+Invoice #58
+
+  ID: in_1TYclTKGzcdqHESC9EqQtCYu
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779155291
+
+  Created (date): 2026-05-18 21:48:11
+
+
+
+Invoice #59
+
+  ID: in_1TYclRKGzcdqHESCuoyFHc6m
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779155288
+
+  Created (date): 2026-05-18 21:48:08
+
+
+
+Invoice #60
+
+  ID: in_1TYcjpKGzcdqHESCZAkWeEQT
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779155189
+
+  Created (date): 2026-05-18 21:46:29
+
+
+
+Invoice #61
+
+  ID: in_1TYcjnKGzcdqHESC1ALG8qfR
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779155187
+
+  Created (date): 2026-05-18 21:46:27
+
+
+
+Invoice #62
+
+  ID: in_1TYcEXKGzcdqHESCIPFVpkT4
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779153249
+
+  Created (date): 2026-05-18 21:14:09
+
+
+
+Invoice #63
+
+  ID: in_1TYcEVKGzcdqHESCI1CLCWh8
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779153247
+
+  Created (date): 2026-05-18 21:14:07
+
+
+
+Invoice #64
+
+  ID: in_1TYc9AKGzcdqHESCbSj6aaQy
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152916
+
+  Created (date): 2026-05-18 21:08:36
+
+
+
+Invoice #65
+
+  ID: in_1TYc98KGzcdqHESCtar6MEV7
+
+  Status: open
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152914
+
+  Created (date): 2026-05-18 21:08:34
+
+
+
+Invoice #66
+
+  ID: in_1TYc5jKGzcdqHESCvkYJxzrp
+
+  Status: void
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152703
+
+  Created (date): 2026-05-18 21:05:03
+
+
+
+Invoice #67
+
+  ID: in_1TYc5hKGzcdqHESCbLB6qqCJ
+
+  Status: void
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152701
+
+  Created (date): 2026-05-18 21:05:01
+
+
+
+Invoice #68
+
+  ID: in_1TYc2GKGzcdqHESCIx68VeCY
+
+  Status: void
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152488
+
+  Created (date): 2026-05-18 21:01:28
+
+
+
+Invoice #69
+
+  ID: in_1TYc2CKGzcdqHESCo4dl7yol
+
+  Status: void
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152484
+
+  Created (date): 2026-05-18 21:01:24
+
+
+
+Invoice #70
+
+  ID: in_1TYc2AKGzcdqHESCbsJnIokU
+
+  Status: void
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152482
+
+  Created (date): 2026-05-18 21:01:22
+
+
+
+Invoice #71
+
+  ID: in_1TYc28KGzcdqHESCIjqnJzI2
+
+  Status: void
+
+  Billing reason: subscription_create
+
+  Subscription: NULL
+
+  Customer email: viperonpcyt@gmail.com
+
+  Created (timestamp): 1779152480
+
+  Created (date): 2026-05-18 21:01:20
+
+
+
+Total invoices: 71
+
+
+
+Event
+
+customer.subscription.updated
+
+Event ID
+
+evt_1TYxgrKGzcdqHESCekspWzL1
+
+Origin date
+
+May 19, 2026, 8:08:48 PM EDT
+
+Source
+
+Automatic
+
+Description
+
+viperonpcyt@gmail.com's subscription has changed
+
+Event data
+
+
+
+
+
+{
+
+
+
+"object"
+
+: {
+
+"id": 
+
+"sub_1TYc98KGzcdqHESCoMNIZ103",
+
+"object": 
+
+"subscription",
+
+"application": 
+
+null,
+
+"application_fee_percent": 
+
+null,
+
+
+
+"automatic_tax"
+
+: {
+
+"disabled_reason": 
+
+null,
+
+"enabled": 
+
+false,
+
+"liability": 
+
+null,
+
+},"billing_cycle_anchor": 
+
+1779152914,
+
+"billing_cycle_anchor_config": 
+
+null,
+
+
+
+"billing_mode"
+
+: {
+
+
+
+"flexible"
+
+: {
+
+"proration_discounts": 
+
+"included",
+
+},"type": 
+
+"flexible",
+
+"updated_at": 
+
+1779152914,
+
+},"billing_thresholds": 
+
+null,
+
+"cancel_at": 
+
+null,
+
+"cancel_at_period_end": 
+
+false,
+
+"canceled_at": 
+
+1779235727,
+
+
+
+"cancellation_details"
+
+: {
+
+"comment": 
+
+null,
+
+"feedback": 
+
+null,
+
+"reason": 
+
+null,
+
+},"collection_method": 
+
+"charge_automatically",
+
+"created": 
+
+1779152914,
+
+"currency": 
+
+"cad",
+
+"customer": 
+
+"cus_UXh042Iq7QDMz8",
+
+"customer_account": 
+
+null,
+
+"days_until_due": 
+
+null,
+
+"default_payment_method": 
+
+null,
+
+"default_source": 
+
+null,
+
+"default_tax_rates"
+
+:
+
+[]
+
+,
+
+"description": 
+
+null,
+
+"discounts"
+
+:
+
+[]
+
+,
+
+"ended_at": 
+
+1779235727,
+
+
+
+"invoice_settings"
+
+: {
+
+"account_tax_ids": 
+
+null,
+
+
+
+"issuer"
+
+: {
+
+"type": 
+
+"self",
+
+},
+
+},
+
+"items"
+
+: {
+
+"object": 
+
+"list",
+
+
+
+"data"
+
+: [
+
+
+
+"0"
+
+: {
+
+"id": 
+
+"si_UXhYlfWCWlpy56",
+
+"object": 
+
+"subscription_item",
+
+"billing_thresholds": 
+
+null,
+
+"created": 
+
+1779152915,
+
+"current_period_end": 
+
+1781831314,
+
+"current_period_start": 
+
+1779152914,
+
+"discounts"
+
+:
+
+[]
+
+,
+
+"metadata"
+
+:
+
+{}
+
+,
+
+
+
+"plan"
+
+: {
+
+"id": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"object": 
+
+"plan",
+
+"active": 
+
+true,
+
+"amount": 
+
+5521,
+
+"amount_decimal": 
+
+"5521",
+
+"billing_scheme": 
+
+"per_unit",
+
+"created": 
+
+1779152914,
+
+"currency": 
+
+"cad",
+
+"interval": 
+
+"month",
+
+"interval_count": 
+
+1,
+
+"livemode": 
+
+false,
+
+
+
+"metadata"
+
+: {
+
+"handling_cost": 
+
+"3.9",
+
+"order_number": 
+
+"BEDDA-07161A27-6A67-428E-B420-0E82FE9C7281",
+
+"shipping_cost": 
+
+"6.23",
+
+},"meter": 
+
+null,
+
+"nickname": 
+
+null,
+
+"product": 
+
+"prod_UXhYTLaR6lxYhD",
+
+"tiers_mode": 
+
+null,
+
+"transform_usage": 
+
+null,
+
+"trial_period_days": 
+
+null,
+
+"usage_type": 
+
+"licensed",
+
+},
+
+"price"
+
+: {
+
+"id": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"object": 
+
+"price",
+
+"active": 
+
+true,
+
+"billing_scheme": 
+
+"per_unit",
+
+"created": 
+
+1779152914,
+
+"currency": 
+
+"cad",
+
+"custom_unit_amount": 
+
+null,
+
+"livemode": 
+
+false,
+
+"lookup_key": 
+
+null,
+
+
+
+"metadata"
+
+: {
+
+"handling_cost": 
+
+"3.9",
+
+"order_number": 
+
+"BEDDA-07161A27-6A67-428E-B420-0E82FE9C7281",
+
+"shipping_cost": 
+
+"6.23",
+
+},"nickname": 
+
+null,
+
+"product": 
+
+"prod_UXhYTLaR6lxYhD",
+
+
+
+"recurring"
+
+: {
+
+"interval": 
+
+"month",
+
+"interval_count": 
+
+1,
+
+"meter": 
+
+null,
+
+"trial_period_days": 
+
+null,
+
+"usage_type": 
+
+"licensed",
+
+},"tax_behavior": 
+
+"unspecified",
+
+"tiers_mode": 
+
+null,
+
+"transform_quantity": 
+
+null,
+
+"type": 
+
+"recurring",
+
+"unit_amount": 
+
+5521,
+
+"unit_amount_decimal": 
+
+"5521",
+
+},"quantity": 
+
+1,
+
+"subscription": 
+
+"sub_1TYc98KGzcdqHESCoMNIZ103",
+
+"tax_rates"
+
+:
+
+[]
+
+,
+
+},
+
+],"has_more": 
+
+false,
+
+"total_count": 
+
+1,
+
+"url": 
+
+"/v1/subscription_items?subscription=sub_1TYc98KGzcdqHESCoMNIZ103"
+
+
+
+,
+
+},"latest_invoice": 
+
+"in_1TYc98KGzcdqHESCtar6MEV7",
+
+"livemode": 
+
+false,
+
+
+
+"managed_payments"
+
+: {
+
+"enabled": 
+
+false,
+
+},
+
+"metadata"
+
+: {
+
+"is_subscription": 
+
+"1",
+
+"items": 
+
+"[{"product":"Plain Jane Soap","price":4.05,"quantity":5,"id":"1779150887469m04am","isSubscription":false,"subscriptionInterval":null},{"product":"Plain Jane Face & Body Balm","price":13.6,"quantity":2,"id":"1779150887470tkao0","isSubscription":false,"subscriptionInterval":null},{"product":"Soap Saver Exfoliating Bag","price":0,"quantity":1,"id":"1779150887470a510s","isSubscription":false,"subscriptionInterval":null}]",
+
+"order_number": 
+
+"BEDDA-07161A27-6A67-428E-B420-0E82FE9C7281",
+
+"price_id": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"product_id": 
+
+"prod_UXhYTLaR6lxYhD",
+
+},"next_pending_invoice_item_invoice": 
+
+null,
+
+"on_behalf_of": 
+
+null,
+
+"pause_collection": 
+
+null,
+
+
+
+"payment_settings"
+
+: {
+
+"payment_method_options": 
+
+null,
+
+"payment_method_types": 
+
+null,
+
+"save_default_payment_method": 
+
+"on_subscription",
+
+},"pending_invoice_item_interval": 
+
+null,
+
+"pending_setup_intent": 
+
+null,
+
+"pending_update": 
+
+null,
+
+
+
+"plan"
+
+: {
+
+"id": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"object": 
+
+"plan",
+
+"active": 
+
+true,
+
+"amount": 
+
+5521,
+
+"amount_decimal": 
+
+"5521",
+
+"billing_scheme": 
+
+"per_unit",
+
+"created": 
+
+1779152914,
+
+"currency": 
+
+"cad",
+
+"interval": 
+
+"month",
+
+"interval_count": 
+
+1,
+
+"livemode": 
+
+false,
+
+
+
+"metadata"
+
+: {
+
+"handling_cost": 
+
+"3.9",
+
+"order_number": 
+
+"BEDDA-07161A27-6A67-428E-B420-0E82FE9C7281",
+
+"shipping_cost": 
+
+"6.23",
+
+},"meter": 
+
+null,
+
+"nickname": 
+
+null,
+
+"product": 
+
+"prod_UXhYTLaR6lxYhD",
+
+"tiers_mode": 
+
+null,
+
+"transform_usage": 
+
+null,
+
+"trial_period_days": 
+
+null,
+
+"usage_type": 
+
+"licensed",
+
+},"quantity": 
+
+1,
+
+"schedule": 
+
+null,
+
+"start_date": 
+
+1779152914,
+
+"status": 
+
+"incomplete_expired",
+
+"test_clock": 
+
+null,
+
+"transfer_data": 
+
+null,
+
+"trial_end": 
+
+null,
+
+
+
+"trial_settings"
+
+: {
+
+
+
+"end_behavior"
+
+: {
+
+"missing_payment_method": 
+
+"create_invoice",
+
+},
+
+},"trial_start": 
+
+null,
+
+},
+
+"previous_attributes"
+
+: {
+
+"canceled_at": 
+
+null,
+
+"ended_at": 
+
+null,
+
+"status": 
+
+"incomplete",
+
+},
+
+}
+
+$
+
+
+
+
+
+
+
+Developers
+
+
+
+
+
+Event
+
+payment_intent.canceled
+
+Event ID
+
+evt_3TYc99KGzcdqHESC01KgIAfA
+
+Origin date
+
+May 19, 2026, 8:08:48 PM EDT
+
+Source
+
+Automatic
+
+Description
+
+A payment pi_3TYc99KGzcdqHESC0J7Mb1PN for CAD 55.21 was canceled
+
+Event data
+
+
+
+
+
+{
+
+
+
+"object"
+
+: {
+
+"id": 
+
+"pi_3TYc99KGzcdqHESC0J7Mb1PN",
+
+"object": 
+
+"payment_intent",
+
+"amount": 
+
+5521,
+
+"amount_capturable": 
+
+0,
+
+
+
+"amount_details"
+
+: {
+
+"tip"
+
+:
+
+{}
+
+,
+
+},"amount_received": 
+
+0,
+
+"application": 
+
+null,
+
+"application_fee_amount": 
+
+null,
+
+"automatic_payment_methods": 
+
+null,
+
+"canceled_at": 
+
+1779235728,
+
+"cancellation_reason": 
+
+"void_invoice",
+
+"capture_method": 
+
+"automatic",
+
+"client_secret": 
+
+"pi_3TYc99KGzcdqHESC0J7Mb1PN_secret_Lm3OcdZjs0OBQbgv52poQEBBZ",
+
+"confirmation_method": 
+
+"automatic",
+
+"created": 
+
+1779152915,
+
+"currency": 
+
+"cad",
+
+"customer": 
+
+"cus_UXh042Iq7QDMz8",
+
+"customer_account": 
+
+null,
+
+"description": 
+
+"Subscription creation",
+
+"excluded_payment_method_types": 
+
+null,
+
+"last_payment_error": 
+
+null,
+
+"latest_charge": 
+
+null,
+
+"livemode": 
+
+false,
+
+
+
+"managed_payments"
+
+: {
+
+"enabled": 
+
+false,
+
+},"metadata"
+
+:
+
+{}
+
+,
+
+"next_action": 
+
+null,
+
+"on_behalf_of": 
+
+null,
+
+
+
+"payment_details"
+
+: {
+
+"customer_reference": 
+
+null,
+
+"order_reference": 
+
+"in_1TYc98KGzcdqHESCtar6MEV7",
+
+},"payment_method": 
+
+null,
+
+"payment_method_configuration_details": 
+
+null,
+
+
+
+"payment_method_options"
+
+: {
+
+
+
+"card"
+
+: {
+
+"installments": 
+
+null,
+
+"mandate_options": 
+
+null,
+
+"network": 
+
+null,
+
+"request_three_d_secure": 
+
+"automatic",
+
+},
+
+"klarna"
+
+: {
+
+"preferred_locale": 
+
+null,
+
+},
+
+"link"
+
+: {
+
+"persistent_token": 
+
+null,
+
+},
+
+},
+
+"payment_method_types"
+
+: [
+
+"card",
+
+"klarna",
+
+"link",
+
+],"processing": 
+
+null,
+
+"receipt_email": 
+
+null,
+
+"review": 
+
+null,
+
+"setup_future_usage": 
+
+"off_session",
+
+"shared_payment_granted_token": 
+
+null,
+
+"shipping": 
+
+null,
+
+"source": 
+
+null,
+
+"statement_descriptor": 
+
+null,
+
+"statement_descriptor_suffix": 
+
+null,
+
+"status": 
+
+"canceled",
+
+"transfer_data": 
+
+null,
+
+"transfer_group": 
+
+null,
+
+},"previous_attributes": 
+
+null,
+
+}
+
+$
+
+
+
+
+
+
+
+Developers
+
+
+
+
+
+Event
+
+invoice.voided
+
+Event ID
+
+evt_1TYxgrKGzcdqHESCwc8pJos6
+
+Origin date
+
+May 19, 2026, 8:08:48 PM EDT
+
+Source
+
+Automatic
+
+Description
+
+viperonpcyt@gmail.com's invoice A03YR0SL-0007 was voided
+
+Event data
+
+
+
+
+
+{
+
+
+
+"object"
+
+: {
+
+"id": 
+
+"in_1TYc98KGzcdqHESCtar6MEV7",
+
+"object": 
+
+"invoice",
+
+"account_country": 
+
+"CA",
+
+"account_name": 
+
+"Bedda",
+
+"account_tax_ids": 
+
+null,
+
+"amount_due": 
+
+5521,
+
+"amount_overpaid": 
+
+0,
+
+"amount_paid": 
+
+0,
+
+"amount_remaining": 
+
+5521,
+
+"amount_shipping": 
+
+0,
+
+"application": 
+
+null,
+
+"attempt_count": 
+
+0,
+
+"attempted": 
+
+false,
+
+"auto_advance": 
+
+false,
+
+
+
+"automatic_tax"
+
+: {
+
+"disabled_reason": 
+
+null,
+
+"enabled": 
+
+false,
+
+"liability": 
+
+null,
+
+"provider": 
+
+null,
+
+"status": 
+
+null,
+
+},"automatically_finalizes_at": 
+
+null,
+
+"billing_reason": 
+
+"subscription_create",
+
+"collection_method": 
+
+"charge_automatically",
+
+"created": 
+
+1779152914,
+
+"currency": 
+
+"cad",
+
+"custom_fields": 
+
+null,
+
+"customer": 
+
+"cus_UXh042Iq7QDMz8",
+
+"customer_account": 
+
+null,
+
+"customer_address": 
+
+null,
+
+"customer_email": 
+
+"viperonpcyt@gmail.com",
+
+"customer_name": 
+
+"alex c",
+
+"customer_phone": 
+
+null,
+
+"customer_shipping": 
+
+null,
+
+"customer_tax_exempt": 
+
+"none",
+
+"customer_tax_ids"
+
+:
+
+[]
+
+,
+
+"default_payment_method": 
+
+null,
+
+"default_source": 
+
+null,
+
+"default_tax_rates"
+
+:
+
+[]
+
+,
+
+"description": 
+
+null,
+
+"discounts"
+
+:
+
+[]
+
+,
+
+"due_date": 
+
+null,
+
+"effective_at": 
+
+1779152914,
+
+"ending_balance": 
+
+0,
+
+"footer": 
+
+null,
+
+"from_invoice": 
+
+null,
+
+"hosted_invoice_url": 
+
+"https://invoice.stripe.com/i/acct_1TUsMeKGzcdqHESC/test_YWNjdF8xVFVzTWVLR3pjZHFIRVNDLF9VWGhZcExHT1JyNU5ES2ZtWWdWTFlSMVdFbVI1YVowLDE2OTc3NjUyOQ0200067oIe0Z?s=ap",
+
+"invoice_pdf": 
+
+"https://pay.stripe.com/invoice/acct_1TUsMeKGzcdqHESC/test_YWNjdF8xVFVzTWVLR3pjZHFIRVNDLF9VWGhZcExHT1JyNU5ES2ZtWWdWTFlSMVdFbVI1YVowLDE2OTc3NjUyOQ0200067oIe0Z/pdf?s=ap",
+
+
+
+"issuer"
+
+: {
+
+"type": 
+
+"self",
+
+},"last_finalization_error": 
+
+null,
+
+"latest_revision": 
+
+null,
+
+
+
+"lines"
+
+: {
+
+"object": 
+
+"list",
+
+
+
+"data"
+
+: [
+
+
+
+"0"
+
+: {
+
+"id": 
+
+"il_1TYc98KGzcdqHESCxIeKVt3u",
+
+"object": 
+
+"line_item",
+
+"amount": 
+
+5521,
+
+"currency": 
+
+"cad",
+
+"description": 
+
+"1 × Bedda Skincare Box (1 Month Auto-Ship) (at $55.21 / month)",
+
+"discount_amounts"
+
+:
+
+[]
+
+,
+
+"discountable": 
+
+true,
+
+"discounts"
+
+:
+
+[]
+
+,
+
+"invoice": 
+
+"in_1TYc98KGzcdqHESCtar6MEV7",
+
+"livemode": 
+
+false,
+
+
+
+"metadata"
+
+: {
+
+"is_subscription": 
+
+"1",
+
+"items": 
+
+"[{"product":"Plain Jane Soap","price":4.05,"quantity":5,"id":"1779150887469m04am","isSubscription":false,"subscriptionInterval":null},{"product":"Plain Jane Face & Body Balm","price":13.6,"quantity":2,"id":"1779150887470tkao0","isSubscription":false,"subscriptionInterval":null},{"product":"Soap Saver Exfoliating Bag","price":0,"quantity":1,"id":"1779150887470a510s","isSubscription":false,"subscriptionInterval":null}]",
+
+"order_number": 
+
+"BEDDA-07161A27-6A67-428E-B420-0E82FE9C7281",
+
+"price_id": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"product_id": 
+
+"prod_UXhYTLaR6lxYhD",
+
+},
+
+"parent"
+
+: {
+
+"invoice_item_details": 
+
+null,
+
+
+
+"subscription_item_details"
+
+: {
+
+"invoice_item": 
+
+null,
+
+"proration": 
+
+false,
+
+
+
+"proration_details"
+
+: {
+
+"credited_items": 
+
+null,
+
+},"subscription": 
+
+"sub_1TYc98KGzcdqHESCoMNIZ103",
+
+"subscription_item": 
+
+"si_UXhYlfWCWlpy56",
+
+},"type": 
+
+"subscription_item_details",
+
+},
+
+"period"
+
+: {
+
+"end": 
+
+1781831314,
+
+"start": 
+
+1779152914,
+
+},"pretax_credit_amounts"
+
+:
+
+[]
+
+,
+
+
+
+"pricing"
+
+: {
+
+
+
+"price_details"
+
+: {
+
+"price": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"product": 
+
+"prod_UXhYTLaR6lxYhD",
+
+},"type": 
+
+"price_details",
+
+"unit_amount_decimal": 
+
+"5521",
+
+},"quantity": 
+
+1,
+
+"quantity_decimal": 
+
+"1",
+
+"subtotal": 
+
+5521,
+
+"taxes"
+
+:
+
+[]
+
+,
+
+},
+
+],"has_more": 
+
+false,
+
+"total_count": 
+
+1,
+
+"url": 
+
+"/v1/invoices/in_1TYc98KGzcdqHESCtar6MEV7/lines"
+
+
+
+,
+
+},"livemode": 
+
+false,
+
+"metadata"
+
+:
+
+{}
+
+,
+
+"next_payment_attempt": 
+
+null,
+
+"number": 
+
+"A03YR0SL-0007",
+
+"on_behalf_of": 
+
+null,
+
+
+
+"parent"
+
+: {
+
+"quote_details": 
+
+null,
+
+
+
+"subscription_details"
+
+: {
+
+
+
+"metadata"
+
+: {
+
+"is_subscription": 
+
+"1",
+
+"items": 
+
+"[{"product":"Plain Jane Soap","price":4.05,"quantity":5,"id":"1779150887469m04am","isSubscription":false,"subscriptionInterval":null},{"product":"Plain Jane Face & Body Balm","price":13.6,"quantity":2,"id":"1779150887470tkao0","isSubscription":false,"subscriptionInterval":null},{"product":"Soap Saver Exfoliating Bag","price":0,"quantity":1,"id":"1779150887470a510s","isSubscription":false,"subscriptionInterval":null}]",
+
+"order_number": 
+
+"BEDDA-07161A27-6A67-428E-B420-0E82FE9C7281",
+
+"price_id": 
+
+"price_1TYc98KGzcdqHESCH2ELxjDs",
+
+"product_id": 
+
+"prod_UXhYTLaR6lxYhD",
+
+},"subscription": 
+
+"sub_1TYc98KGzcdqHESCoMNIZ103",
+
+},"type": 
+
+"subscription_details",
+
+},
+
+"payment_settings"
+
+: {
+
+"default_mandate": 
+
+null,
+
+"payment_method_options": 
+
+null,
+
+"payment_method_types": 
+
+null,
+
+},"period_end": 
+
+1779152914,
+
+"period_start": 
+
+1779152914,
+
+"post_payment_credit_notes_amount": 
+
+0,
+
+"pre_payment_credit_notes_amount": 
+
+0,
+
+"receipt_number": 
+
+null,
+
+"rendering": 
+
+null,
+
+"shipping_cost": 
+
+null,
+
+"shipping_details": 
+
+null,
+
+"starting_balance": 
+
+0,
+
+"statement_descriptor": 
+
+null,
+
+"status": 
+
+"void",
+
+
+
+"status_transitions"
+
+: {
+
+"finalized_at": 
+
+1779152914,
+
+"marked_uncollectible_at": 
+
+null,
+
+"paid_at": 
+
+null,
+
+"voided_at": 
+
+1779235727,
+
+},"subtotal": 
+
+5521,
+
+"subtotal_excluding_tax": 
+
+5521,
+
+"test_clock": 
+
+null,
+
+"total": 
+
+5521,
+
+"total_discount_amounts"
+
+:
+
+[]
+
+,
+
+"total_excluding_tax": 
+
+5521,
+
+"total_pretax_credit_amounts"
+
+:
+
+[]
+
+,
+
+"total_taxes"
+
+:
+
+[]
+
+,
+
+"webhooks_delivered_at": 
+
+1779152914,
+
+},"previous_attributes": 
+
+null,
+
+}
+
+$
+
+
+
+
+
+
+
+Developers
+
+
+
+
+
+
+
+
+
+Event
+
+invoice.updated
+
+Event ID
+
+evt_1TYxgrKGzcdqHESCSxCwaP3e
+
+Origin date
+
+May 19, 2026, 8:08:48 PM EDT
+
+Source
+
+Automatic
+
+Description
+
+viperonpcyt@gmail.com's invoice has changed
+
+Event data
+
+
+
+
+
+{
+
+
+
+"object"
+
+: {
+
+"id": 
+
+"in_1TYc98KGzcdqHESCtar6MEV7",
+
+"object": 
+
+"invoice",
+
+"account_country": 
+
+"CA",
+
+"account_name": 
+
+"Bedda",
+
+"account_tax_ids": 
+
+null,
+
+"amount_due": 
+
+5521,
+
+"amount_overpaid": 
+
+0,
+
+"amount_paid": 
+
+0,
+
+"amount_remaining": 
+
+5521,
+
+"amount_shipping": 
+
+0,

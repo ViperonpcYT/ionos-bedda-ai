@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Confirmed - Bedda Skincare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="font-inter bg-stone-50 min-h-screen flex items-center justify-center p-4" data-bedda-ai="off">
+  <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+    <h1 class="font-playfair text-2xl font-bold text-stone-800 mb-2">Payment Confirmed!</h1>
+    <p class="text-stone-600 mb-6">Thank you for your order. You'll receive a confirmation email shortly with tracking details.</p>
+    
+    <div class="bg-stone-50 rounded-lg p-4 mb-6 text-left">
+      <p class="text-sm text-stone-500">Order Number</p>
+      <p id="order-number" class="font-mono font-semibold text-stone-800">Loading...</p>
+    </div>
+
+    <!-- Post-Purchase Upsell -->
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+      <p class="text-sm font-semibold text-amber-800 mb-2">🎁 Special Offer</p>
+      <p class="text-xs text-amber-700 mb-3">Get 10% off your next order with code: <span class="font-mono font-bold">BEDDA10</span></p>
+      <a href="products.html" class="block w-full bg-amber-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-amber-700 transition-colors">
+        Shop Now
+      </a>
+    </div>
+
+  <div class="space-y-3">
+        <a href="https://billing.stripe.com/p/login/4gM5kEdep50ogFTeW908g00" class="block w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
+          Manage Subscription
+        </a>
+        <a href="products.html" class="block w-full border border-stone-300 text-stone-700 py-3 rounded-lg font-semibold hover:bg-stone-50 transition-colors">
+          Continue Shopping
+        </a>
+      </div>
+    
+    <p class="text-xs text-stone-400 mt-6">
+      Questions? Email <a href="mailto:orders@bedda.ca" class="text-amber-600 hover:underline">orders@bedda.ca</a>
+    </p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderNumber = params.get('order_number');
+    if (orderNumber) {
+      document.getElementById('order-number').textContent = orderNumber;
+    }
+
+    const upsellCode = params.get('upsell_code');
+    const upsellValue = params.get('upsell_value');
+
+    // Ghost order recovery for redirect-based payment methods (e.g. Klarna, iDEAL)
+    const pendingOrderJson = localStorage.getItem('bedda_pending_order');
+    if (pendingOrderJson && params.get('payment_intent')) {
+      try {
+        const pendingOrder = JSON.parse(pendingOrderJson);
+        // Only submit if it's the matching order
+        if (pendingOrder.orderNumber === orderNumber) {
+          pendingOrder.payment_intent_id = params.get('payment_intent');
+          pendingOrder.payment_status = 'succeeded';
+          
+          fetch('/api/submit-order.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(pendingOrder)
+          }).then(res => res.json()).then(data => {
+            if (data.success) {
+              console.log('Ghost order recovered successfully');
+              localStorage.removeItem('bedda_pending_order');
+              if (window.cartManager) {
+                window.cartManager.items = [];
+                window.cartManager.saveCart();
+                window.cartManager.renderCartCount();
+              }
+              // Refresh page to show upsell if newly generated
+              if (data.upsell_code && !upsellCode) {
+                 const newUrl = new URL(window.location.href);
+                 newUrl.searchParams.set('upsell_code', data.upsell_code);
+                 newUrl.searchParams.set('upsell_value', data.upsell_value);
+                 window.location.href = newUrl.toString();
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Failed to recover pending order', e);
+      }
+    }
+    
+    if (upsellCode && upsellValue) {
+      const upsellHtml = `
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg uppercase tracking-wide">
+            Expires in 14 days
+          </div>
+          <p class="text-sm font-semibold text-amber-800 mb-2 mt-1">🎁 Here's a coupon for your next order!</p>
+          <p class="text-xs text-amber-700 mb-3">We loved making your order! As a thank you, enjoy <span class="font-bold text-amber-900">${upsellValue}% OFF</span> your next purchase. But hurry, this exclusive offer is only valid for 14 days!</p>
+          <div class="bg-white border border-amber-200 rounded p-2 mb-3 flex justify-between items-center">
+            <span class="font-mono font-bold text-lg text-stone-800 tracking-wider">${upsellCode}</span>
+            <button onclick="navigator.clipboard.writeText('${upsellCode}').then(() => { this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000); })" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded font-semibold hover:bg-amber-200 transition-colors">Copy</button>
+          </div>
+          <a href="products.html" class="block w-full bg-amber-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-amber-700 transition-colors text-center">
+            Shop Now With Discount
+          </a>
+        </div>
+      `;
+      // Replace the default upsell
+      const defaultUpsell = document.querySelector('.bg-amber-50');
+      if (defaultUpsell) {
+        defaultUpsell.outerHTML = upsellHtml;
+      }
+    }
+
+    // Log checkout complete event
+    if (window.beddaLogger) {
+      window.beddaLogger.logEvent('checkout_complete', {
+        orderNumber: orderNumber,
+        paymentIntent: params.get('payment_intent')
+      });
+    }
+  </script>
+  <script src="logger-backend.js"></script>
+</body>
+</html>

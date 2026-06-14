@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your Own Tallow Soap Loaf | Custom Artisan Soap | Bedda Canada</title>
+    <meta name="description" content="Create your custom tallow soap loaf in Mississauga. Choose exfoliants, scents & designs. 11 handmade bars, 4-6 week cure. Order personalized natural soap online Canada.">
+    <meta name="keywords" content="custom soap Canada, build your own soap, personalized tallow soap, artisan soap loaf, handmade soap Mississauga">
+    <meta property="og:title" content="Build Your Own Tallow Soap Loaf | Bedda">
+    <meta property="og:description" content="Design your perfect custom soap loaf with natural exfoliants, essential oil scents, and artisan designs. Handmade in Mississauga.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://bedda.ca/build-loaf.html">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .option-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .option-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        .option-card.selected {
+            border-color: #d97706;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            box-shadow: 0 0 0 3px #f59e0b, 0 12px 24px rgba(217, 119, 6, 0.2);
+        }
+        .option-card.premium.selected {
+            border-color: #dc2626;
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            box-shadow: 0 0 0 3px #ef4444, 0 12px 24px rgba(220, 38, 38, 0.25);
+        }
+        /* Disabled exfoliant style (visually disabled but clickable) */
+        .option-card.disabled-exfoliant {
+            opacity: 0.4;
+            filter: grayscale(0.5);
+            cursor: not-allowed;
+            pointer-events: auto; /* allow clicks to trigger the message */
+        }
+        .option-card.disabled-exfoliant:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .scarcity-pulse {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+        }
+        .sticky-price {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 3px solid #d97706;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 50;
+            padding: 1rem;
+        }
+        .step-indicator.active {
+            background: #d97706;
+            color: white;
+        }
+        .step-indicator.completed {
+            background: #10b981;
+            color: white;
+        }
+        .popular-badge {
+            background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            position: absolute;
+            top: 0;
+            right: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 50%);
+        }
+        .value-badge {
+            background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .anchor-price {
+            text-decoration: line-through;
+            color: #78716c;
+            font-size: 1.25rem;
+        }
+        .actual-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1c1917;
+            line-height: 1;
+        }
+        .premium-glow {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+            position: absolute;
+            inset: -2px;
+            z-index: -1;
+            border-radius: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .option-card.premium:hover .premium-glow,
+        .option-card.premium.selected .premium-glow {
+            opacity: 1;
+        }
+        .social-proof-toast {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-left: 4px solid #10b981;
+            max-width: 300px;
+            z-index: 40;
+            animation: slideIn 0.5s ease-out;
+            display: none;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .urgency-timer {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        #mobile-menu, #mobile-menu-panel { display: none; }
+        #mobile-menu.open, #mobile-menu-panel.open { display: block; }
+    </style>
+</head>
+<body class="font-inter bg-stone-50 pb-32">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <a href="index.html" class="text-amber-600 font-medium flex items-center space-x-2 flex-shrink-0">
+                <img src="images/bedda-logo.jpg" alt="Bedda logo" class="h-10 w-auto">
+                <span class="hidden sm:inline text-xl">Bedda</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="text-stone-700 hover:text-amber-600 font-medium">Home</a>
+                
+                <div class="relative group">
+                    <button class="text-stone-700 hover:text-amber-600 font-medium flex items-center">
+                        Shop by Need
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-stone-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50" role="menu" aria-label="Shop by Need">
+                        <!-- Standard Action -->
+                        <a href="build-loaf.html" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">Build Your Own Loaf</a>
+
+                        <!-- Visual Grouping -->
+                        <div class="px-4 py-2 border-t border-stone-100 mt-1">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Shop by Need</span>
+                        </div>
+
+                        <!-- Core Categories -->
+                        <a href="products.html?category=dryness" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">For Dryness &amp; Repair</a>
+                        <a href="products.html?category=sensitive" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">For Sensitive Skin</a>
+                        <a href="products.html?category=exfoliation" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">For Exfoliation</a>                    
+
+                        <!-- Value Proposition -->
+                        <a href="bundles.html" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">
+                            Bundles
+                            <span class="block text-xs text-stone-500 font-normal mt-0.5">Curated routines</span>
+                        </a>
+
+                        <!-- Comprehensive Fallback (Highlighted) -->
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Browse</span>
+                        </div>
+                        <a href="products.html" role="menuitem" class="block px-4 py-3 text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border-l-4 border-amber-500">All Products</a>
+                    </div>
+                </div>
+                
+                <a href="build-loaf.html" class="text-stone-700 hover:text-amber-600 font-medium">Build Your Own Loaf</a>
+                <a href="bundles.html" class="text-stone-700 hover:text-amber-600 font-medium">Bundles</a>
+                <a href="ingredients.html" class="text-stone-700 hover:text-amber-600 font-medium">Ingredients</a>
+                <a href="about.html" class="text-stone-700 hover:text-amber-600 font-medium">About</a>
+                <a href="contact.html" class="text-stone-700 hover:text-amber-600 font-medium">Contact & Pickup Info</a>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <button id="login-btn" class="relative p-2 text-stone-700 hover:text-amber-600" aria-label="Account">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </button>
+                <button id="cart-btn" class="relative p-2 text-stone-700 hover:text-amber-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6"/></svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-stone-700 hover:text-amber-600 border border-stone-300 rounded" type="button" aria-label="Open menu">
+                    <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="fixed top-16 left-0 w-full bg-white border-b border-stone-200 shadow-lg z-[60]">
+        <div class="px-4 py-6 space-y-4">
+            <a href="index.html" class="block text-stone-700 hover:text-amber-600 font-medium py-2">Home</a>
+            
+            <div class="space-y-2">
+                <button id="mobile-shop-toggle" class="flex items-center justify-between w-full text-stone-700 hover:text-amber-600 font-medium py-2 text-left">
+                    <span>Shop by Need</span>
+                    <svg class="w-4 h-4 transition-transform duration-200" id="mobile-shop-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                
+                <div id="mobile-shop-submenu" class="hidden pl-4 space-y-2">
+                    <!-- Standard Action -->
+                    <a href="build-loaf.html" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">Build Your Own Loaf</a>
+
+                    <!-- Visual Grouping -->
+                    <div class="px-3 py-2 border-t border-stone-100 mt-1">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Shop by Need</span>
+                    </div>
+
+                    <!-- Core Categories -->
+                    <a href="products.html?category=dryness" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">For Dryness &amp; Repair</a>
+                    <a href="products.html?category=sensitive" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">For Sensitive Skin</a>
+                    <a href="products.html?category=exfoliation" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">For Exfoliation</a>
+
+                    <!-- Value Proposition -->
+                    <a href="bundles.html" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700">
+                        Bundles
+                        <span class="block text-xs text-stone-500 font-normal mt-0.5">Curated routines</span>
+                    </a>
+
+                    <!-- Comprehensive Fallback (Highlighted) -->
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Browse</span>
+                    </div>
+                    <a href="products.html" class="block px-3 py-3 text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border-l-4 border-amber-500 rounded">All Products</a>
+                </div>
+            </div>
+
+            <a href="build-loaf.html" class="block text-stone-700 hover:text-amber-600 font-medium py-2">Build Your Own Loaf</a>
+            <a href="bundles.html" class="block text-stone-700 hover:text-amber-600 font-medium py-2">Bundles</a>
+            <a href="ingredients.html" class="block text-stone-700 hover:text-amber-600 font-medium py-2">Ingredients</a>
+            <a href="about.html" class="block text-stone-700 hover:text-amber-600 font-medium py-2">About</a>
+            <a href="contact.html" class="block text-stone-700 hover:text-amber-600 font-medium py-2">Contact & Pickup Info</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="pt-24 pb-8 bg-gradient-to-br from-amber-50 to-orange-50">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <div class="inline-block bg-red-100 text-red-800 px-4 py-1 rounded-full text-sm font-semibold mb-4 scarcity-pulse">
+            ⚡ Limited: Only 8 Custom Slots Available This Week
+        </div>
+        <h1 class="font-playfair text-4xl md:text-5xl font-bold text-stone-800 mb-4">Build Your Artisan Loaf</h1>
+        <p class="text-lg text-stone-600 mb-2">Create a one-of-a-kind soap masterpiece tailored to your skin's unique needs</p>
+        <div class="flex justify-center items-center gap-2 text-sm text-stone-500">
+            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>100% Customizable</span>
+            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Premium Ingredients</span>
+            <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>4-6 Weeks Cured</span>
+        </div>
+    </div>
+</section>
+
+<!-- PROGRESS INDICATOR -->
+<section class="py-6 bg-white border-b border-stone-200 sticky top-16 z-30">
+    <div class="max-w-4xl mx-auto px-4 relative">
+        <!-- Background Track (The grey line) -->
+        <div class="absolute top-5 left-5 right-8 h-1 bg-stone-200 rounded-full -z-0"></div>
+        
+        <!-- Active Progress Bar (The moving amber line) -->
+        <div class="absolute top-5 left-5 h-1 bg-amber-600 transition-all duration-500 rounded-full -z-0" id="progress-bar" style="width: 0%"></div>
+        
+        <!-- Step Indicators -->
+        <div class="relative flex justify-between items-center z-10">
+            <div class="step-indicator active w-10 h-10 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center font-bold text-sm transition-all" id="step1-indicator">1</div>
+            <div class="step-indicator w-10 h-10 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center font-bold text-sm transition-all" id="step2-indicator">2</div>
+            <div class="step-indicator w-10 h-10 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center font-bold text-sm transition-all" id="step3-indicator">3</div>
+            <div class="step-indicator w-10 h-10 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center font-bold text-sm transition-all" id="step4-indicator">4</div>
+        </div>
+        
+        <!-- Labels -->
+        <div class="flex justify-between text-xs text-stone-600 mt-2 font-medium px-1">
+            <span>Base</span>
+            <span>Exfoliant</span>
+            <span>Design</span>
+            <span>Colour</span>
+        </div>
+    </div>
+</section>
+
+<!-- MAIN CONFIGURATOR -->
+<section class="py-12 max-w-6xl mx-auto px-4">
+    
+    <!-- STEP 0: BASE LOAF -->
+    <div id="step0" class="step-section mb-16">
+        <div class="text-center mb-8">
+            <h2 class="font-playfair text-3xl font-bold text-stone-800 mb-2">Your Base Loaf</h2>
+            <p class="text-stone-600">11 soap bars (100g each), cut and ready to use. Unscented foundation.</p>
+        </div>
+        <div class="max-w-md mx-auto">
+            <div class="option-card selected border-2 border-amber-600 rounded-xl p-6 bg-white text-center cursor-pointer" onclick="startConfigurator()">
+                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🍞</div>
+                <h3 class="font-bold text-stone-800 mb-2">Plain Jane Base Loaf</h3>
+                <p class="text-sm text-stone-600 mb-4">Olivate (Olive Oil), Tallowate (Beef Tallow), Sodium Cocoate (Coconut Oil) <br>11 bars • Unscented</p>
+                <span class="text-2xl font-bold text-amber-600">$44.99</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- STEP 1: EXFOLIANT -->
+    <div id="step1" class="step-section mb-16">
+        <div class="text-center mb-8">
+            <h2 class="font-playfair text-3xl font-bold text-stone-800 mb-2">Step 1: Choose Your Exfoliant</h2>
+            <p class="text-stone-600">Select a natural exfoliant to reveal brighter, smoother skin</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('exfoliant', 'none', 0)" data-value="none">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✓</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Pure & Simple</h3>
+                    <p class="text-sm text-stone-600 mb-4">No exfoliant<br>Gentle cleanse</p>
+                    <span class="text-amber-600 font-bold">No charge</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white relative " onclick="selectOption('exfoliant', 'turmeric', 0.20)" data-value="turmeric">
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✨</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Golden Glow</h3>
+                    <p class="text-sm text-stone-600 mb-4">Turmeric<br>Brightens & heals</p>
+                    <div class="space-y-1">
+                        <span class="text-stone-800 font-bold">+$0.20</span>
+                    </div>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white relative" onclick="selectOption('exfoliant', 'cinnamon', 0.45)" data-value="cinnamon">
+                <div class="text-center">
+                    <div class="premium-glow"></div>
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🍂</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Warm Spice</h3>
+                    <p class="text-sm text-stone-600 mb-4">Cinnamon<br>Boosts circulation</p>
+                    <span class="text-stone-800 font-bold">+$0.45</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('exfoliant', 'rosemary', 0.80)" data-value="rosemary">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🌿</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Herbal Refresh</h3>
+                    <p class="text-sm text-stone-600 mb-4">Rosemary<br>Clarifying & toning</p>
+                    <span class="text-stone-800 font-bold">+$0.80</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- STEP 2: SCENT -->
+    <div id="step2" class="step-section mb-16 hidden">
+        <div class="text-center mb-8">
+            <h2 class="font-playfair text-3xl font-bold text-stone-800 mb-2">Step 2: Select Your Scent</h2>
+            <p class="text-stone-600">Aromatherapy benefits to elevate your daily ritual</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('scent', 'none', 0)" data-value="none">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🚫</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Unscented</h3>
+                    <p class="text-sm text-stone-600 mb-4">Fragrance-free<br>Ultra-sensitive skin</p>
+                    <span class="text-stone-500 font-bold">No charge</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('scent', 'uni', 9.25)" data-value="uni">
+                <div class="text-center">
+                    <div class="popular-badge">BEST SELLER</div>
+                    <div class="premium-glow"></div>
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🍋</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Uni Blend</h3>
+                    <p class="text-sm text-stone-600 mb-4">Lemon + Lavender<br>Uplifting & calming</p>
+                    <span class="text-stone-800 font-bold">+$9.25</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('scent', 'shera', 9.25)" data-value="shera">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🍊</div>
+                    <h3 class="font-bold text-stone-800 mb-2">She-Ra Blend</h3>
+                    <p class="text-sm text-stone-600 mb-4">Pure Orange<br>Bright & energizing</p>
+                    <span class="text-stone-800 font-bold">+$9.25</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('scent', 'lavender', 9.25)" data-value="lavender">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">💜</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Classic Lavender</h3>
+                    <p class="text-sm text-stone-600 mb-4">Pure Lavender<br>Sleep & relaxation</p>
+                    <span class="text-stone-800 font-bold">+$9.25</span>
+                </div>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto">
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('scent', 'heman', 12.50)" data-value="heman">
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🌲</div>
+                    <h3 class="font-bold text-stone-800 mb-2">He-Man Blend</h3>
+                    <p class="text-sm text-stone-600 mb-4">Cedarwood, Lavender & Patchouli<br>Grounding & complex</p>
+                    <div class="space-y-1">
+                        <span class="text-stone-800 font-bold">+$12.50</span>
+                        <span class="text-xs text-green-600 font-semibold">Premium 3-note blend</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-2xl mx-auto">
+            <h4 class="font-bold text-blue-900 mb-2">💡 Why customers upgrade to He-Man Blend:</h4>
+            <p class="text-blue-800 text-sm">This complex three-note scent creates a spa-like aromatherapy experience that de-stresses the mind while the patchouli provides earthy grounding notes that linger subtly on skin throughout the day.</p>
+        </div>
+    </div>
+    
+    <!-- STEP 3: DESIGN -->
+    <div id="step3" class="step-section mb-16 hidden">
+        <div class="text-center mb-8">
+            <h2 class="font-playfair text-3xl font-bold text-stone-800 mb-2">Step 3: Choose Your Design</h2>
+            <p class="text-stone-600">The visual artistry of your custom loaf</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('design', 'none', 0)" data-value="none">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">⬜</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Classic Cut</h3>
+                    <p class="text-sm text-stone-600 mb-4">Clean & simple</p>
+                    <span class="text-stone-800 font-bold">Standard</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white disabled-exfoliant" onclick="selectOption('design', 'swirl', 0)" data-value="swirl">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🌀</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Marbled Swirl</h3>
+                    <p class="text-sm text-stone-600 mb-4">Highlights exfoliant texture</p>
+                    <span class="text-green-600 font-bold">FREE</span>
+                </div>
+            </div>
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white disabled-exfoliant" onclick="selectOption('design', 'layered', 0.50)" data-value="layered">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🥮</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Layered</h3>
+                    <p class="text-sm text-stone-600 mb-4">Accentuates botanical texture</p>
+                    <span class="text-stone-800 font-bold">+$0.50</span>
+                </div>
+            </div>
+            <div class="option-card premium border-2 border-red-500 rounded-xl p-6 relative disabled-exfoliant" onclick="selectOption('design', 'specialty', 0)" data-value="specialty">
+                <div class="popular-badge">EXCLUSIVE</div>
+                <div class="premium-glow"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🎨</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Artisan Custom</h3>
+                    <p class="text-sm text-stone-600 mb-4">Embeds, or custom pattern</p>
+                    <div class="space-y-1">
+                        <span class="block text-red-600 font-bold text-lg">By Inquiry</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 text-center">
+            <div class="inline-block bg-red-50 border border-red-200 text-red-800 px-4 py-2 rounded-lg text-sm font-medium">
+                ⚠️ <strong>Scarcity Alert:</strong> Only 3 Artisan Custom slots remaining for this week's production batch. Next availability: 3 weeks.
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4: COLOUR -->
+    <div id="step4" class="step-section mb-16 hidden">
+        <div class="text-center mb-8">
+            <h2 class="font-playfair text-3xl font-bold text-stone-800 mb-2">Step 4: Add Colour - Coming soon</h2>
+            <p class="text-stone-600">Natural botanical colourants for visual beauty</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('colour', 'none', 0)" data-value="none">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">⬜</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Natural Cream</h3>
+                    <p class="text-sm text-stone-600 mb-4">No added colour<br>Classic soap tone</p>
+                    <span class="text-stone-800 font-bold">No charge</span>
+                </div>
+            </div>
+            <!-- Uncomment the following to add more colour options later -->
+            <!--
+            <div class="option-card border-2 border-stone-200 rounded-xl p-6 bg-white" onclick="selectOption('colour', 'lightblue', 3.00)" data-value="lightblue">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">💙</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Light Blue</h3>
+                    <p class="text-sm text-stone-600 mb-4">Indigofera Tinctoria<br>Natural plant dye</p>
+                    <span class="text-stone-800 font-bold">+$3.00</span>
+                </div>
+            </div>
+            <div class="option-card premium border-2 border-red-500 rounded-xl p-6 relative" onclick="selectOption('colour', 'rose', 5.00)" data-value="rose">
+                <div class="popular-badge">POPULAR</div>
+                <div class="premium-glow"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🌹</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Rose</h3>
+                    <p class="text-sm text-stone-600 mb-4">Rubia Cordifolia<br>Natural rose hue</p>
+                    <div class="space-y-1">
+                        <span class="block text-red-600 font-bold text-lg">+$5.00</span>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+    </div>
+    
+    <div id="summary" class="hidden max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border border-stone-200 overflow-hidden">
+        <div class="p-8">
+            <h3 class="font-playfair text-2xl font-bold text-stone-800 mb-6 text-center">Your Custom Creation</h3>
+            
+            <div class="space-y-3 mb-8">
+                <div class="flex justify-between items-center py-2 border-b border-stone-100">
+                    <span class="text-stone-600">Base Loaf (11 bars)</span>
+                    <span class="font-medium">$44.99</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-stone-100" id="summary-exfoliant">
+                    <span class="text-stone-600">Golden Glow Exfoliant (Turmeric)</span>
+                    <span class="font-medium text-stone-800">+$0.20</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-stone-100" id="summary-scent">
+                    <span class="text-stone-600">He-Man Blend Scent</span>
+                    <span class="font-medium text-stone-800">+$12.50</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-stone-100" id="summary-colour">
+                    <span class="text-stone-600">Natural Cream (No colour)</span>
+                    <span class="font-medium text-stone-800">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-stone-100" id="summary-design">
+                    <span class="text-stone-600">Artisan Custom Design</span>
+                    <span class="font-medium text-stone-500 italic">By inquiry</span>
+                </div>
+            </div>
+
+            <div class="bg-amber-50 rounded-lg p-4 mb-6 flex justify-between items-center">
+                <span class="text-lg font-semibold text-stone-800">Estimated Total</span>
+                <span id="total-price" class="text-2xl font-bold text-amber-700">$57.69</span>
+            </div>
+            <div class="text-center -mt-4 mb-6">
+                <span class="value-badge text-xs font-medium text-stone-500">11 custom bars, hand-poured</span>
+            </div>
+
+            <div class="bg-stone-50 rounded-lg p-4 mb-6 border border-stone-100">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-stone-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1 mb-1">
+                            <span class="text-xl font-bold text-amber-700">4–6 Weeks</span>
+                            <span class="text-sm font-medium text-stone-700">Estimated Production</span>
+                        </div>
+                        <p class="text-xs text-stone-500 leading-relaxed">Each loaf is hand-poured to order. Tracking and dispatch notifications are sent immediately upon completion.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="purchase-btn" onclick="addToCart()" class="w-full bg-amber-600 text-white py-3.5 rounded-lg font-semibold text-lg hover:bg-amber-700 transition-colors shadow-md">
+                Reserve My Custom Loaf →
+            </button>
+
+            <div class="mt-4 text-center space-y-1">
+                <p class="text-xs text-stone-500">
+                    🔒 Secure reservation. Payment is processed when production begins (Week of <span id="production-date"></span>).
+                </p>
+                <p class="text-xs text-stone-400">
+                    Dispatch estimates are based on current queue volume and may adjust ±3 business days.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STICKY PRICE BAR (Mobile) -->
+<div class="sticky-price md:hidden">
+    <div class="flex justify-between items-center max-w-7xl mx-auto">
+        <div>
+            <div class="text-xs text-stone-500">Your Custom Loaf</div>
+            <div class="text-2xl font-bold text-stone-800" id="sticky-price">$44.99</div>
+            <div class="text-xs text-green-600">Base price</div>
+        </div>
+        <button onclick="scrollToSummary()" class="bg-amber-600 text-white px-6 py-3 rounded-lg font-bold">
+            Continue
+        </button>
+    </div>
+</div>
+
+<!-- DESKTOP STICKY SUMMARY -->
+<div class="hidden md:block fixed bottom-8 right-8 bg-white rounded-xl shadow-2xl p-6 border-2 border-amber-200 z-40 max-w-xs" id="desktop-sticky">
+    <div class="text-center mb-4">
+        <span class="text-xs text-stone-500 uppercase tracking-wide">Total Investment</span>
+        <div class="text-3xl font-bold text-stone-800" id="desktop-price">$44.99</div>
+        <div class="text-sm text-stone-500">Base loaf starting price</div>
+    </div>
+    <button onclick="scrollToSummary()" class="w-full bg-amber-600 text-white py-3 rounded-lg font-bold hover:bg-amber-700 transition-colors">
+        Reserve Now
+    </button>
+    <div class="mt-3 text-center">
+        <span class="text-xs text-red-600 font-semibold">⏰ 8 custom slots left this week</span>
+    </div>
+</div>
+
+<script>
+// State management (single source of truth)
+const state = {
+    base: { name: 'Plain Jane Base Loaf', price: 44.99, value: 'plain_base' }, // Add this line
+    exfoliant: { name: 'Golden Glow (Turmeric)', price: 0.20, value: 'turmeric' },
+    scent: { name: 'He-Man Blend', price: 12.50, value: 'heman' },
+    colour: { name: 'Natural Cream', price: 0, value: 'none' },
+    design: { name: 'Artisan Custom', price: 0, value: 'specialty' },
+    basePrice: 44.99
+};
+
+// Option name mappings
+const optionNames = {
+    exfoliant: {
+        none: 'Pure & Simple (No exfoliant)',
+        cinnamon: 'Warm Spice (Cinnamon)',
+        rosemary: 'Herbal Refresh (Rosemary)',
+        turmeric: 'Golden Glow (Turmeric)'
+    },
+    scent: {
+        none: 'Unscented',
+        uni: 'Uni Blend (Lemon + Lavender)',
+        shera: 'She-Ra Blend (Orange)',
+        lavender: 'Classic Lavender',
+        heman: 'He-Man Blend (Cedarwood, Lavender & Patchouli)',
+        lemon: 'Citrus Calm (Lemon + Lavender)',
+        cedarwood: 'Masculine Luxury (3-Note Blend)'
+    },
+    colour: {
+        none: 'Natural Cream',
+        lightblue: 'Light Blue (Indigofera Tinctoria)',
+        rose: 'Rose (Rubia Cordifolia)'
+    },
+    design: {
+        none: 'Classic Cut',
+        swirl: 'Marbled Swirl',
+        layered: 'Ombre Layers',
+        specialty: 'Artisan Custom'
+    }
+};
+
+// Helper to update cart count badge from localStorage
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('bedda_cart') || '[]');
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const cartCountEl = document.getElementById('cart-count');
+    if (cartCountEl) cartCountEl.textContent = totalItems;
+}
+
+// Step mapping for progress navigation
+const stepMap = {
+    exfoliant: '1',
+    scent: '2',
+    design: '3',
+    colour: '4'
+};
+
+// Show a tooltip message
+function showExfoliantTooltip(msg) {
+    const existing = document.getElementById('exfoliant-tooltip');
+    if (existing) existing.remove();
+    const tooltip = document.createElement('div');
+    tooltip.id = 'exfoliant-tooltip';
+    tooltip.className = 'fixed bottom-24 left-4 bg-stone-800 text-white text-sm px-4 py-3 rounded-lg shadow-xl z-50 max-w-xs';
+    tooltip.textContent = msg;
+    document.body.appendChild(tooltip);
+    setTimeout(() => {
+        if (category === 'exfoliant') {
+            advanceStep(2, 1, '31.5%'); // Dot 2 center (adjusted from 33.3%)
+        } else if (category === 'scent') {
+            advanceStep(3, 2, '63%');   // Dot 3 center (adjusted from 66.6%)
+        } else if (category === 'design') {
+            advanceStep(4, 3, '94%');   // Dot 4 center (adjusted from 97%)
+        } else if (category === 'colour') {
+            completeFinalStep();
+        }
+    }, 300);
+}
+
+function startConfigurator() {
+    const step1 = document.getElementById('step1');
+    if (step1) {
+        step1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function selectOption(category, value, price) {
+    // 1. Get the step ID and section first so we have them for the whole function
+    const stepId = stepMap[category];
+    const section = document.getElementById(`step${stepId}`);
+    const targetCard = section ? section.querySelector(`[data-value="${value}"]`) : null;
+
+    // 2. Check if the card is blocked/disabled
+    if (targetCard && targetCard.classList.contains('disabled-exfoliant')) {
+        // Display the message and exit the function so nothing else happens
+        showExfoliantTooltip("This design is currently unavailable for your selected base.");
+        return; 
+    }
+
+    // 3. Normal selection logic (only runs if NOT disabled)
+    state[category] = { 
+        name: optionNames[category][value], 
+        price: price, 
+        value: value 
+    };
+
+    syncDesignAvailability();
+    
+    // 4. Visual feedback: update selected card styling
+    if (section) {
+        const cards = section.querySelectorAll('.option-card');
+        cards.forEach(card => {
+            card.classList.remove('selected');
+            if (card.dataset.value === value) {
+                card.classList.add('selected');
+            }
+        });
+    }
+
+    // 5. Run state updates
+    if (category === 'exfoliant') {
+        updateExfoliantDisabledState();
+    }
+    
+    // 6. Advance steps
+    setTimeout(() => {
+        if (category === 'exfoliant') {
+            advanceStep(2, 1, '31.5%'); // Dot 2 center (adjusted from 33.3%)
+        } else if (category === 'scent') {
+            advanceStep(3, 2, '63%');   // Dot 3 center (adjusted from 66.6%)
+        } else if (category === 'design') {
+            advanceStep(4, 3, '94%');   // Dot 4 center (adjusted from 97%)
+        } else if (category === 'colour') {
+            completeFinalStep();
+        }
+    }, 300);
+    
+    updateTotal();
+}
+
+function updateExfoliantDisabledState() {
+    const step1 = document.getElementById('step1');
+    if (!step1) return;
+    
+    // Remove the blocking class from all cards so they remain clickable
+    step1.querySelectorAll('.option-card').forEach(card => {
+        card.classList.remove('disabled-exfoliant');
+    });
+}
+
+function syncDesignAvailability() {
+    const step3 = document.getElementById('step3');
+    if (!step3) return;
+
+    const designCards = step3.querySelectorAll('.option-card[data-value="swirl"], .option-card[data-value="layered"], .option-card[data-value="specialty"]');
+
+    // The logic: Unlock if there's an exfoliant OR if the base allows it
+    // Replace 'custom_base_id' with whatever your "fancy" base value is
+    const hasExfoliant = state.exfoliant.value !== 'none';
+    const baseAllowsDesign = state.base.value !== 'plain_base'; 
+
+    designCards.forEach(card => {
+        if (hasExfoliant || baseAllowsDesign) {
+            card.classList.remove('disabled-exfoliant');
+        } else {
+            card.classList.add('disabled-exfoliant');
+            // If they already selected a design that is now illegal, reset it
+            if (state.design.value === card.dataset.value) {
+                state.design.value = 'plain'; 
+            }
+        }
+    });
+}
+
+function advanceStep(nextStepNum, prevStepNum, progressWidth) {
+    const nextStep = document.getElementById(`step${nextStepNum}`);
+    const nextIndicator = document.getElementById(`step${nextStepNum}-indicator`);
+    const prevIndicator = document.getElementById(`step${prevStepNum}-indicator`);
+    const progressBar = document.getElementById('progress-bar');
+    
+    if (nextStep) nextStep.classList.remove('hidden');
+    if (nextIndicator) {
+        nextIndicator.classList.add('active');
+        nextIndicator.textContent = nextStepNum;
+    }
+    if (prevIndicator) {
+        prevIndicator.classList.add('completed');
+        prevIndicator.innerHTML = '✓';
+    }
+    if (progressBar) progressBar.style.width = progressWidth;
+    
+    if (nextStep) {
+        nextStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function completeFinalStep() {
+    const indicator = document.getElementById('step4-indicator');
+    const progressBar = document.getElementById('progress-bar');
+    
+    if (indicator) {
+        indicator.classList.add('completed');
+        indicator.innerHTML = '✓';
+    }
+    
+    // Ensure bar is fully extended
+    if (progressBar) progressBar.style.width = '100%';
+    
+    showSummary();
+}
+
+function updateTotal() {
+    const total = state.basePrice 
+        + state.exfoliant.price 
+        + state.scent.price 
+        + state.colour.price 
+        + state.design.price;
+    
+    ['total-price', 'sticky-price', 'desktop-price'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '$' + total.toFixed(2);
+    });
+    
+    updateSummaryRow('summary-exfoliant', state.exfoliant);
+    updateSummaryRow('summary-scent', state.scent);
+    updateSummaryRow('summary-colour', state.colour, true);
+    updateSummaryRow('summary-design', state.design, false, true);
+}
+
+function updateSummaryRow(elementId, item, allowFreeLabel = false, isDesign = false) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    
+    let priceText = '';
+    let priceClass = 'text-green-600';
+    
+    if (isDesign && item.value === 'specialty') {
+        priceText = 'By inquiry';
+        priceClass = 'text-amber-600';
+    } else if (allowFreeLabel && item.price === 0) {
+        priceText = 'No charge';
+    } else {
+        priceText = '+$' + item.price.toFixed(2);
+    }
+    
+    el.innerHTML = `
+        <span class="text-stone-600">${item.name}</span>
+        <span class="font-semibold ${priceClass}">${priceText}</span>
+    `;
+}
+
+function showSummary() {
+    const summary = document.getElementById('summary');
+    if (summary) {
+        summary.classList.remove('hidden');
+        summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function scrollToSummary() {
+    const summary = document.getElementById('summary');
+    if (summary) {
+        summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+// Replace percentage logic with calculated positions
+function getProgressForStep(stepNum) {
+    const container = document.querySelector('.max-w-4xl.mx-auto.px-4.relative');
+    if (!container) return ['0%', '0%', '0%', '100%'];
+    
+    const containerWidth = container.clientWidth;
+    const padding = 16; // px-4 = 16px
+    const dotWidth = 40; // w-10 = 40px
+    const trackStart = 20; // left-5 = 20px
+    const trackEnd = 32; // right-8 = 32px
+    
+    const flexWidth = containerWidth - (padding * 2);
+    const availableSpace = flexWidth - dotWidth; // space between dot 1 and dot 4 centers
+    
+    const positions = [
+        0, // Dot 1: start
+        (trackStart + (availableSpace * 1/3)) / containerWidth * 100, // Dot 2
+        (trackStart + (availableSpace * 2/3)) / containerWidth * 100, // Dot 3
+        100 // Dot 4: end
+    ];
+    
+    return positions.map(p => `${Math.min(p, 100).toFixed(1)}%`);
+}
+
+// ========== FIXED ADD TO CART ==========
+function addToCart() {
+    const total = state.basePrice 
+        + (state.exfoliant?.price || 0) 
+        + (state.scent?.price || 0) 
+        + (state.colour?.price || 0) 
+        + (state.design?.price || 0);
+    
+    // Build comprehensive specification string - all categories explicitly stated
+    const exfoliantDisplay = state.exfoliant?.value === 'none' 
+        ? 'Pure & Simple' 
+        : (state.exfoliant?.name || '').split('(')[0].trim();
+    
+    const scentDisplay = state.scent?.value === 'none'
+        ? 'Unscented'
+        : (state.scent?.name || '').split('(')[0].trim();
+    
+    const designDisplay = state.design?.name || 'Classic Cut';
+    
+    const colourDisplay = state.colour?.value === 'none'
+        ? 'Natural Cream'
+        : (state.colour?.name || '').split('(')[0].trim();
+    
+    // Consolidate all specifications into single product name
+    const fullSpecs = `${exfoliantDisplay} + ${scentDisplay} + ${designDisplay} + ${colourDisplay}`;
+    
+    const itemsToAdd = [];
+    
+    // Single line item containing all loaf specifications
+    itemsToAdd.push({
+        product: `Custom Loaf: ${fullSpecs}`,
+        price: total,
+        qty: 1
+    });
+    
+    // Persist to localStorage
+    let cart = [];
+    const storedCart = localStorage.getItem('bedda_cart');
+    if (storedCart) {
+        try {
+            cart = JSON.parse(storedCart);
+            if (!Array.isArray(cart)) cart = [];
+        } catch (e) {
+            cart = [];
+        }
+    }
+    
+    itemsToAdd.forEach(item => {
+        cart.push({
+            id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+            product: item.product,
+            price: item.price,
+            quantity: item.qty,
+            timestamp: new Date().toISOString()
+        });
+    });
+    
+    localStorage.setItem('bedda_cart', JSON.stringify(cart));
+    updateCartCount();
+    
+    // Sync with cartManager if available
+    if (typeof window.cartManager !== 'undefined' && window.cartManager) {
+        itemsToAdd.forEach(item => {
+            try {
+                window.cartManager.addItem(item.product, item.price, item.qty);
+            } catch (err) {
+                console.warn('cartManager.addItem failed for:', item.product, err);
+            }
+        });
+    }
+    
+    // UI feedback and redirect
+    const btn = document.getElementById("purchase-btn");
+    if (btn) {
+        btn.textContent = "✓ Added to Cart!";
+        btn.classList.remove("bg-amber-600", "hover:bg-amber-700");
+        btn.classList.add("bg-green-600");
+        btn.disabled = true;
+        setTimeout(() => { window.location.href = 'products.html'; }, 1200);
+    } else {
+        setTimeout(() => { window.location.href = 'products.html'; }, 800);
+    }
+}
+
+// Initialize disabled exfoliant state on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateExfoliantDisabledState();
+    updateCartCount();
+    
+    // Set production date
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    const prodDateEl = document.getElementById('production-date');
+    if (prodDateEl) {
+        prodDateEl.textContent = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    }
+});
+</script>
+
+<script src="main.js"></script>
+<script src="bedda-ai.js?v=3" defer></script>
+<script src="logger-backend.js"></script>
+
+<!-- Login/Register Modal -->
+<div id="auth-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+        <button id="close-auth-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        
+        <div id="auth-login-view">
+            <h2 class="text-2xl font-playfair font-bold text-stone-800 mb-2">Welcome Back</h2>
+            <p class="text-stone-600 mb-6">Sign in to access your Bedda Rewards points</p>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                    <input type="email" id="login-email" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Password</label>
+                    <input type="password" id="login-password" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">Sign In</button>
+            </form>
+            
+            <p class="text-center mt-4 text-sm text-stone-600">
+                Don't have an account? <button id="show-register" class="text-amber-600 font-semibold hover:underline">Create one</button>
+            </p>
+        </div>
+        
+        <div id="auth-register-view" class="hidden">
+            <h2 class="text-2xl font-playfair font-bold text-stone-800 mb-2">Create Account</h2>
+            <p class="text-stone-600 mb-6">Join Bedda Rewards and start earning points</p>
+            
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">First Name</label>
+                    <input type="text" id="register-first-name" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Last Name</label>
+                    <input type="text" id="register-last-name" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                    <input type="email" id="register-email" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Password (min 8 characters)</label>
+                    <input type="password" id="register-password" required minlength="8" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">Create Account</button>
+            </form>
+            
+            <p class="text-center mt-4 text-sm text-stone-600">
+                Already have an account? <button id="show-login" class="text-amber-600 font-semibold hover:underline">Sign in</button>
+            </p>
+        </div>
+        
+        <div id="auth-loading" class="hidden text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-600 border-t-transparent"></div>
+            <p class="mt-2 text-stone-600">Loading...</p>
+        </div>
+        
+        <div id="auth-error" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+    </div>
+</div>
+</body>
+</html>

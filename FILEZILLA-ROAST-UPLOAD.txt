@@ -1,0 +1,54 @@
+ONLYBIKES ROAST — FILEZILLA UPLOAD CHECKLIST
+============================================
+Local folder:  d:\Ebike Part selling
+Remote root:   /htdocs/   (Ionos — same level as index.html)
+
+Upload these paths (keep folder structure):
+
+MODELS & BINARY (from GitHub Action artifacts)
+  models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+  llama-b9285/llama-cli                    (chmod 755 on server)
+
+ENV (overwrite server copy — contains secrets)
+  api/.env
+
+API — ROAST PIPELINE
+  api/roast-limited/orchestrator.php
+  api/roast-limited/resume.php
+  api/roast-limited/purge-temp.php
+  api/roast-limited/test-roast-health.php
+  api/roast-limited/agents/agent1-identify.php
+  api/roast-limited/agents/agent2-condition.php
+  api/roast-limited/agents/agent3-mods.php
+  api/roast-limited/agents/agent4-roast.php
+
+  api/lib/roast-config.php
+  api/lib/roast-coordinator.php
+  api/lib/roast-envelope.php
+  api/lib/roast-jobs.php
+  api/lib/roast-score.php
+  api/lib/roast-local-agents.php
+  api/lib/roast-local-inference.php
+  api/lib/roast-cloud-api.php
+  api/lib/roast-cloud-vision.php
+  api/lib/roast-cloud-text.php
+  api/lib/bike-stock-specs.php
+
+  api/data/bike-stock-specs.json
+  api/data/roast-ads.json
+  api/cache/roast-tmp/.htaccess
+
+FRONTEND
+  roast-limited.html
+  js/roast-limited.js
+  includes/roast-ad-slots.html
+
+FILEZILLA TIPS
+  1. Left panel = your PC (d:\Ebike Part selling)
+  2. Right panel = remote /htdocs/
+  3. Drag folders api, js, models, llama-b9285 — merge/overwrite when asked
+  4. For api/.env: upload as BINARY or Auto, overwrite Yes
+
+AFTER UPLOAD
+  https://onlybikes.shop/api/roast-limited/test-roast-health.php?key=YOUR_CRON_SECRET
+  https://onlybikes.shop/roast-limited.html

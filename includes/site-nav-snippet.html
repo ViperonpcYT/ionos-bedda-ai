@@ -1,0 +1,38 @@
+<!-- Shared nav: copy into pages or keep in sync manually. Shop dropdown is intentionally limited to four choices. -->
+<nav class="fixed top-0 w-full bg-zinc-950/95 backdrop-blur-sm z-50 border-b border-zinc-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+        <img src="images/onlybikes-logo.svg" alt="OnlyBikes" class="h-8 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <div class="relative group">
+          <button class="text-zinc-300 hover:text-accent flex items-center gap-1" type="button">Shop <svg class="h-3.5 w-3.5 opacity-70" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg></button>
+          <div class="absolute left-0 mt-2 w-56 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-2">
+            <a href="products.html?bike=surron" class="block px-4 py-2 text-zinc-200 hover:bg-zinc-800">Surron parts</a>
+            <a href="products.html?bike=talaria" class="block px-4 py-2 text-zinc-200 hover:bg-zinc-800">Talaria parts</a>
+            <a href="products.html?bike=eride" class="block px-4 py-2 text-zinc-200 hover:bg-zinc-800">E-Ride parts</a>
+            <a href="products.html" class="block px-4 py-2 text-green-300 hover:bg-zinc-800">All parts</a>
+          </div>
+        </div>
+        <a href="bundles.html" class="text-zinc-300 hover:text-accent">Kits</a>
+        <a href="roast-pvp.html" class="text-green-300 hover:text-green-200">Live PvP</a>
+        <a href="products.html?category=merch" class="text-zinc-300 hover:text-accent">Merch</a>
+        <a href="contact.html" class="text-zinc-300 hover:text-accent">Support</a>
+        <a href="account.html" class="text-zinc-300 hover:text-accent">Account</a>
+        <button type="button" id="cart-btn" class="relative bg-accent text-zinc-950 px-4 py-2 rounded-full font-semibold hover:bg-accent/90">Bag <span id="cart-count" class="ml-1">0</span></button>
+      </div>
+      <button type="button" id="mobile-menu-btn" class="md:hidden text-zinc-200 p-2" aria-label="Menu"><svg class="w-6 h-6" id="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg></button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="md:hidden border-t border-zinc-800 bg-zinc-950 px-4 pb-4">
+    <a href="products.html?bike=surron" class="block py-2 text-zinc-200">Surron parts</a>
+    <a href="products.html?bike=talaria" class="block py-2 text-zinc-200">Talaria parts</a>
+    <a href="products.html?bike=eride" class="block py-2 text-zinc-200">E-Ride parts</a>
+    <a href="products.html" class="block py-2 text-green-300 font-bold">All parts</a>
+    <a href="bundles.html" class="block py-2 text-zinc-200">Kits</a>
+    <a href="roast-pvp.html" class="block py-2 text-green-300 font-bold">Live PvP</a>
+    <a href="contact.html" class="block py-2 text-zinc-200">Support</a>
+    <a href="account.html" class="block py-2 text-zinc-200">Account</a>
+  </div>
+</nav>

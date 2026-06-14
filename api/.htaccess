@@ -1,0 +1,27 @@
+# OnlyBikes API — IONOS-safe origin rules (pairs with CLOUDFLARE-ONLYBIKES.md)
+
+Options -Indexes
+
+<FilesMatch "^(secure-config|config\.local|\.env)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Block sensitive paths (Cloudflare WAF rule 3 mirrors this at the edge)
+    RewriteRule (^|/)\.env - [F,L,NC]
+    RewriteRule (^|/)\.git - [F,L,NC]
+    RewriteRule secure-config - [F,L,NC]
+    # Declutter public deploy: api/*.html files are restored locally but should never be served.
+    RewriteRule \.html$ - [F,L,NC]
+    RewriteRule ^(logs|rate-limits|spam-logs|orders|includes)/ - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    # API must never be cached (Cloudflare cache rule 1 also bypasses /api/)
+    Header always set Cache-Control "no-store, no-cache, must-revalidate"
+    Header always set Pragma "no-cache"
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>

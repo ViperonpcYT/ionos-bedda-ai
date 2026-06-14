@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlyBikes Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .metric-card { transition: all 0.3s ease; }
+        .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .tab-button { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .tab-button:hover { border-bottom-color: #3B82F6; }
+        .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid #3B82F6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 font-playfair">OnlyBikes Analytics Dashboard</h1>
+                    <p class="text-gray-600">Real-time User Behavior & Engagement Insights</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button id="refresh-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>Refresh</span>
+                    </button>
+                    <button id="export-csv-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span>Export CSV</span>
+                    </button>
+                    <button id="export-json-btn" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span>Export JSON</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Loading State -->
+        <div id="loading-state" class="text-center py-16">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-gray-600">Loading analytics data...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="hidden text-center py-16">
+            <div class="text-6xl mb-4">😔</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Failed to Load Analytics</h3>
+            <p id="error-message" class="text-gray-600 mb-6">Something went wrong while fetching your data.</p>
+            <button id="retry-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Try Again
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div id="content" class="hidden fade-in">
+            <!-- Period Tabs -->
+            <div class="mb-8">
+                <nav class="flex space-x-8 border-b border-gray-200">
+                    <button id="tab-24h" class="tab-button py-2 px-1 text-sm font-medium text-blue-600 border-blue-500 border-b-2">Last 24 Hours</button>
+                    <button id="tab-7d" class="tab-button py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">Last 7 Days</button>
+                    <button id="tab-30d" class="tab-button py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">Last 30 Days</button>
+                    <button id="tab-all" class="tab-button py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">All Time</button>
+                </nav>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Total Events</p>
+                            <p id="total-events" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M12 20h-1m8.964-12.95a7.5 7.5 0 00-14.842 0m14.842 0A7.5 7.5 0 0012 17.5a7.5 7.5 0 00-7.158-5.45m0 0a7.5 7.5 0 007.158 5.45"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Unique Users</p>
+                            <p id="unique-users" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Unique Sessions</p>
+                            <p id="unique-sessions" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-orange-100">
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Add to Carts</p>
+                            <p id="add-to-carts" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Event Timeline -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Event Timeline</h3>
+                    <div id="event-timeline" style="height: 300px;"></div>
+                </div>
+
+                <!-- Top Pages -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Pages</h3>
+                    <div id="pages-chart" style="height: 300px;"></div>
+                </div>
+            </div>
+
+            <!-- Detailed Analytics -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Event Types -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Event Types</h3>
+                    <div id="event-types-list" class="space-y-2"></div>
+                </div>
+
+                <!-- Top Referrers -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Referrers</h3>
+                    <div id="referrers-list" class="space-y-2"></div>
+                </div>
+
+                <!-- Conversion Metrics -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Conversion Metrics</h3>
+                    <div id="conversion-metrics" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- Behavioral Insights & Bottleneck Analysis -->
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-lg shadow-sm border border-amber-200 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-amber-900 flex items-center gap-2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 14H7v-2h4v2zm6-4H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+                        Behavioral Insights & Bottleneck Analysis
+                    </h3>
+                    <button id="run-deep-analysis" class="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        Run Deep Analysis
+                    </button>
+                </div>
+
+                <!-- Loading state -->
+                <div id="deep-analysis-loading" class="hidden text-center py-8">
+                    <div class="loading-spinner mx-auto mb-4" style="border-top-color: #d97706;"></div>
+                    <p class="text-amber-800 font-medium" id="analysis-phase">Initializing behavioral models...</p>
+                    <div class="w-full max-w-md mx-auto mt-4 bg-amber-100 rounded-full h-2">
+                        <div id="analysis-progress" class="bg-amber-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div id="deep-analysis-results" class="hidden space-y-6">
+                    <!-- Executive Summary -->
+                    <div class="bg-white p-4 rounded-lg border border-amber-100">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3">Executive Summary</h4>
+                        <div id="insights-summary" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+                    </div>
+
+                    <!-- Conversion Funnel -->
+                    <div class="bg-white p-4 rounded-lg border border-amber-100">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3">Conversion Funnel & Drop-offs</h4>
+                        <div id="insights-funnel" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Bottleneck Alerts -->
+                    <div class="bg-white p-4 rounded-lg border border-amber-100">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            Bottleneck Alerts
+                        </h4>
+                        <div id="insights-bottlenecks" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Page Performance -->
+                    <div class="bg-white p-4 rounded-lg border border-amber-100">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3">Page Performance Report</h4>
+                        <div id="insights-performance" class="space-y-2 text-sm"></div>
+                    </div>
+
+                    <!-- Actionable Recommendations -->
+                    <div class="bg-white p-4 rounded-lg border border-amber-100">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Actionable Recommendations
+                        </h4>
+                        <div id="insights-recommendations" class="space-y-2"></div>
+                    </div>
+
+                    <!-- AI Widget Mini Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-amber-100">
+                            <p class="text-xs text-amber-700 uppercase font-semibold mb-1">AI Queries</p>
+                            <p id="ai-total-queries" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-amber-100">
+                            <p class="text-xs text-amber-700 uppercase font-semibold mb-1">Unique Users</p>
+                            <p id="ai-unique-users" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-amber-100">
+                            <p class="text-xs text-amber-700 uppercase font-semibold mb-1">Widget Opens</p>
+                            <p id="ai-widget-opens" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-amber-100">
+                            <p class="text-xs text-amber-700 uppercase font-semibold mb-1">Avg Response (ms)</p>
+                            <p id="ai-avg-elapsed" class="text-2xl font-bold text-gray-900">0</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white p-4 rounded-lg border border-amber-100">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-3">Top Customer Questions</h4>
+                            <div id="ai-top-queries" class="space-y-2 text-sm"></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-amber-100">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-3">Intent Breakdown</h4>
+                            <div id="ai-intent-breakdown" class="space-y-2 text-sm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Events Table -->
+            <div class="bg-white rounded-lg shadow-sm border">
+                <div class="p-6 border-b">
+                    <h3 class="text-lg font-semibold text-gray-900">Recent Events</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Page</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-table" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <p class="text-center text-gray-500 text-sm">
+                OnlyBikes Analytics — data from api/log-event.php (UserClicks database)
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        class BackendAnalyticsDashboard {
+            constructor() {
+                this.currentPeriod = '24h';
+                this.data = {};
+                this.apiEndpoint = '/api/get-analytics.php';
+                this.summaryEndpoint = '/api/get-summary.php';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadData();
+                console.log('Backend Analytics Dashboard initialized');
+            }
+
+            setupEventListeners() {
+                // Refresh button
+                document.getElementById('refresh-btn').addEventListener('click', () => {
+                    this.loadData();
+                });
+
+                // Export buttons
+                document.getElementById('export-csv-btn').addEventListener('click', () => {
+                    this.exportData('csv');
+                });
+
+                document.getElementById('export-json-btn').addEventListener('click', () => {
+                    this.exportData('json');
+                });
+
+                // Period tabs
+                ['24h', '7d', '30d', 'all'].forEach(period => {
+                    const tab = document.getElementById(`tab-${period}`);
+                    if (tab) {
+                        tab.addEventListener('click', () => {
+                            this.switchPeriod(period);
+                        });
+                    }
+                });
+
+                // Retry button
+                const retryBtn = document.getElementById('retry-btn');
+                if (retryBtn) {
+                    retryBtn.addEventListener('click', () => {
+                        this.loadData();
+                    });
+                }
+            }
+
+            async loadData() {
+                this.showLoading();
+                this.hideError();
+
+                try {
+                    const summaryResponse = await fetch(`${this.summaryEndpoint}?period=${this.currentPeriod}`);
+                    const summaryData = await summaryResponse.json();
+                    if (!summaryResponse.ok || summaryData.error) {
+                        throw new Error(summaryData.error || `Summary HTTP ${summaryResponse.status}`);
+                    }
+
+                    const analyticsResponse = await fetch(`${this.apiEndpoint}?period=${this.currentPeriod}&limit=1000`);
+                    const analyticsData = await analyticsResponse.json();
+                    if (!analyticsResponse.ok || analyticsData.error) {
+                        throw new Error(analyticsData.error || `Analytics HTTP ${analyticsResponse.status}`);
+                    }
+
+                    this.data = {
+                        summary: summaryData.summary || {},
+                        events: analyticsData.events || [],
+                        eventTypes: analyticsData.eventTypes || [],
+                        topPages: analyticsData.topPages || [],
+                        topReferrers: analyticsData.topReferrers || [],
+                        conversionMetrics: analyticsData.conversionMetrics || {},
+                    };
+                    
+                    this.hideLoading();
+                    this.showContent();
+                    this.updateDashboard();
+                    
+                } catch (error) {
+                    console.error('Failed to load analytics:', error);
+                    this.hideLoading();
+                    this.showError(`Failed to load analytics data: ${error.message}`);
+                }
+            }
+
+            switchPeriod(period) {
+                this.currentPeriod = period;
+                
+                // Update tab styles
+                document.querySelectorAll('.tab-button').forEach(tab => {
+                    tab.classList.remove('border-blue-500', 'text-blue-600');
+                    tab.classList.add('border-transparent', 'text-gray-500');
+                });
+                
+                const activeTab = document.getElementById(`tab-${period}`);
+                if (activeTab) {
+                    activeTab.classList.remove('border-transparent', 'text-gray-500');
+                    activeTab.classList.add('border-blue-500', 'text-blue-600');
+                }
+                
+                this.loadData();
+            }
+
+            updateDashboard() {
+                const events = this.data.events || [];
+                const summary = this.data.summary || {};
+
+                // Update metrics cards
+                document.getElementById('total-events').textContent = summary.totalEvents || 0;
+                document.getElementById('unique-users').textContent = summary.uniqueUsers || 0;
+                document.getElementById('unique-sessions').textContent = summary.uniqueSessions || 0;
+                document.getElementById('add-to-carts').textContent = this.data.conversionMetrics?.addToCarts || 0;
+
+                // Update charts
+                this.updateEventTimeline(events);
+                this.updatePagesChart();
+                this.updateEventTypesList();
+                this.updateReferrersList();
+                this.updateConversionMetrics();
+                this.updateAiInsights(events);
+                this.updateEventsTable(events);
+            }
+
+            updateEventTimeline(events) {
+                const timelineData = this.processTimelineData(events);
+                
+                const trace = {
+                    x: timelineData.times,
+                    y: timelineData.counts,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Events',
+                    line: { color: '#3B82F6' },
+                    marker: { color: '#3B82F6' }
+                };
+
+                const layout = {
+                    title: 'Event Timeline',
+                    xaxis: { title: 'Time' },
+                    yaxis: { title: 'Event Count' },
+                    margin: { t: 50, r: 20, b: 50, l: 50 },
+                    showlegend: false
+                };
+
+                Plotly.newPlot('event-timeline', [trace], layout, {responsive: true});
+            }
+
+            updatePagesChart() {
+                const pages = this.data.topPages || [];
+                
+                if (pages.length === 0) {
+                    document.getElementById('pages-chart').innerHTML = '<p class="text-gray-500 text-center py-8">No page data available</p>';
+                    return;
+                }
+
+                const trace = {
+                    x: pages.map(p => p.page),
+                    y: pages.map(p => p.count),
+                    type: 'bar',
+                    marker: { color: '#10B981' }
+                };
+
+                const layout = {
+                    title: 'Top Pages',
+                    xaxis: { title: 'Page' },
+                    yaxis: { title: 'Views' },
+                    margin: { t: 50, r: 20, b: 80, l: 50 },
+                    showlegend: false
+                };
+
+                Plotly.newPlot('pages-chart', [trace], layout, {responsive: true});
+            }
+
+            updateEventTypesList() {
+                const eventTypes = this.data.eventTypes || [];
+                const container = document.getElementById('event-types-list');
+                
+                if (eventTypes.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">No event data available</p>';
+                    return;
+                }
+
+                const sortedTypes = eventTypes.slice(0, 10);
+
+                container.innerHTML = sortedTypes.map(({event_type, count}) => `
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm text-gray-600 capitalize">${event_type.replace(/_/g, ' ')}</span>
+                        <span class="text-sm font-medium text-gray-900">${count}</span>
+                    </div>
+                `).join('');
+            }
+
+            updateReferrersList() {
+                const referrers = this.data.topReferrers || [];
+                const container = document.getElementById('referrers-list');
+                
+                if (referrers.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">No referrer data available</p>';
+                    return;
+                }
+
+                container.innerHTML = referrers.slice(0, 10).map(({referrer, count}) => `
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm text-gray-600 truncate">${referrer || 'Direct'}</span>
+                        <span class="text-sm font-medium text-gray-900">${count}</span>
+                    </div>
+                `).join('');
+            }
+
+            updateConversionMetrics() {
+                const conversion = this.data.conversionMetrics || {};
+                const container = document.getElementById('conversion-metrics');
+                
+                container.innerHTML = `
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-600">Add to Carts:</span>
+                        <span class="text-sm font-medium text-gray-900">${conversion.addToCarts || 0}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-600">Cart Views:</span>
+                        <span class="text-sm font-medium text-gray-900">${conversion.cartViews || 0}</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-600">Conversion Rate:</span>
+                        <span class="text-sm font-medium text-gray-900">${((conversion.conversionRate || 0) * 100).toFixed(2)}%</span>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <span class="text-sm text-gray-600">Cart Abandonment:</span>
+                        <span class="text-sm font-medium text-gray-900">${((conversion.cartAbandonment || 0) * 100).toFixed(2)}%</span>
+                    </div>
+                `;
+            }
+
+            updateAiInsights(events) {
+                this.allEvents = events;
+                const btn = document.getElementById('run-deep-analysis');
+                const loading = document.getElementById('deep-analysis-loading');
+                const results = document.getElementById('deep-analysis-results');
+
+                results.classList.add('hidden');
+                loading.classList.add('hidden');
+
+                if (btn) {
+                    btn.onclick = async () => {
+                        btn.classList.add('hidden');
+                        loading.classList.remove('hidden');
+
+                        const phases = [
+                            { msg: 'Building user session maps...', progress: 15, delay: 400 },
+                            { msg: 'Analyzing conversion paths...', progress: 35, delay: 600 },
+                            { msg: 'Identifying drop-off points...', progress: 55, delay: 800 },
+                            { msg: 'Correlating performance data...', progress: 75, delay: 600 },
+                            { msg: 'Generating recommendations...', progress: 95, delay: 800 },
+                            { msg: 'Finalizing insights...', progress: 100, delay: 400 }
+                        ];
+
+                        for (const phase of phases) {
+                            document.getElementById('analysis-phase').textContent = phase.msg;
+                            document.getElementById('analysis-progress').style.width = phase.progress + '%';
+                            await new Promise(r => setTimeout(r, phase.delay));
+                        }
+
+                        loading.classList.add('hidden');
+                        results.classList.remove('hidden');
+                        this.renderDeepInsights(this.allEvents);
+                    };
+                }
+            }
+
+            renderDeepInsights(events) {
+                const pageViews = events.filter(e => e.event_type === 'page_view');
+                const clicks = events.filter(e => e.event_type === 'click');
+                const addToCarts = events.filter(e => e.event_type === 'add_to_cart');
+                const checkoutStarts = events.filter(e => e.event_type === 'checkout_start');
+                const checkoutCompletes = events.filter(e => e.event_type === 'checkout_complete');
+                const performanceEvents = events.filter(e => e.event_type === 'performance');
+                const errorEvents = events.filter(e => e.event_type === 'error');
+                const aiEvents = events.filter(e => e.event_type && e.event_type.startsWith('ai_'));
+                const queries = aiEvents.filter(e => e.event_type === 'ai_query');
+                const opens = aiEvents.filter(e => e.event_type === 'ai_widget_open');
+
+                const sessions = new Set(events.map(e => e.session_id).filter(Boolean));
+                const users = new Set(events.map(e => e.user_id).filter(Boolean));
+
+                // ========== EXECUTIVE SUMMARY ==========
+                const totalEvents = events.length;
+                const bounceEstimate = totalEvents > 0 ? Math.round((pageViews.length / totalEvents) * 100) : 0;
+                const cartAbandonment = addToCarts.length > 0
+                    ? ((addToCarts.length - checkoutCompletes.length) / addToCarts.length * 100).toFixed(1)
+                    : 0;
+                const errorRate = totalEvents > 0 ? ((errorEvents.length / totalEvents) * 100).toFixed(2) : 0;
+
+                document.getElementById('insights-summary').innerHTML = `
+                    <div class="bg-amber-50 p-3 rounded border border-amber-100 text-center">
+                        <p class="text-xs text-amber-700 uppercase font-semibold">Total Sessions</p>
+                        <p class="text-xl font-bold text-gray-900">${sessions.size}</p>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded border border-amber-100 text-center">
+                        <p class="text-xs text-amber-700 uppercase font-semibold">Page View Ratio</p>
+                        <p class="text-xl font-bold text-gray-900">${bounceEstimate}%</p>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded border border-amber-100 text-center">
+                        <p class="text-xs text-amber-700 uppercase font-semibold">Cart Abandonment</p>
+                        <p class="text-xl font-bold text-gray-900">${cartAbandonment}%</p>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded border border-amber-100 text-center">
+                        <p class="text-xs text-amber-700 uppercase font-semibold">Error Rate</p>
+                        <p class="text-xl font-bold text-gray-900">${errorRate}%</p>
+                    </div>
+                `;
+
+                // ========== CONVERSION FUNNEL ==========
+                const funnel = [
+                    { label: 'Page Views', count: pageViews.length, color: 'bg-blue-500' },
+                    { label: 'Product Clicks', count: clicks.length, color: 'bg-green-500' },
+                    { label: 'Add to Cart', count: addToCarts.length, color: 'bg-purple-500' },
+                    { label: 'Checkout Start', count: checkoutStarts.length, color: 'bg-orange-500' },
+                    { label: 'Purchase Complete', count: checkoutCompletes.length, color: 'bg-red-500' }
+                ];
+
+                const maxFunnel = Math.max(...funnel.map(f => f.count), 1);
+                let funnelHtml = '';
+                for (let i = 0; i < funnel.length; i++) {
+                    const step = funnel[i];
+                    const width = Math.max((step.count / maxFunnel) * 100, 5);
+                    const prev = i > 0 ? funnel[i-1].count : step.count;
+                    const dropOff = i > 0 && prev > 0 ? ((prev - step.count) / prev * 100).toFixed(1) : 0;
+                    const conversion = i > 0 && prev > 0 ? ((step.count / prev) * 100).toFixed(1) : 100;
+
+                    funnelHtml += `
+                        <div class="relative">
+                            <div class="flex items-center gap-3">
+                                <div class="w-24 text-xs font-medium text-gray-600 text-right">${step.label}</div>
+                                <div class="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden relative">
+                                    <div class="${step.color} h-full rounded-full flex items-center justify-end px-2 transition-all duration-700" style="width: ${width}%">
+                                        <span class="text-white text-xs font-bold">${step.count}</span>
+                                    </div>
+                                </div>
+                                ${i > 0 ? `<div class="w-20 text-xs text-right"><span class="text-red-600 font-semibold">-${dropOff}%</span> <span class="text-gray-400">|</span> <span class="text-green-600">${conversion}%</span></div>` : '<div class="w-20"></div>'}
+                            </div>
+                        </div>
+                    `;
+                }
+                document.getElementById('insights-funnel').innerHTML = funnelHtml || '<p class="text-gray-500 text-sm italic">Not enough funnel data yet.</p>';
+
+                // ========== BOTTLENECK ALERTS ==========
+                const bottlenecks = [];
+                if (funnel[1] && funnel[0].count > 0 && ((funnel[0].count - funnel[1].count) / funnel[0].count * 100) > 60) {
+                    bottlenecks.push({ level: 'critical', text: `High drop-off from page views to clicks. Users are landing but not engaging with products.` });
+                }
+                if (funnel[2] && funnel[1].count > 0 && ((funnel[1].count - funnel[2].count) / funnel[1].count * 100) > 50) {
+                    bottlenecks.push({ level: 'high', text: `Many users click products but don't add to cart. Review pricing, descriptions, or CTAs.` });
+                }
+                if (funnel[3] && funnel[2].count > 0 && ((funnel[2].count - funnel[3].count) / funnel[2].count * 100) > 50) {
+                    bottlenecks.push({ level: 'high', text: `Cart-to-checkout abandonment is severe. Shipping costs or account creation may be blocking purchases.` });
+                }
+                if (funnel[4] && funnel[3].count > 0 && ((funnel[3].count - funnel[4].count) / funnel[3].count * 100) > 30) {
+                    bottlenecks.push({ level: 'critical', text: `Payment completion drop-off detected. Verify Stripe integration and error handling.` });
+                }
+                if (errorEvents.length > 0) {
+                    bottlenecks.push({ level: 'high', text: `${errorEvents.length} JavaScript errors logged. These correlate with lost revenue.` });
+                }
+                if (addToCarts.length > 0 && checkoutCompletes.length === 0) {
+                    bottlenecks.push({ level: 'critical', text: 'Zero purchases despite cart activity. Checkout flow is likely completely broken.' });
+                }
+                if (bottlenecks.length === 0) {
+                    bottlenecks.push({ level: 'good', text: 'No major bottlenecks detected. Traffic volume is healthy for current scale.' });
+                }
+
+                const levelColors = { critical: 'bg-red-100 text-red-800 border-red-200', high: 'bg-orange-100 text-orange-800 border-orange-200', medium: 'bg-yellow-100 text-yellow-800 border-yellow-200', good: 'bg-green-100 text-green-800 border-green-200' };
+                document.getElementById('insights-bottlenecks').innerHTML = bottlenecks.map(b =>
+                    `<div class="p-3 rounded border text-sm ${levelColors[b.level] || levelColors.medium}">${b.text}</div>`
+                ).join('');
+
+                // ========== PAGE PERFORMANCE ==========
+                const pagePerf = {};
+                performanceEvents.forEach(e => {
+                    try {
+                        const d = e.data ? JSON.parse(e.data) : {};
+                        const page = e.page || 'unknown';
+                        if (d.totalTime && d.totalTime > 0) {
+                            if (!pagePerf[page]) pagePerf[page] = { total: 0, count: 0 };
+                            pagePerf[page].total += d.totalTime;
+                            pagePerf[page].count++;
+                        }
+                    } catch(_) {}
+                });
+
+                const pageErrors = {};
+                errorEvents.forEach(e => {
+                    const page = e.page || 'unknown';
+                    pageErrors[page] = (pageErrors[page] || 0) + 1;
+                });
+
+                const perfSorted = Object.entries(pagePerf)
+                    .filter(([_, v]) => v.count > 0)
+                    .map(([page, v]) => ({ page, avg: Math.round(v.total / v.count), count: v.count }))
+                    .sort((a, b) => b.avg - a.avg);
+
+                let perfHtml = '';
+                if (perfSorted.length > 0) {
+                    perfHtml += `<div class="grid grid-cols-3 gap-2 text-xs font-semibold text-gray-500 mb-2 border-b pb-1"><span>Page</span><span>Avg Load</span><span>Events</span></div>`;
+                    perfHtml += perfSorted.slice(0, 6).map(p => {
+                        const errCount = pageErrors[p.page] || 0;
+                        const errBadge = errCount > 0 ? `<span class="ml-1 text-red-600 font-bold">(${errCount} errors)</span>` : '';
+                        const slowBadge = p.avg > 3000 ? `<span class="text-red-600">${p.avg}ms</span>` : `<span class="text-green-600">${p.avg}ms</span>`;
+                        return `<div class="grid grid-cols-3 gap-2 text-sm py-1 border-b border-gray-50"><span class="truncate">${p.page}${errBadge}</span>${slowBadge}<span>${p.count}</span></div>`;
+                    }).join('');
+                } else {
+                    perfHtml = '<p class="text-gray-500 text-sm italic">No performance data captured yet.</p>';
+                }
+                document.getElementById('insights-performance').innerHTML = perfHtml;
+
+                // ========== ACTIONABLE RECOMMENDATIONS ==========
+                const recommendations = [];
+                if (funnel[1] && funnel[0].count > 0 && ((funnel[0].count - funnel[1].count) / funnel[0].count * 100) > 50) {
+                    recommendations.push({ severity: 'high', text: 'Add stronger product CTAs above the fold on high-traffic landing pages.' });
+                }
+                if (funnel[2] && funnel[1].count > 0 && ((funnel[1].count - funnel[2].count) / funnel[1].count * 100) > 60) {
+                    recommendations.push({ severity: 'high', text: 'Show price and shipping estimate earlier to reduce cart hesitation.' });
+                }
+                if (addToCarts.length > 0 && checkoutCompletes.length === 0) {
+                    recommendations.push({ severity: 'critical', text: 'URGENT: Test complete checkout flow end-to-end. Check Stripe keys and webhook configuration.' });
+                }
+                if (perfSorted.length > 0 && perfSorted[0].avg > 3000) {
+                    recommendations.push({ severity: 'medium', text: `Optimize ${perfSorted[0].page} — it's loading at ${perfSorted[0].avg}ms. Compress images and defer non-critical JS.` });
+                }
+                if (errorEvents.length > 0) {
+                    recommendations.push({ severity: 'high', text: 'Fix JavaScript errors immediately — each error correlates with user drop-off.' });
+                }
+                if (sessions.size > 0 && pageViews.length / sessions.size < 2) {
+                    recommendations.push({ severity: 'medium', text: 'Low pages-per-session. Add related product links and "Customers also bought" sections.' });
+                }
+                if (recommendations.length === 0) {
+                    recommendations.push({ severity: 'good', text: 'Data looks healthy. Keep monitoring as traffic scales.' });
+                }
+
+                const recColors = { critical: 'bg-red-50 border-red-200 text-red-800', high: 'bg-orange-50 border-orange-200 text-orange-800', medium: 'bg-yellow-50 border-yellow-200 text-yellow-800', good: 'bg-green-50 border-green-200 text-green-800' };
+                document.getElementById('insights-recommendations').innerHTML = recommendations.map(r =>
+                    `<div class="p-3 rounded border text-sm ${recColors[r.severity] || recColors.medium}">${r.text}</div>`
+                ).join('');
+
+                // AI Widget Mini Stats (preserved from original)
+                const aiUserIds = new Set(aiEvents.map(e => e.user_id).filter(Boolean));
+                let totalElapsed = 0, elapsedCount = 0;
+                const intentCount = {};
+                const queryCount = {};
+
+                queries.forEach(e => {
+                    let d = {};
+                    try { d = e.data ? JSON.parse(e.data) : {}; } catch (_) {}
+                    if (typeof d.elapsed === 'number') { totalElapsed += d.elapsed; elapsedCount++; }
+                    if (d.intent) intentCount[d.intent] = (intentCount[d.intent] || 0) + 1;
+                    if (d.query) {
+                        const k = String(d.query).toLowerCase().trim().slice(0, 80);
+                        if (k) queryCount[k] = (queryCount[k] || 0) + 1;
+                    }
+                });
+
+                document.getElementById('ai-total-queries').textContent = queries.length;
+                document.getElementById('ai-unique-users').textContent = aiUserIds.size;
+                document.getElementById('ai-widget-opens').textContent = opens.length;
+                document.getElementById('ai-avg-elapsed').textContent = elapsedCount > 0 ? Math.round(totalElapsed / elapsedCount) : 0;
+
+                const topQ = document.getElementById('ai-top-queries');
+                const sortedQ = Object.entries(queryCount).sort((a, b) => b[1] - a[1]).slice(0, 8);
+                topQ.innerHTML = sortedQ.length === 0
+                    ? '<p class="text-gray-500 text-xs italic">No customer questions yet.</p>'
+                    : sortedQ.map(([q, c]) => `<div class="flex justify-between gap-2"><span class="text-gray-700 truncate" title="${q.replace(/"/g,'&quot;')}">${q}</span><span class="text-xs font-medium text-amber-700 flex-shrink-0">${c}</span></div>`).join('');
+
+                const intentBox = document.getElementById('ai-intent-breakdown');
+                const sortedI = Object.entries(intentCount).sort((a, b) => b[1] - a[1]);
+                intentBox.innerHTML = sortedI.length === 0
+                    ? '<p class="text-gray-500 text-xs italic">No intent data yet.</p>'
+                    : sortedI.map(([i, c]) => `<div class="flex justify-between"><span class="capitalize text-gray-700">${i}</span><span class="text-xs font-medium text-amber-700">${c}</span></div>`).join('');
+            }
+
+            updateEventsTable(events) {
+                const tableBody = document.getElementById('events-table');
+                
+                if (events.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No events to display</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = events.map(event => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${new Date(event.timestamp).toLocaleString()}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                ${event.event_type}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${event.page || 'unknown'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${event.user_id?.substring(0, 8) || 'anonymous'}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            ${this.formatEventDetails(event)}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // In backend-analytics.html, find this method and update it:
+            formatEventDetails(event) {
+                try {
+                    const data = event.data ? JSON.parse(event.data) : {};
+                    
+                    switch (event.event_type) {
+                        case 'click':
+                            return `Element: ${data.element || 'unknown'}, Text: ${(data.text || 'none').substring(0, 30)}`;
+                        case 'add_to_cart':
+                            return `Product: ${data.product || 'unknown'}, Price: $${data.price || 0}`;
+                        case 'page_view':
+                            return `URL: ${data.url || 'unknown'}`;
+                        case 'error':
+                            return `Message: ${data.message || 'unknown'}`.substring(0, 100);
+                        default:
+                            return JSON.stringify(data).substring(0, 100) + '...';
+                    }
+                } catch (e) {
+                    return 'Unable to parse details';
+                }
+            }
+
+            processTimelineData(events) {
+                const grouped = {};
+                
+                events.forEach(event => {
+                    const time = new Date(event.timestamp).toLocaleTimeString();
+                    grouped[time] = (grouped[time] || 0) + 1;
+                });
+
+                const sortedTimes = Object.keys(grouped).sort();
+                
+                return {
+                    times: sortedTimes,
+                    counts: sortedTimes.map(time => grouped[time])
+                };
+            }
+
+            async exportData(format) {
+                try {
+                    const response = await fetch(`${this.apiEndpoint}?limit=10000`);
+                    const data = await response.json();
+                    
+                    if (format === 'csv') {
+                        this.downloadCSV(data.events || []);
+                    } else if (format === 'json') {
+                        this.downloadJSON(data);
+                    }
+                    
+                } catch (error) {
+                    console.error('Export failed:', error);
+                    alert('Failed to export data. Please try again.');
+                }
+            }
+
+            downloadCSV(events) {
+                if (!events || events.length === 0) {
+                    alert('No data to export');
+                    return;
+                }
+
+                const headers = ['timestamp', 'event_type', 'page', 'user_id', 'session_id', 'data'];
+                const csvContent = [
+                    headers.join(','),
+                    ...events.map(event => [
+                        `"${event.timestamp}"`,
+                        `"${event.event_type}"`,
+                        `"${event.page || ''}"`,
+                        `"${event.user_id || ''}"`,
+                        `"${event.session_id || ''}"`,
+                        `"${(event.data || '').replace(/"/g, '""')}"`
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bedda-analytics-${this.currentPeriod}-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+
+            downloadJSON(data) {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bedda-analytics-${this.currentPeriod}-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+
+            // UI State Management
+            showLoading() {
+                document.getElementById('loading-state').classList.remove('hidden');
+                document.getElementById('content').classList.add('hidden');
+                document.getElementById('error-state').classList.add('hidden');
+            }
+
+            hideLoading() {
+                document.getElementById('loading-state').classList.add('hidden');
+            }
+
+            showContent() {
+                document.getElementById('content').classList.remove('hidden');
+            }
+
+            showError(message) {
+                document.getElementById('error-state').classList.remove('hidden');
+                document.getElementById('error-message').textContent = message;
+                this.hideLoading();
+            }
+
+            hideError() {
+                document.getElementById('error-state').classList.add('hidden');
+            }
+        }
+
+        // Initialize dashboard when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new BackendAnalyticsDashboard();
+        });
+    </script>
+</body>
+</html>

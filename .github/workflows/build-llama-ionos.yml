@@ -1,10 +1,11 @@
-name: Build llama-cli for Ionos Shared Hosting (GLIBC 2.31)
+name: Build llama-cli + Qwen2.5-0.5B for Ionos Shared Hosting (GLIBC 2.31)
 
 # This workflow builds a llama-cli binary compatible with Ionos shared hosting,
 # which runs on an older Linux distribution with GLIBC 2.31 and OpenSSL 1.1.1.
+# It also downloads and quantizes Qwen2.5-0.5B-Instruct to q4_k_m for the 640MB memory limit.
 #
 # Trigger: manually from the Actions tab on GitHub
-# Output: artifact named "llama-cli-ionos" containing a single static-ish binary
+# Output: artifacts named "llama-cli-ionos" and "qwen2.5-0.5b-instruct-q4_k_m"
 
 on:
   workflow_dispatch:
@@ -13,6 +14,11 @@ on:
         description: 'llama.cpp git ref (tag/branch/commit) to build'
         required: true
         default: 'b4279'
+        type: string
+      model_name:
+        description: 'HuggingFace model name'
+        required: true
+        default: 'Qwen/Qwen2.5-0.5B-Instruct'
         type: string
 
 jobs:
@@ -32,7 +38,10 @@ jobs:
       - name: Install build dependencies
         run: |
           apt-get update
-          apt-get install -y build-essential ca-certificates cmake git libssl-dev pkg-config file binutils file binutils file binutils file binutils
+          apt-get install -y build-essential ca-certificates cmake git libssl-dev pkg-config file python3 python3-pip
+
+      - name: Install huggingface-hub for model download
+        run: pip3 install huggingface-hub
 
       - name: Configure (portable, static, CPU-only)
         run: |
@@ -52,6 +61,19 @@ jobs:
       - name: Build llama-cli
         run: cmake --build build --config Release -j$(nproc) --target llama-cli
 
+      - name: Download Qwen2.5-0.5B-Instruct model
+        run: |
+          mkdir -p models
+          huggingface-cli download ${{ inputs.model_name }} --local-dir models/Qwen2.5-0.5B-Instruct --local-dir-use-symlinks False
+
+      - name: Convert model to GGUF and quantize to q4_k_m
+        run: |
+          cd build/bin
+          ./llama-cli --model ../../models/Qwen2.5-0.5B-Instruct --convert-gguf ../../models/qwen2.5-0.5b-instruct-f16.gguf --out-type f16
+          ./llama-cli --model ../../models/qwen2.5-0.5b-instruct-f16.gguf --quantize ../../models/qwen2.5-0.5b-instruct-q4_k_m.gguf q4_k_m
+          rm ../../models/qwen2.5-0.5b-instruct-f16.gguf
+          rm -rf ../../models/Qwen2.5-0.5B-Instruct
+
       - name: Verify binary dependencies
         run: |
           echo "=== ldd output ==="
@@ -67,9 +89,16 @@ jobs:
           echo "=== File info ==="
           file build/bin/llama-cli
 
-      - name: Upload artifact
+      - name: Upload llama-cli artifact
         uses: actions/upload-artifact@v4
         with:
           name: llama-cli-ionos
           path: build/bin/llama-cli
+          if-no-files-found: error
+
+      - name: Upload Qwen model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qwen2.5-0.5b-instruct-q4_k_m
+          path: models/qwen2.5-0.5b-instruct-q4_k_m.gguf
           if-no-files-found: error

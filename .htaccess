@@ -1,0 +1,72 @@
+# OnlyBikes — IONOS-safe site root (no PHP whitelist, no RequireAll)
+# Upload to htdocs/ (site root). API rules live in api/.htaccess only.
+
+Options -Indexes
+
+<IfModule mod_authz_core.c>
+    <Files ".htaccess">
+        Require all denied
+    </Files>
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "\.(env|sql|sqlite|db|log|bak|old|zip|tar|gz)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Scripts live at site root on IONOS; HTML references /js/*.js
+    RewriteRule ^js/(site-config|onlybikes-ui|site-layout|conversion|stock-badges|onlybikes-app)\.js$ /$1.js [L]
+
+    # /cart -> products.html because the cart lives in the main.js modal.
+    RewriteRule ^cart/?$ products.html [L,R=302]
+
+    # Block sensitive paths (Cloudflare WAF rule 3 mirrors this at the edge)
+    RewriteRule (^|/)\.env - [F,L,NC]
+    RewriteRule (^|/)\.git - [F,L,NC]
+    RewriteRule secure-config - [F,L,NC]
+    RewriteRule ^(\.git|node_modules|vendor|backups)/ - [F,L,NC]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header always set Content-Security-Policy "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; media-src 'self' blob: data:; connect-src 'self' https: data: blob:; worker-src 'self' blob: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://checkout.stripe.com;"
+    <Files "roast-pvp.html">
+        Header always set Cache-Control "no-cache, no-store, must-revalidate"
+        Header always set Pragma "no-cache"
+        Header always set Expires "0"
+        Header set Permissions-Policy "camera=(self), microphone=(self)"
+    </Files>
+    <FilesMatch "\.(html|htm)$">
+        Header always set Permissions-Policy "camera=(self), microphone=(self)"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType video/mp4 "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Strong cache for static assets (Cloudflare will respect these at the edge)
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|mjs|woff2?|ttf|eot|svg|png|jpe?g|webp|gif|ico|mp4|webm)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json
+</IfModule>

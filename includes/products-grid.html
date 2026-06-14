@@ -1,0 +1,125 @@
+<!--
+  ENTERPRISE PRODUCT GRID COMPONENT
+  
+  Architecture Notes:
+  - Each product card uses data-* attributes for SEO and JavaScript state management
+  - Images use bg-contain on black background (not bg-cover) to show full product without cropping
+  - Toggle functionality uses event delegation via data-details-toggle attribute
+  - Stock badges fetch from /api/get-stock.php with graceful degradation
+  - All prices are display-only; server validates actual charges
+  
+  Accessibility:
+  - aria-expanded on toggle buttons
+  - aria-controls linking to detail panes
+  - aria-live region for cart updates
+  - Semantic HTML5 elements throughout
+-->
+
+<!-- Product 1: Ultra Bee Brake Kit -->
+<div class="product-card ob-card p-5" data-sku="OB-BRAKE-UBEE-001" data-product-id="ob-brake-ubee-001" data-price="349.99" data-category="build braking surron universal" data-bike="surron" data-stock="12" data-low-stock="5" data-animate>
+<!-- Product Image: bg-contain shows FULL image without cropping, black background -->
+<div class="aspect-[4/3] rounded-xl bg-white product-image" style="background-image:url('images/products/Ultra-Bee-Brake.png')" role="img" aria-label="Ultra Bee Brake Kit product photo"></div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge">Build center</span><span class="text-xs text-zinc-500">Braking</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">Ultra Bee Brake Kit</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<!-- Description Pane (default visible) -->
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-brake-ubee-001"><p>Rear moto brake upgrade for Sur-Ron Ultra Bee — stronger stopping power, improved bite, and a solid foundation for aggressive riding. Direct replacement when you verify mount, rotor, and line routing.</p><p class="mt-3 text-xs text-green-300"><strong>Verify:</strong> Sur-Ron Ultra Bee · confirm fitment before checkout</p></div>
+<!-- Details Pane (hidden by default, toggled via data-details-toggle) -->
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-brake-ubee-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Position</dt><dd class="text-zinc-200 text-right">Rear (verify front/rear kit contents)</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Typical fit</dt><dd class="text-zinc-200 text-right">Sur-Ron Ultra Bee</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Includes</dt><dd class="text-zinc-200 text-right">Caliper, bracket, hardware — verify listing</dd></div><div class="flex justify-between gap-3"><dt class="text-zinc-500">You verify</dt><dd class="text-zinc-200 text-right">Rotor diameter, mount spacing, brake line</dd></div></dl></div>
+</div>
+<!-- Toggle Button: Switches between overview and details via event delegation -->
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-brake-ubee-001" aria-expanded="false" aria-controls="details-ob-brake-ubee-001 desc-ob-brake-ubee-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-green-400">$349.99</span><span class="text-xs" data-stock-badge data-sku="OB-BRAKE-UBEE-001"></span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-primary" data-product="Ultra Bee Brake Kit" data-price="349.99">Add to bag</button>
+</div>
+
+<!-- Product 2: Titanium Bolt Kit -->
+<div class="product-card ob-card p-5" data-sku="OB-BOLT-TI-001" data-product-id="ob-bolt-ti-001" data-price="89.99" data-category="build hardware surron universal" data-bike="surron" data-stock="20" data-low-stock="6" data-animate>
+<div class="aspect-[4/3] rounded-xl bg-white product-image" style="background-image:url('images/products/Surron%20Titanium%20Bolts.png')" role="img" aria-label="Titanium Bolt Kit product photo"></div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge">Build center</span><span class="text-xs text-zinc-500">Hardware</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">Titanium Bolt Kit</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-bolt-ti-001"><p>Lightweight titanium hardware for visible fasteners — cleaner look, corrosion resistance, and dress-up weight savings on compatible Sur-Ron builds.</p></div>
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-bolt-ti-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Material</dt><dd class="text-zinc-200 text-right">Grade 5 titanium (typical)</dd></div><div class="flex justify-between gap-3"><dt class="text-zinc-500">You verify</dt><dd class="text-zinc-200 text-right">Thread pitch and length vs stock hardware</dd></div></dl></div>
+</div>
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-bolt-ti-001" aria-expanded="false" aria-controls="details-ob-bolt-ti-001 desc-ob-bolt-ti-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-green-400">$89.99</span><span class="text-xs" data-stock-badge data-sku="OB-BOLT-TI-001"></span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-primary" data-product="Titanium Bolt Kit" data-price="89.99">Add to bag</button>
+</div>
+
+<!-- Product 3: Supermoto Wheel Set -->
+<div class="product-card ob-card p-5" data-sku="OB-WHEEL-SM-001" data-product-id="ob-wheel-sm-001" data-price="599.99" data-category="style wheels surron talaria universal" data-bike="universal" data-stock="6" data-low-stock="2" data-animate>
+<div class="aspect-[4/3] rounded-xl bg-white product-image" style="background-image:url('images/products/supermoto%20wheels.jpg')" role="img" aria-label="17x1.6 Supermoto Wheel Set product photo"></div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge">Style add-on</span><span class="text-xs text-zinc-500">Wheels</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">17×1.6 Supermoto Wheel Set for Talaria &amp; Sur-Ron</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-wheel-sm-001"><p>Premium 17-inch supermoto wheel set for improved street handling, a wider contact patch, and stability on pavement. Front and rear complete assembly — ideal for off-road to supermoto conversions.</p><ul class="mt-3 space-y-1 text-xs text-zinc-300 list-disc pl-4"><li>Lightweight aluminum alloy · CNC-machined hub</li><li>High-strength spoke layout · corrosion-resistant finish</li><li>Direct replacement when fitment is confirmed</li></ul></div>
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-wheel-sm-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Wheel diameter</dt><dd class="text-zinc-200 text-right">17 in</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Rim width</dt><dd class="text-zinc-200 text-right">1.6 in</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Material</dt><dd class="text-zinc-200 text-right">Aluminum alloy</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Finish</dt><dd class="text-zinc-200 text-right">Anodized / powder coat (verify color)</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Package</dt><dd class="text-zinc-200 text-right">Front + rear wheels · bearings/spacers/rim strips (verify)</dd></div><div class="pt-2"><dt class="text-zinc-500 mb-1">Request fitment for</dt><dd class="text-zinc-300">Sur-Ron Light Bee X · Talaria Sting MX3/MX4 · Talaria XXX · E-Ride Pro · Segway X160/X260</dd></div></dl></div>
+</div>
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-wheel-sm-001" aria-expanded="false" aria-controls="details-ob-wheel-sm-001 desc-ob-wheel-sm-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-green-400">$599.99</span><span class="text-xs" data-stock-badge data-sku="OB-WHEEL-SM-001"></span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-primary" data-product="17x1.6 Supermoto Wheel Set for Talaria & Sur-Ron" data-price="599.99">Add to bag</button>
+</div>
+
+<!-- Product 4: Baja LED Headlight -->
+<div class="product-card ob-card p-5" data-sku="OB-LIGHT-BAJA-001" data-product-id="ob-light-baja-001" data-price="49.99" data-category="style lighting surron talaria universal" data-bike="universal" data-stock="18" data-low-stock="6" data-animate>
+<div class="aspect-[4/3] rounded-xl bg-white product-image" style="background-image:url('images/products/Baja%20Headlight.jpg')" role="img" aria-label="3-Inch Baja Style LED Headlight product photo"></div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge">Style add-on</span><span class="text-xs text-zinc-500">Lighting</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">3-Inch Baja Style LED Headlight</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-light-baja-001"><p>Compact high-output 3-inch Baja-style LED auxiliary light — aluminum housing, weather-resistant build, and strong low-light visibility for e-moto and off-road setups.</p><ul class="mt-3 space-y-1 text-xs text-zinc-300 list-disc pl-4"><li>Projector LED · shock-resistant design</li><li>Low draw · long service life (verify spec)</li><li>Bracket + harness in box (verify)</li></ul></div>
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-light-baja-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Lens size</dt><dd class="text-zinc-200 text-right">3 in</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Housing</dt><dd class="text-zinc-200 text-right">Aluminum alloy</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Waterproof</dt><dd class="text-zinc-200 text-right">IP67–IP68 (verify exact unit)</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Voltage</dt><dd class="text-zinc-200 text-right">12V–72V (verify)</dd></div><div class="pt-2"><dt class="text-zinc-500 mb-1">Typical fit</dt><dd class="text-zinc-300">Sur-Ron LBX / Ultra Bee · Talaria Sting / XXX · E-Ride Pro · Segway X260 · universal bars</dd></div></dl></div>
+</div>
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-light-baja-001" aria-expanded="false" aria-controls="details-ob-light-baja-001 desc-ob-light-baja-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-green-400">$49.99</span><span class="text-xs" data-stock-badge data-sku="OB-LIGHT-BAJA-001"></span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-primary" data-product="3-Inch Baja Style LED Headlight" data-price="49.99">Add to bag</button>
+</div>
+
+<!-- Product 5: Off-Road Tire Set -->
+<div class="product-card ob-card p-5" data-sku="OB-TIRE-OFFROAD-001" data-product-id="ob-tire-offroad-001" data-price="169.99" data-category="maintenance tires surron talaria universal" data-bike="universal" data-stock="10" data-low-stock="3" data-animate>
+<div class="aspect-[4/3] rounded-xl bg-white product-image" style="background-image:url('images/products/70-90-100%20Tires.png')" role="img" aria-label="Front 70/100-19 & 90/100-16 Rear Tire + Tube product photo"></div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge">Maintenance</span><span class="text-xs text-zinc-500">Tires</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">Front 70/100-19 &amp; 90/100-16 Rear Tire + Tube for Off Road Dirt</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-tire-offroad-001"><p>Aggressive off-road rubber bundle — deep tread for loose dirt, gravel, and mud. Front 70/100-19 plus rear 90/100-16 with tubes for dirt and trail riding.</p><ul class="mt-3 space-y-1 text-xs text-zinc-300 list-disc pl-4"><li>Reinforced sidewall · high-traction tread</li><li>Front sized for 19 in rim · verify rear clearance</li></ul></div>
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-tire-offroad-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Front tire</dt><dd class="text-zinc-200 text-right">70/100-19 · 19 in rim · 70 mm width</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Rear tire</dt><dd class="text-zinc-200 text-right">90/100-16 + tube</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Construction</dt><dd class="text-zinc-200 text-right">Bias ply (verify ply rating)</dd></div><div class="pt-2"><dt class="text-zinc-500 mb-1">Typical fit</dt><dd class="text-zinc-300">Sur-Ron Ultra Bee · Talaria MX · 19 in front dirt setups</dd></div></dl></div>
+</div>
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-tire-offroad-001" aria-expanded="false" aria-controls="details-ob-tire-offroad-001 desc-ob-tire-offroad-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-green-400">$169.99</span><span class="text-xs" data-stock-badge data-sku="OB-TIRE-OFFROAD-001"></span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-primary" data-product="Front 70/100-19 & 90/100-16 Rear Tire + Tube for Off Road Dirt" data-price="169.99">Add to bag</button>
+</div>
+
+<!-- Product 6: Rear Brake Pads (Coming Soon) -->
+<div class="product-card ob-card p-5" data-sku="OB-BRAKE-PAD-001" data-product-id="ob-brake-pad-001" data-price="54.99" data-category="maintenance braking surron universal soon" data-bike="surron" data-stock="0" data-low-stock="0" data-coming-soon="true" data-animate>
+<!-- Has image but coming soon overlay -->
+<div class="aspect-[4/3] rounded-xl bg-black relative product-image" style="background-image:url('images/products/Surron%20Brake%20Pads.jpg')" role="img" aria-label="Rear Brake Pads for Sur-Ron - Coming soon">
+<div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 z-10"><div class="ob-timer-ring" aria-hidden="true"><svg class="ob-timer-svg" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" class="text-zinc-700"/><circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="120 56" class="text-amber-400 ob-timer-hand"/><line x1="32" y1="32" x2="32" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-green-400 ob-timer-needle"/><circle cx="32" cy="32" r="3" fill="currentColor" class="text-zinc-300"/></svg></div><span class="text-[10px] font-black uppercase tracking-[0.35em] text-amber-200">Coming soon</span></div>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge border-amber-400/40 text-amber-200 bg-amber-400/10">Maintenance</span><span class="text-xs text-zinc-500">Brakes</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">Rear Brake Pads for Sur-Ron</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-brake-pad-001"><p>High-friction rear brake pads to restore stopping power — wear-resistant compound, reduced fade, and consistent wet/dry performance when fitment is confirmed.</p><p class="mt-3 text-xs text-amber-200"><strong>Status:</strong> Listing preview · not available to order yet</p></div>
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-brake-pad-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Position</dt><dd class="text-zinc-200 text-right">Rear</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Compound</dt><dd class="text-zinc-200 text-right">Semi-metallic / sintered (verify)</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Package</dt><dd class="text-zinc-200 text-right">1 pair · install spring (if included)</dd></div><div class="pt-2"><dt class="text-zinc-500 mb-1">Verify fitment</dt><dd class="text-zinc-300">Sur-Ron LBX · Ultra Bee · Talaria Sting / XXX · E-Ride Pro</dd></div></dl></div>
+</div>
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-brake-pad-001" aria-expanded="false" aria-controls="details-ob-brake-pad-001 desc-ob-brake-pad-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-zinc-500">TBD</span><span class="text-xs" data-stock-badge data-sku="OB-BRAKE-PAD-001">Coming soon</span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-ghost opacity-60 cursor-not-allowed" data-product="Rear Brake Pads for Sur-Ron" data-price="54.99" disabled>Coming soon</button>
+</div>
+
+<!-- Product 7: Fender Set (Photo Coming Soon) -->
+<div class="product-card ob-card p-5" data-sku="OB-FENDER-UBEE-001" data-product-id="ob-fender-ubee-001" data-price="79.99" data-category="style plastics surron universal soon" data-bike="surron" data-stock="0" data-low-stock="0" data-coming-soon="true" data-animate>
+<!-- No image yet - black placeholder with timer -->
+<div class="aspect-[4/3] rounded-xl bg-zinc-950 ob-coming-soon flex flex-col items-center justify-center gap-3 product-image" aria-label="Coming soon - photo uploading">
+<div class="ob-timer-ring" aria-hidden="true"><svg class="ob-timer-svg" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" class="text-zinc-800"/><circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="120 56" class="text-amber-400 ob-timer-hand"/><line x1="32" y1="32" x2="32" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-green-400 ob-timer-needle"/><circle cx="32" cy="32" r="3" fill="currentColor" class="text-zinc-300"/></svg></div>
+<span class="text-[10px] font-black uppercase tracking-[0.35em] text-amber-200">Photo coming soon</span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2"><span class="ob-badge border-amber-400/40 text-amber-200 bg-amber-400/10">Style add-on</span><span class="text-xs text-zinc-500">Plastics</span></div>
+<h3 class="mt-4 font-bold text-xl text-white">Sur-Ron Ultra Bee Front &amp; Rear Fender Set</h3>
+<div class="product-copy mt-2 text-sm text-zinc-400" data-product-copy>
+<div class="product-desc" data-copy-pane="desc" id="desc-ob-fender-ubee-001"><p>OEM-style front and rear fender kit — impact-resistant plastic, UV-treated finish, and factory mount points for mud and debris protection on Ultra Bee builds.</p><p class="mt-3 text-xs text-amber-200"><strong>Status:</strong> Listing preview · photo and checkout coming soon</p></div>
+<div class="product-details hidden" data-copy-pane="details" id="details-ob-fender-ubee-001"><dl class="space-y-2 text-xs"><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Material</dt><dd class="text-zinc-200 text-right">Injection-molded plastic</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Finish</dt><dd class="text-zinc-200 text-right">Matte / gloss (verify)</dd></div><div class="flex justify-between gap-3 border-b border-zinc-800 pb-2"><dt class="text-zinc-500">Package</dt><dd class="text-zinc-200 text-right">Front + rear fender · hardware (verify)</dd></div><div class="pt-2"><dt class="text-zinc-500 mb-1">Compatibility</dt><dd class="text-zinc-300">Sur-Ron Ultra Bee — confirm before other models</dd></div></dl></div>
+</div>
+<button type="button" class="product-details-toggle text-xs font-bold" data-details-toggle data-product-id="ob-fender-ubee-001" aria-expanded="false" aria-controls="details-ob-fender-ubee-001 desc-ob-fender-ubee-001">Dimensions &amp; details →</button>
+<div class="mt-4 flex items-end justify-between gap-2"><span class="text-2xl font-black text-zinc-500">TBD</span><span class="text-xs" data-stock-badge data-sku="OB-FENDER-UBEE-001">Coming soon</span></div>
+<button class="add-to-cart mt-5 w-full ob-btn ob-btn-ghost opacity-60 cursor-not-allowed" data-product="Sur-Ron Ultra Bee Front & Rear Fender Set" data-price="79.99" disabled>Coming soon</button>
+</div>

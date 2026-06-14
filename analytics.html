@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedda Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .metric-card { transition: all 0.3s ease; }
+        .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Bedda Analytics Dashboard</h1>
+                    <p class="text-gray-600">User Behavior & Engagement Insights</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button id="refresh-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        Refresh Data
+                    </button>
+                    <button id="export-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        Export CSV
+                    </button>
+                    <button id="clear-btn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                        Clear Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Metrics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Events</p>
+                        <p id="total-events" class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Clicks</p>
+                        <p id="total-clicks" class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Avg Scroll Depth</p>
+                        <p id="avg-scroll" class="text-2xl font-bold text-gray-900">0%</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card bg-white p-6 rounded-lg shadow-sm border">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-orange-100">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Session Duration</p>
+                        <p id="session-duration" class="text-2xl font-bold text-gray-900">0s</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Event Timeline -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Event Timeline</h3>
+                <div id="event-timeline" style="height: 300px;"></div>
+            </div>
+
+            <!-- Click Heatmap -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Click Distribution</h3>
+                <div id="click-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+
+        <!-- Detailed Analytics -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Top Pages -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Pages</h3>
+                <div id="pages-list" class="space-y-2"></div>
+            </div>
+
+            <!-- User Engagement -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">User Engagement</h3>
+                <div id="engagement-metrics" class="space-y-3"></div>
+            </div>
+
+            <!-- Error Tracking -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Error Tracking</h3>
+                <div id="error-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- Recent Events Table -->
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Events</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Page</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="events-table" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <p class="text-center text-gray-500 text-sm">
+                Bedda Analytics Dashboard - Real-time user behavior insights
+            </p>
+        </div>
+    </footer>
+
+    <script src="logger-backend.js"></script>
+    <script>
+        class AnalyticsDashboard {
+            constructor() {
+                this.data = {};
+                this.init();
+            }
+
+            init() {
+                this.loadData();
+                this.setupEventListeners();
+                this.updateDashboard();
+                console.log('Analytics Dashboard initialized');
+            }
+
+            setupEventListeners() {
+                document.getElementById('refresh-btn').addEventListener('click', () => {
+                    this.loadData();
+                    this.updateDashboard();
+                });
+
+                document.getElementById('export-btn').addEventListener('click', () => {
+                    this.exportData();
+                });
+
+                document.getElementById('clear-btn').addEventListener('click', () => {
+                    if (confirm('Are you sure you want to clear all analytics data?')) {
+                        this.clearData();
+                    }
+                });
+            }
+
+            loadData() {
+                try {
+                    const stored = localStorage.getItem('bedda_analytics');
+                    this.data = stored ? JSON.parse(stored) : {};
+                } catch (e) {
+                    console.error('Failed to load analytics data:', e);
+                    this.data = {};
+                }
+            }
+
+            updateDashboard() {
+                this.updateMetrics();
+                this.updateCharts();
+                this.updateTables();
+            }
+
+            updateMetrics() {
+                const events = this.data.events || [];
+                const summary = this.data.summary || {};
+
+                // Total Events
+                document.getElementById('total-events').textContent = summary.totalEvents || 0;
+
+                // Total Clicks
+                document.getElementById('total-clicks').textContent = summary.totalClicks || 0;
+
+                // Average Scroll Depth
+                const avgScroll = summary.maxScrollDepth || 0;
+                document.getElementById('avg-scroll').textContent = avgScroll + '%';
+
+                // Session Duration
+                const duration = summary.sessionDuration || 0;
+                document.getElementById('session-duration').textContent = Math.round(duration / 1000) + 's';
+            }
+
+            updateCharts() {
+                const events = this.data.events || [];
+                
+                // Event Timeline Chart
+                this.createEventTimeline(events);
+                
+                // Click Distribution Chart
+                this.createClickChart(events);
+            }
+
+            createEventTimeline(events) {
+                const eventCounts = {};
+                const eventTypes = [...new Set(events.map(e => e.type))];
+                
+                events.forEach(event => {
+                    const time = new Date(event.timestamp).toLocaleTimeString();
+                    if (!eventCounts[time]) {
+                        eventCounts[time] = {};
+                        eventTypes.forEach(type => {
+                            eventCounts[time][type] = 0;
+                        });
+                    }
+                    eventCounts[time][event.type] = (eventCounts[time][event.type] || 0) + 1;
+                });
+
+                const times = Object.keys(eventCounts).slice(-20); // Last 20 time points
+                const traces = eventTypes.map(type => ({
+                    x: times,
+                    y: times.map(time => eventCounts[time][type] || 0),
+                    name: type,
+                    type: 'scatter',
+                    mode: 'lines+markers'
+                }));
+
+                const layout = {
+                    title: 'Event Timeline',
+                    xaxis: { title: 'Time' },
+                    yaxis: { title: 'Event Count' },
+                    margin: { t: 50, r: 20, b: 50, l: 50 }
+                };
+
+                Plotly.newPlot('event-timeline', traces, layout, {responsive: true});
+            }
+
+            createClickChart(events) {
+                const clickEvents = events.filter(e => e.type === 'click');
+                const elementCounts = {};
+
+                clickEvents.forEach(event => {
+                    const element = event.data?.element || 'unknown';
+                    elementCounts[element] = (elementCounts[element] || 0) + 1;
+                });
+
+                const sortedElements = Object.entries(elementCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10); // Top 10 elements
+
+                const trace = {
+                    x: sortedElements.map(([element]) => element),
+                    y: sortedElements.map(([, count]) => count),
+                    type: 'bar',
+                    marker: { color: '#3B82F6' }
+                };
+
+                const layout = {
+                    title: 'Top Clicked Elements',
+                    xaxis: { title: 'Element Type' },
+                    yaxis: { title: 'Click Count' },
+                    margin: { t: 50, r: 20, b: 80, l: 50 }
+                };
+
+                Plotly.newPlot('click-chart', [trace], layout, {responsive: true});
+            }
+
+            updateTables() {
+                const events = this.data.events || [];
+
+                // Top Pages
+                this.updatePagesList(events);
+
+                // User Engagement
+                this.updateEngagementMetrics();
+
+                // Error Tracking
+                this.updateErrorList(events);
+
+                // Recent Events Table
+                this.updateEventsTable(events.slice(-20)); // Last 20 events
+            }
+
+            updatePagesList(events) {
+                const pageCounts = {};
+                events.forEach(event => {
+                    const page = event.page || 'unknown';
+                    pageCounts[page] = (pageCounts[page] || 0) + 1;
+                });
+
+                const sortedPages = Object.entries(pageCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+
+                const pagesList = document.getElementById('pages-list');
+                pagesList.innerHTML = sortedPages.map(([page, count]) => `
+                    <div class="flex justify-between items-center py-1">
+                        <span class="text-sm text-gray-600 truncate">${page}</span>
+                        <span class="text-sm font-medium text-gray-900">${count}</span>
+                    </div>
+                `).join('');
+            }
+
+            updateEngagementMetrics() {
+                const summary = this.data.summary || {};
+                const engagement = document.getElementById('engagement-metrics');
+                
+                engagement.innerHTML = `
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Total Scrolls:</span>
+                        <span class="text-sm font-medium">${summary.totalScrolls || 0}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Max Scroll Depth:</span>
+                        <span class="text-sm font-medium">${summary.maxScrollDepth || 0}%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Session Duration:</span>
+                        <span class="text-sm font-medium">${Math.round((summary.sessionDuration || 0) / 1000)}s</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Total Errors:</span>
+                        <span class="text-sm font-medium">${summary.totalErrors || 0}</span>
+                    </div>
+                `;
+            }
+
+            updateErrorList(events) {
+                const errors = events.filter(e => e.type === 'error').slice(-10);
+                const errorList = document.getElementById('error-list');
+
+                if (errors.length === 0) {
+                    errorList.innerHTML = '<p class="text-sm text-gray-500">No errors tracked</p>';
+                    return;
+                }
+
+                errorList.innerHTML = errors.map(error => `
+                    <div class="text-sm">
+                        <div class="font-medium text-red-600">${error.data?.message || 'Unknown error'}</div>
+                        <div class="text-gray-500">${new Date(error.timestamp).toLocaleString()}</div>
+                    </div>
+                `).join('');
+            }
+
+            updateEventsTable(events) {
+                const tableBody = document.getElementById('events-table');
+                tableBody.innerHTML = events.map(event => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${new Date(event.timestamp).toLocaleString()}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                ${event.type}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${event.page || 'unknown'}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            ${this.formatEventDetails(event)}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            formatEventDetails(event) {
+                const data = event.data || {};
+                
+                switch (event.type) {
+                    case 'click':
+                        return `Element: ${data.element || 'unknown'}, Text: ${data.text || 'none'}`;
+                    case 'add_to_cart':
+                        return `Product: ${data.product || 'unknown'}, Price: $${data.price || 0}`;
+                    case 'page_view':
+                        return `URL: ${data.url || 'unknown'}`;
+                    case 'error':
+                        return `Message: ${data.message || 'unknown'}`;
+                    default:
+                        return JSON.stringify(data).substring(0, 100) + '...';
+                }
+            }
+
+            exportData() {
+                const data = this.data;
+                if (!data.events || data.events.length === 0) {
+                    alert('No data to export');
+                    return;
+                }
+
+                const csv = this.convertToCSV(data.events);
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bedda-analytics-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+
+            convertToCSV(events) {
+                if (events.length === 0) return '';
+                
+                const headers = ['timestamp', 'event_type', 'page', 'user_id', 'session_id', 'data'];
+                const csvContent = [
+                    headers.join(','),
+                    ...events.map(event => [
+                        event.timestamp,
+                        event.type,
+                        event.page || '',
+                        event.userId || '',
+                        event.sessionId || '',
+                        `"${JSON.stringify(event.data || {}).replace(/"/g, '""')}"`
+                    ].join(','))
+                ].join('\n');
+                
+                return csvContent;
+            }
+
+            clearData() {
+                if (window.beddaLogger) {
+                    window.beddaLogger.clearData();
+                }
+                this.data = {};
+                this.updateDashboard();
+            }
+        }
+
+        // Initialize dashboard when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new AnalyticsDashboard();
+        });
+    </script>
+</body>
+</html>

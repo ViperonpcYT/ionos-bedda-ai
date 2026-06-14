@@ -1,0 +1,14 @@
+{
+  "orderNumber": "OB-TEST",
+  "items": [
+    {"product": "Ultra Bee Brake Kit", "price": 349.99, "quantity": 1},
+    {"product": "Titanium Bolt Kit", "price": 89.99, "quantity": 1}
+  ],
+  "subtotal": 439.98,
+  "customerName": "Test User",
+  "customerEmail": "test@example.com",
+  "fulfillment_method": "pickup",
+  "pickup_location": "Toronto",
+  "pickup_date": "2026-06-10",
+  "form_timestamp": 1748880000
+}

@@ -1,0 +1,39 @@
+{
+  "opponents": [
+    {
+      "id": "surron-ultra-bee",
+      "enabled": true,
+      "video": "images/pvp-opponents/Surron Ultra Bee.mp4",
+      "reference_image": "images/pvp-opponents/Surron Ultra Bee.webp",
+      "starting_score": 62
+    },
+    {
+      "id": "purple-surron-ultra-bee",
+      "enabled": true,
+      "video": "images/pvp-opponents/Purple Surron Ultra Bee.mp4",
+      "reference_image": "images/pvp-opponents/Purple Surron UltraBee.webp",
+      "starting_score": 58
+    },
+    {
+      "id": "black-stark-varg",
+      "enabled": true,
+      "video": "images/pvp-opponents/Black Stark Varg.mp4",
+      "reference_image": "images/pvp-opponents/Black Stark Varg.jpg",
+      "starting_score": 71
+    },
+    {
+      "id": "yz450",
+      "enabled": true,
+      "video": "images/pvp-opponents/YZ450.mp4",
+      "reference_image": "images/pvp-opponents/Yz450.jpg",
+      "starting_score": 55
+    },
+    {
+      "id": "talaria-x3",
+      "enabled": true,
+      "video": "images/pvp-opponents/Talaria X3.mp4",
+      "reference_image": "images/pvp-opponents/Talaria X3.jpg",
+      "starting_score": 64
+    }
+  ]
+}

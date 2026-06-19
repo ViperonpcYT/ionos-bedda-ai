@@ -32,6 +32,8 @@ llama-cli-new/
 models/
 roast-llama-cli-ionos/
 data/
+!api/data/
+!api/data/pvp-opponents.json
 extracted/
 
 # Dependencies

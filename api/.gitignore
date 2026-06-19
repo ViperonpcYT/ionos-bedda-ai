@@ -1,3 +1,4 @@
 secure-config.php
 .env
-data/
+data/*
+!data/pvp-opponents.json

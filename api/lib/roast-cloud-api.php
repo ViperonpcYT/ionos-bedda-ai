@@ -117,6 +117,16 @@ if (!function_exists('roast_api_chat_completion')) {
             ];
         }
 
+        if (!function_exists('curl_init')) {
+            return [
+                'ok' => false,
+                'error' => roast_error('CLOUD_ERROR', 'HTTP client (curl) not available.', true, $phase),
+                'http_code' => 0,
+                'provider' => $provider,
+                'model' => (string) ($payload['model'] ?? ''),
+            ];
+        }
+
         $headers = ['Content-Type: application/json', 'Authorization: Bearer ' . $apiKey];
         if ($provider === 'openrouter') {
             $headers = roast_openrouter_headers();

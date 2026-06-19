@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 2) . '/lib/roast-envelope.php';
 require_once dirname(__DIR__, 2) . '/lib/roast-local-agents.php';
 
 /** Agent 2 — Condition inspector */
-function roast_agent2_condition(string $imagePath, array $identity): array
+function roast_agent2_condition(string $imagePath, array $identity, array $ctx = []): array
 {
     $make = (string) ($identity['make'] ?? 'Unknown');
     $model = (string) ($identity['model'] ?? 'Unknown');
@@ -24,7 +24,10 @@ PROMPT;
         $imagePath,
         $prompt,
         'roast_validate_condition',
-        'condition'
+        'condition',
+        '',
+        '',
+        $ctx
     );
 
     if (!$result['ok']) {

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Permissions-Policy" content="camera=(self), microphone=(self)">
+  <meta name="robots" content="noindex, follow">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6865501266103199" crossorigin="anonymous"></script>
   <title>Live Bike Roast PvP — Limited Event | OnlyBikes</title>
   <meta name="description" content="Match with another rider live, verify you're real, and compare AI cred scores on your e-moto builds. Limited OnlyBikes event — entertainment only.">
@@ -37,8 +38,37 @@
     .pvp-score-value { font-family: 'Archivo Black', sans-serif; font-size: 1.75rem; line-height: 1; margin-top: 0.15rem; font-variant-numeric: tabular-nums; }
     .pvp-score-overlay--you .pvp-score-value { color: #4ade80; }
     .pvp-score-overlay--opp .pvp-score-value { color: #a1a1aa; }
+    .pvp-score-pending { opacity: 0.42; }
+    .pvp-score-tier-pending {
+      opacity: 0.88;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.28);
+    }
+    .pvp-score-tier-pending::after {
+      content: '~';
+      font-size: 0.55em;
+      vertical-align: super;
+      margin-left: 0.08em;
+      color: rgba(251, 191, 36, 0.85);
+      font-family: Inter, sans-serif;
+      font-weight: 600;
+    }
+    .pvp-score-overlay.pvp-score-overlay--tier-pending {
+      border-color: rgba(251, 191, 36, 0.35);
+      box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.12);
+    }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .pvp-timer-ring { font-variant-numeric: tabular-nums; }
+    .pvp-remote-tap {
+      position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center;
+      background: rgba(9, 9, 11, 0.72); border: 0; cursor: pointer; padding: 1rem;
+      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+    }
+    .pvp-remote-tap.hidden { display: none; }
+    .pvp-remote-tap-inner {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+      color: #fbbf24; background: rgba(0,0,0,.55); padding: 0.55rem 0.85rem; border-radius: 999px;
+      border: 1px solid rgba(251, 191, 36, 0.45);
+    }
   </style>
 </head>
 <body class="ob-mobile-safe pt-16 text-zinc-100 bg-zinc-950">
@@ -86,7 +116,7 @@
 
     <section id="pvp-liveness" class="mt-8 ob-card p-6 hidden" data-liveness-moves="3">
       <p class="text-xs uppercase tracking-widest text-green-300 mb-1">Face check</p>
-      <p id="pvp-build-stamp" class="text-[10px] text-zinc-600 text-center mb-2">Build: pvp-inline-v26</p>
+      <p id="pvp-build-stamp" class="text-[10px] text-zinc-600 text-center mb-2">Build: pvp-inline-v40</p>
       <div id="pvp-turn-banner" class="hidden mb-4 rounded-lg border border-amber-700/60 bg-amber-950/40 px-4 py-3 text-xs text-amber-100/90 leading-relaxed text-center"></div>
       <p id="pvp-liveness-meta" class="text-xs text-zinc-500 mb-3">3 moves — center, left, right. Once per session.</p>
       <p id="pvp-liveness-prompt" class="text-lg font-bold mb-4">Look at the camera</p>
@@ -130,8 +160,11 @@
               </div>
               <span class="pvp-video-label">You</span>
             </div>
-            <div class="pvp-video-wrap">
-              <video id="pvp-cam-opp" autoplay playsinline muted></video>
+            <div class="pvp-video-wrap pvp-remote-tap-wrap">
+              <video id="pvp-cam-opp" autoplay playsinline webkit-playsinline muted></video>
+              <button type="button" class="pvp-remote-tap hidden" data-target="pvp-cam-opp" aria-label="Click to show stranger video">
+                <span class="pvp-remote-tap-inner">Click to show stranger</span>
+              </button>
               <div class="pvp-score-overlay pvp-score-overlay--opp" aria-live="polite">
                 <p class="pvp-score-label">Stranger cred</p>
                 <p id="pvp-opp-score-live" class="pvp-score-value">--</p>
@@ -139,14 +172,11 @@
               <span class="pvp-video-label">Stranger</span>
             </div>
           </div>
-          <p id="pvp-duel-status" class="text-xs text-zinc-500 leading-relaxed text-center">Best bike score wins. Top camera auto-judges your build.</p>
+          <p id="pvp-duel-status" class="text-xs text-zinc-500 leading-relaxed text-center">Best bike score wins. Bike camera auto-judges your build every ~5s.</p>
           <div class="flex justify-center gap-2 flex-wrap">
             <button type="button" id="pvp-flip-cam" class="ob-btn ob-btn-ghost text-xs py-1 px-3 border border-zinc-700">Flip camera (face / bike)</button>
             <button type="button" id="pvp-judge-now" class="ob-btn ob-btn-primary text-xs py-1 px-3">Judge now</button>
           </div>
-          <button type="button" id="pvp-enable-audio" class="hidden ob-btn ob-btn-ghost text-xs py-1 px-3 border border-zinc-700">
-            Enable stranger audio
-          </button>
           <audio id="pvp-stranger-audio" autoplay playsinline class="sr-only" aria-hidden="true"></audio>
       </div>
       <button type="button" id="pvp-quit-btn" class="ob-btn ob-btn-ghost w-full mt-4 border border-red-900/50 text-red-300">Quit match</button>
@@ -163,8 +193,11 @@
           </div>
           <span class="pvp-video-label">You</span>
         </div>
-        <div class="pvp-video-wrap">
-          <video id="pvp-cam-opp-judge" autoplay playsinline muted></video>
+        <div class="pvp-video-wrap pvp-remote-tap-wrap">
+          <video id="pvp-cam-opp-judge" autoplay playsinline webkit-playsinline muted></video>
+          <button type="button" class="pvp-remote-tap hidden" data-target="pvp-cam-opp-judge" aria-label="Click to show stranger video">
+            <span class="pvp-remote-tap-inner">Click to show stranger</span>
+          </button>
           <div class="pvp-score-overlay pvp-score-overlay--opp">
             <p class="pvp-score-label">Stranger cred</p>
             <p id="pvp-opp-score-judge" class="pvp-score-value">--</p>
@@ -222,14 +255,16 @@
       </div>
     </div>
   </footer>
-  <script src="roast-credits-ui.js?v=20" defer></script>
-  <!-- pvp-inline-v26 | MUST upload to htdocs/roast-pvp.html then purge Cloudflare -->
+  <script src="roast-credits-ui.js?v=24" defer></script>
+  <!-- pvp-inline-v40 | CSP debug fix — agentDebugLog localhost-only (no 127.0.0.1 on prod) — upload roast-pvp.html + purge Cloudflare -->
   <script>
 (function () {
   'use strict';
 
-  const PVP_INLINE_BUILD = 'pvp-inline-v26';
-  const PVP_BUILD = 'v1.2.4-mirror';
+  const PVP_INLINE_BUILD = 'pvp-inline-v40';
+  const VISION_FALLBACK_FLOOR = 54;
+  const SOLO_JOB_KEY = 'roast_solo_job_id';
+  const PVP_BUILD = 'v1.2.6-pvp-cred';
   const PVP_DEBUG = /(?:^|[?&])debug=1(?:&|$)/.test(window.location.search) ||
     window.location.hostname === 'localhost' ||
     window.location.hostname === '127.0.0.1';
@@ -242,8 +277,10 @@
   const SCORE_CACHE_KEY = 'roast_pvp_score_cache';
   const PLACEHOLDER = '--';
 
-  const AUTO_JUDGE_FIRST_MS = 6000;
-  const AUTO_JUDGE_INTERVAL_MS = 12000;
+  const AUTO_JUDGE_FIRST_MS = 2000;
+  const AUTO_JUDGE_INTERVAL_MS = 5000;
+  const ROAST_PVP_T1_RATE_SEC = 4;
+  const MIN_FRAME_BLOB_BYTES = 2048;
 
   const CHALLENGES = [
     {
@@ -307,6 +344,10 @@
     activeVideoDeviceId: '',
     mediaSessionStartedAt: 0,
     modeConfirmed: false,
+    modeConfirmedMatchId: '',
+    modeSetPromise: null,
+    modeSetPromiseMatchId: '',
+    modeRetryTimer: null,
     liveScoringTimer: null,
     liveScoringBusy: false,
     duelPollTimer: null,
@@ -337,6 +378,8 @@
     turnSource: '',
     turnWarning: '',
     turnConfigured: false,
+    turnKeySet: false,
+    turnStatus: '',
     lastRemoteStreamWarnAt: 0,
     localIceCounts: { host: 0, srflx: 0, relay: 0, prflx: 0 },
     remoteIceCounts: { host: 0, srflx: 0, relay: 0, prflx: 0 },
@@ -361,6 +404,22 @@
     webrtcMaxHeight: 480,
     webrtcMaxFps: 20,
     roundSec: 180,
+    remotePlaybackUnlocked: false,
+    mediaUnlocked: false,
+    lastUserGestureAt: 0,
+    audioCtx: null,
+    forfeitPollFast: false,
+    remoteTrackWatchdog: null,
+    opponentFeed: '',
+    opponentNpc: false,
+    opponentStartingScore: null,
+    opponentFeedVisibilityBound: false,
+    judgmentStatusUntil: 0,
+    initialLiveFrameSent: false,
+    liveFrameCooldownUntil: 0,
+    lastPollStatus: '',
+    youScoreTier: null,
+    youProvisional: false,
   };
 
   function pvpDebug(level, msg) {
@@ -393,6 +452,21 @@
     } else if (level === 'warn') {
       console.warn('[Roast PvP]', line);
     }
+  }
+
+  /** Local Cursor debug only — never call 127.0.0.1 on production (CSP blocks it). */
+  function agentDebugLog(payload) {
+    if (!payload || typeof payload !== 'object') return;
+    if (PVP_DEBUG) {
+      pvpDebug('info', payload.message || 'agent_debug', payload.data || payload);
+    }
+    var host = location.hostname || '';
+    if (host !== 'localhost' && host !== '127.0.0.1') return;
+    fetch('http://127.0.0.1:7533/ingest/9df50e65-8b5d-47b0-b387-3691c6e37757', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'a3b6cc' },
+      body: JSON.stringify(Object.assign({ sessionId: 'a3b6cc', timestamp: Date.now() }, payload))
+    }).catch(function () {});
   }
 
   function dumpWebRtcDebug() {
@@ -471,6 +545,49 @@
     return state.token;
   }
 
+  function getAvailableJoinJobId() {
+    try {
+      var fromUrl = new URLSearchParams(window.location.search).get('job_id');
+      if (fromUrl && String(fromUrl).trim()) return String(fromUrl).trim();
+      var stored = sessionStorage.getItem(SOLO_JOB_KEY);
+      if (stored && String(stored).trim()) return String(stored).trim();
+    } catch (e) { /* ignore */ }
+    return '';
+  }
+
+  function isTruthyFlag(val) {
+    return val === true || val === 1 || val === '1';
+  }
+
+  function syncCascadeTierFromPayload(data) {
+    if (!data) return;
+    if (data.score_tier != null && Number.isFinite(Number(data.score_tier))) {
+      state.youScoreTier = Number(data.score_tier);
+    }
+    if (data.provisional != null) {
+      state.youProvisional = isTruthyFlag(data.provisional);
+    }
+  }
+
+  function resolveYouDisplayScore(data) {
+    if (!data || data.display_score == null || data.display_score === '') return null;
+    var n = Number(data.display_score);
+    if (!Number.isFinite(n) || n === 0) return null;
+    // Hide bare vision-fallback floor (54) only; provisional floor (58+) always displays.
+    if (n === VISION_FALLBACK_FLOOR && isFallbackFramePayload(data)) return null;
+    return n;
+  }
+
+  function youTierPendingStyle(data) {
+    if (data) {
+      if (isTruthyFlag(data.provisional)) return true;
+      if (data.score_tier != null && Number(data.score_tier) === 0) return true;
+    }
+    if (state.youProvisional) return true;
+    if (state.youScoreTier === 0) return true;
+    return false;
+  }
+
   function stopLiveScoring() {
     if (state.liveScoringTimer) clearInterval(state.liveScoringTimer);
     state.liveScoringTimer = null;
@@ -496,11 +613,62 @@
     }
   }
 
+  function isPlayerFallbackLiveScore(val) {
+    if (val == null) return false;
+    const n = Number(val);
+    return Number.isFinite(n) && n === VISION_FALLBACK_FLOOR;
+  }
+
+  function isFallbackFramePayload(data) {
+    return !!(data && (data.vision_fallback || data.frame_fallback));
+  }
+
+  function liveFrameVisionHint(data) {
+    return ((data && (data.message || data.vision_hint)) || '').trim();
+  }
+
+  function formatLiveFrameVisionStatus(data) {
+    var hint = liveFrameVisionHint(data);
+    if (!hint) {
+      hint = 'Still judging your build — hold the bike in frame with good light.';
+    }
+    return hint + ' Next auto-judge in ~5s.';
+  }
+
+  /** Score UI hides bare 54 fallback — surface vision_hint in duel status instead. */
+  function shouldUseVisionHintStatus(data) {
+    if (!data) return false;
+    var frameScoreNum = data.frame_score != null ? Number(data.frame_score) : null;
+    var hasFallback = isFallbackFramePayload(data) || !!data.frame_fallback;
+    var hint = liveFrameVisionHint(data);
+    if (!hasFallback && !hint) return false;
+    if (frameScoreNum === VISION_FALLBACK_FLOOR && (hasFallback || hint)) return true;
+    if (pickLiveScore(data, 'you') != null) return false;
+    return hasFallback && (
+      isPlayerFallbackLiveScore(frameScoreNum) || isPlayerFallbackLiveScore(data.display_score)
+    );
+  }
+
+  function syncQuickStartFromPayload(data) {
+    if (!data) return;
+    if (data.opponent_starting_score != null) {
+      state.opponentStartingScore = Number(data.opponent_starting_score);
+    }
+  }
+
+  function opponentQuickScore(data) {
+    if (data && data.opponent_starting_score != null) return Number(data.opponent_starting_score);
+    if (state.opponentStartingScore != null) return state.opponentStartingScore;
+    return null;
+  }
+
   function saveCachedScores(you, opp, yourBest) {
     const prev = loadCachedScores() || {};
+    const prevYou = prev.you != null && prev.you !== 0 && !isPlayerFallbackLiveScore(prev.you) ? prev.you : null;
+    const nextYou = you != null && you !== 0 && !isPlayerFallbackLiveScore(you) ? you : prevYou;
     sessionStorage.setItem(SCORE_CACHE_KEY, JSON.stringify({
-      you: you != null ? you : (prev.you != null ? prev.you : null),
-      opp: opp != null ? opp : (prev.opp != null ? prev.opp : null),
+      you: nextYou,
+      opp: opp != null && opp !== 0 ? opp : (prev.opp != null && prev.opp !== 0 ? prev.opp : null),
       yourBest: yourBest != null ? yourBest : (prev.yourBest != null ? prev.yourBest : null),
       at: Date.now(),
     }));
@@ -508,12 +676,19 @@
 
   function applyCachedScoresToUi() {
     const cached = loadCachedScores();
-    if (!cached) return;
-    updateLiveScores({
-      you_score: cached.you,
-      opponent_score: cached.opp,
-      your_best: cached.yourBest,
-    });
+    if (!cached && state.opponentStartingScore == null) return;
+    const payload = {
+      opponent_starting_score: state.opponentStartingScore,
+      opponent_npc: state.opponentNpc,
+    };
+    if (cached) {
+      if (cached.you != null && !isPlayerFallbackLiveScore(cached.you)) {
+        payload.you_score = cached.you;
+      }
+      if (cached.opp != null) payload.opponent_score = cached.opp;
+      payload.your_best = cached.yourBest;
+    }
+    updateLiveScores(payload);
   }
 
   function hasLiveFaceTrack() {
@@ -524,7 +699,7 @@
   }
 
   function replaceLocalTracksOnPeerConnection() {
-    if (!state.pc || !state.localStream) return;
+    if (isNpcDuel() || !state.pc || !state.localStream) return;
     const senders = state.pc.getSenders();
     state.localStream.getTracks().forEach(function (track) {
       if (track.readyState !== 'live') return;
@@ -596,13 +771,35 @@
     });
   }
 
-  async function captureBikeJudgingFrame() {
-    return await bikeFrameBlobFromVideo($('pvp-cam-you'));
+  function isValidJudgingFrameBlob(blob) {
+    return !!(blob && blob.size >= MIN_FRAME_BLOB_BYTES);
   }
 
-  function setDuelCaptureStatus(text) {
+  async function captureBikeJudgingFrame() {
+    var videoEl = $('pvp-cam-you');
+    if (!videoEl) return null;
+    var waitMs = [4500, 3000, 3000];
+    for (var attempt = 0; attempt < waitMs.length; attempt++) {
+      if (attempt > 0) {
+        await sleepMs(320);
+      }
+      await waitForVideoReady(videoEl, waitMs[attempt]);
+      var blob = await bikeFrameBlobFromVideo(videoEl);
+      if (isValidJudgingFrameBlob(blob)) {
+        return blob;
+      }
+      pvpDebug('warn', 'captureBikeJudgingFrame attempt ' + (attempt + 1) + ' invalid',
+        blob ? 'blob too small (' + blob.size + ' bytes)' : 'no blob');
+    }
+    return null;
+  }
+
+  function setDuelCaptureStatus(text, holdMs) {
     const el = $('pvp-duel-status');
     if (el && text) el.textContent = text;
+    if (holdMs && holdMs > 0) {
+      state.judgmentStatusUntil = Date.now() + holdMs;
+    }
   }
 
   function resetSession() {
@@ -614,6 +811,7 @@
     state.localStream = null;
     state.remoteStream = null;
     state.matchId = '';
+    state.matchStatus = '';
     state.role = '';
     state.livenessIdx = 0;
     state.livenessLandmarks = [];
@@ -628,6 +826,25 @@
     state.debugLines = [];
     state.bikeFacing = 'user';
     state.modeConfirmed = false;
+    state.modeConfirmedMatchId = '';
+    state.modeSetPromise = null;
+    state.modeSetPromiseMatchId = '';
+    if (state.modeRetryTimer) clearTimeout(state.modeRetryTimer);
+    state.modeRetryTimer = null;
+    state.remotePlaybackUnlocked = false;
+    state.mediaUnlocked = false;
+    state.lastUserGestureAt = 0;
+    state.forfeitPollFast = false;
+    state.opponentFeed = '';
+    state.opponentNpc = false;
+    state.opponentStartingScore = null;
+    state.judgmentStatusUntil = 0;
+    state.initialLiveFrameSent = false;
+    state.liveFrameCooldownUntil = 0;
+    state.lastPollStatus = '';
+    state.youScoreTier = null;
+    state.youProvisional = false;
+    stopRemoteTrackWatchdog();
     const savedFace = sessionStorage.getItem(FACE_KEY);
     const savedVerified = sessionStorage.getItem(VERIFIED_KEY);
     sessionStorage.removeItem(TOKEN_KEY);
@@ -679,6 +896,8 @@
     fd.append('action', action);
     fd.append('token', getToken());
     Object.keys(extra).forEach(function (k) { fd.append(k, extra[k]); });
+    const bk = bypassKey();
+    if (bk) fd.append('bypass_key', bk);
     const res = await fetch(PVP_API, { method: 'POST', body: fd, credentials: 'same-origin' });
     if (!res.ok) {
       let body = null;
@@ -702,7 +921,7 @@
   }
 
   async function pvpSignals() {
-    if (!state.matchId) return { ok: true, signals: [] };
+    if (!state.matchId || isNpcDuel()) return { ok: true, signals: [] };
     const url = PVP_API + '?action=signals&match_id=' + encodeURIComponent(state.matchId) +
       '&token=' + encodeURIComponent(getToken()) + '&since=' + state.signalSince;
     const res = await fetch(url, { credentials: 'same-origin' });
@@ -892,6 +1111,9 @@
         return;
       }
       pvpDebug('warn', label + ' play failed', msg);
+      if (label.indexOf('stranger') !== -1) {
+        updateRemoteTapOverlay(true);
+      }
       if (!videoEl.muted) {
         videoEl.muted = true;
         playVideoElement(videoEl, label + ' (muted)', 0);
@@ -899,10 +1121,209 @@
     });
   }
 
+  function markUserGesture() {
+    state.lastUserGestureAt = Date.now();
+    state.mediaUnlocked = true;
+  }
+
+  function primeMediaPlayback() {
+    markUserGesture();
+    try {
+      var el = document.createElement('video');
+      el.setAttribute('playsinline', '');
+      el.setAttribute('webkit-playsinline', 'true');
+      el.muted = true;
+      el.volume = 0;
+      document.body.appendChild(el);
+      var p = el.play();
+      if (p && p.then) {
+        p.then(function () { el.remove(); }).catch(function () { el.remove(); });
+      } else {
+        el.remove();
+      }
+    } catch (e) { /* ignore */ }
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (Ctx) {
+        if (!state.audioCtx) state.audioCtx = new Ctx();
+        if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
+      }
+    } catch (e2) { /* ignore */ }
+  }
+
+  function bindRemoteVideoElement(videoEl) {
+    if (!videoEl || !state.remoteStream || hasOpponentFeedActive()) return Promise.resolve(false);
+    if (isOpponentVideoElement(videoEl) && videoEl.getAttribute('src')) {
+      return Promise.resolve(false);
+    }
+    videoEl.muted = true;
+    videoEl.defaultMuted = true;
+    videoEl.volume = 0;
+    videoEl.playsInline = true;
+    videoEl.autoplay = true;
+    videoEl.setAttribute('playsinline', '');
+    videoEl.setAttribute('webkit-playsinline', 'true');
+    videoEl.setAttribute('muted', '');
+    if (videoEl.srcObject !== state.remoteStream) {
+      videoEl.srcObject = state.remoteStream;
+    }
+    // Re-try play on canplay event (helps iOS where the stream needs a moment)
+    videoEl.oncanplay = function () {
+      if (hasOpponentFeedActive() || (isOpponentVideoElement(videoEl) && videoEl.getAttribute('src'))) return;
+      if (videoEl.paused) {
+        var p2 = videoEl.play();
+        if (p2 && p2.catch) p2.catch(function () {});
+      }
+    };
+    var p = videoEl.play();
+    if (!p || !p.then) return Promise.resolve(true);
+    // Always resolve (never reject) so callers using Promise.all don't bail on
+    // a hidden element — the visible video result is all that matters.
+    return p.then(function () { return true; }).catch(function (err) {
+      pvpDebug('warn', 'bindRemoteVideoElement play failed', err && err.message ? err.message : String(err));
+      return false;
+    });
+  }
+
+  function updateRemoteTapOverlay(forceShow) {
+    document.querySelectorAll('.pvp-remote-tap').forEach(function (btn) {
+      var targetId = btn.getAttribute('data-target');
+      var videoEl = targetId ? $(targetId) : null;
+      var needsTap;
+      if (hasOpponentFeedActive()) {
+        needsTap = !!forceShow || (videoEl && !isRemoteVideoPlaying());
+      } else {
+        needsTap = !!forceShow || (
+          state.remoteStream && hasRemoteVideo() && (!videoEl || !videoEl.srcObject || !isRemoteVideoPlaying())
+        );
+      }
+      btn.classList.toggle('hidden', !needsTap);
+    });
+  }
+
+  function playRemoteVideoFromGesture(ev) {
+    if (hasOpponentFeedActive()) {
+      if (ev && ev.preventDefault) ev.preventDefault();
+      if (ev && ev.stopPropagation) ev.stopPropagation();
+      markUserGesture();
+      if (state.opponentFeed) attachOpponentFeed(state.opponentFeed);
+      return;
+    }
+    if (ev && ev.preventDefault) ev.preventDefault();
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    markUserGesture();
+    state.remotePlaybackUnlocked = true;
+    if (!state.remoteStream) {
+      pvpDebug('info', 'tap remote — waiting for WebRTC stream');
+      updateRemoteTapOverlay(true);
+      return;
+    }
+    Promise.all([
+      bindRemoteVideoElement($('pvp-cam-opp')),
+      bindRemoteVideoElement($('pvp-cam-opp-judge')),
+    ]).then(function () {
+      if (isRemoteVideoPlaying()) {
+        updateRemoteTapOverlay(false);
+        pvpDebug('info', 'stranger video playing after gesture');
+      } else {
+        updateRemoteTapOverlay(true);
+        pvpDebug('warn', 'stranger video still not playing after gesture');
+      }
+      enableStrangerAudio(true);
+    }).catch(function (err) {
+      pvpDebug('warn', 'gesture bind failed', err && err.message ? err.message : String(err));
+      updateRemoteTapOverlay(true);
+    });
+  }
+
+  function tryAutoplayRemoteAfterStream() {
+    if (hasOpponentFeedActive()) {
+      attachOpponentFeed(state.opponentFeed);
+      return;
+    }
+    if (!state.remoteStream || !hasRemoteVideo()) return;
+    // No gesture-time or mediaUnlocked gate: muted video should autoplay everywhere.
+    // On iOS it sometimes still requires a tap; the overlay handles that fallback.
+    var pOpp = bindRemoteVideoElement($('pvp-cam-opp'));
+    // Only try the judge video if it's visible (iOS blocks play() on display:none)
+    var judgeSection = $('pvp-judging');
+    var judgeVisible = judgeSection && !judgeSection.classList.contains('hidden');
+    if (judgeVisible) {
+      bindRemoteVideoElement($('pvp-cam-opp-judge'));
+    }
+    if (pOpp && pOpp.then) {
+      pOpp.then(function () {
+        if (isRemoteVideoPlaying()) {
+          updateRemoteTapOverlay(false);
+        } else {
+          updateRemoteTapOverlay(true);
+        }
+        enableStrangerAudio(true);
+      }).catch(function () {
+        updateRemoteTapOverlay(true);
+      });
+    } else {
+      if (isRemoteVideoPlaying()) updateRemoteTapOverlay(false);
+      else updateRemoteTapOverlay(true);
+    }
+  }
+
+  function bindGlobalTouchUnlock() {
+    // Any touch on the page is a user gesture — use it to nudge stalled remote video.
+    // Passive so it never blocks scrolling.
+    document.addEventListener('touchstart', function () {
+      markUserGesture();
+      if (hasOpponentFeedActive()) {
+        if (!isRemoteVideoPlaying() && state.opponentFeed) attachOpponentFeed(state.opponentFeed);
+        return;
+      }
+      if (state.remoteStream && hasRemoteVideo() && !isRemoteVideoPlaying()) {
+        tryAutoplayRemoteAfterStream();
+      }
+    }, { passive: true });
+  }
+
+  function bindRemoteTapTargets() {
+    var handler = function (ev) {
+      playRemoteVideoFromGesture(ev);
+    };
+    document.querySelectorAll('.pvp-remote-tap').forEach(function (el) {
+      el.addEventListener('click', handler);
+      el.addEventListener('touchstart', handler, { passive: false });
+    });
+    ['pvp-cam-opp', 'pvp-cam-opp-judge'].forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      el.addEventListener('click', handler);
+      el.addEventListener('touchend', function (ev) {
+        if (hasOpponentFeedActive()) return;
+        ev.preventDefault();
+        playRemoteVideoFromGesture(ev);
+      }, { passive: false });
+    });
+    var duel = $('pvp-duel');
+    if (duel) {
+      duel.addEventListener('click', function () {
+        markUserGesture();
+        if (hasOpponentFeedActive()) {
+          if (!isRemoteVideoPlaying() && state.opponentFeed) attachOpponentFeed(state.opponentFeed);
+          return;
+        }
+        if (state.remoteStream && hasRemoteVideo()) {
+          tryAutoplayRemoteAfterStream();
+          enableStrangerAudio(true);
+        }
+      });
+    }
+  }
+
   function attachStream(videoEl, stream, opts) {
     opts = opts || {};
     if (!videoEl || !stream) {
       pvpDebug('warn', 'attachStream skipped — no element or stream', opts.label || '');
+      return;
+    }
+    if (isOpponentVideoElement(videoEl) && (hasOpponentFeedActive() || videoEl.getAttribute('src'))) {
       return;
     }
     const label = opts.label || 'video';
@@ -920,38 +1341,31 @@
     videoEl.muted = !!opts.muted;
     videoEl.playsInline = true;
     videoEl.autoplay = true;
+    videoEl.setAttribute('playsinline', '');
+    videoEl.setAttribute('webkit-playsinline', 'true');
+    if (opts.muted) videoEl.setAttribute('muted', '');
     if (opts.mirror) {
       videoEl.classList.add('pvp-video-mirror');
     } else {
       videoEl.classList.remove('pvp-video-mirror');
     }
-    playVideoElement(videoEl, label, 0, opts.unmuteAfterPlay ? function () {
+    playVideoElement(videoEl, label, 0, function () {
+      if (label.indexOf('stranger') !== -1) {
+        updateRemoteTapOverlay(false);
+      }
       if (opts.unmuteAfterPlay) enableStrangerAudio(false);
-    } : null);
-  }
-
-  function showStrangerAudioPrompt(show) {
-    const btn = $('pvp-enable-audio');
-    if (btn) btn.classList.toggle('hidden', !show);
+    });
   }
 
   function enableStrangerAudio(fromUserGesture) {
     const stream = state.remoteStream;
     if (!stream) return false;
-    attachRemoteAudio();
     const audioTracks = stream.getAudioTracks().filter(function (t) {
       return t.readyState === 'live' && t.enabled;
     });
     if (!audioTracks.length) {
-      pvpDebug('info', 'no remote audio tracks yet');
       return false;
     }
-
-    [$('pvp-cam-opp'), $('pvp-cam-opp-judge')].forEach(function (videoEl) {
-      if (!videoEl || videoEl.srcObject !== stream) return;
-      videoEl.muted = false;
-      videoEl.volume = 1;
-    });
 
     var audioOk = false;
     [$('pvp-stranger-audio'), $('pvp-stranger-audio-judge')].forEach(function (audioEl) {
@@ -959,33 +1373,19 @@
       if (audioEl.srcObject !== stream) audioEl.srcObject = stream;
       audioEl.muted = false;
       audioEl.volume = 1;
+      audioEl.setAttribute('playsinline', '');
       const p = audioEl.play();
       if (p && p.then) {
-        p.then(function () { audioOk = true; }).catch(function () { /* try video path */ });
+        p.then(function () { audioOk = true; }).catch(function () { /* needs gesture */ });
       }
     });
 
-    [$('pvp-cam-opp'), $('pvp-cam-opp-judge')].forEach(function (videoEl) {
-      if (!videoEl || videoEl.srcObject !== stream || !videoEl.muted) return;
-      const p = videoEl.play();
-      if (p && p.then) {
-        p.then(function () { audioOk = true; }).catch(function () { /* ignore */ });
-      }
-    });
-
-    const anyMuted = [$('pvp-cam-opp'), $('pvp-cam-opp-judge')].some(function (v) {
-      return v && v.srcObject === stream && v.muted;
-    });
-    if (!anyMuted || audioOk) {
-      showStrangerAudioPrompt(false);
+    if (audioOk) {
       pvpDebug('info', 'stranger audio enabled', { tracks: audioTracks.length });
       return true;
     }
     if (fromUserGesture) {
-      showStrangerAudioPrompt(true);
-    } else {
-      showStrangerAudioPrompt(true);
-      pvpDebug('warn', 'stranger audio blocked — tap Enable audio');
+      pvpDebug('warn', 'stranger audio blocked on this browser');
     }
     return false;
   }
@@ -1000,7 +1400,153 @@
     attachStream($('pvp-cam-you-judge'), state.localStream, { muted: true, mirror: mirror, label: 'you-judge' });
   }
 
+  function isOpponentVideoElement(el) {
+    return !!(el && (el.id === 'pvp-cam-opp' || el.id === 'pvp-cam-opp-judge'));
+  }
+
+  function playOpponentFeedElement(videoEl, attempt, afterPlay) {
+    if (!videoEl || !hasOpponentFeedActive()) return;
+    attempt = attempt || 0;
+    videoEl.muted = true;
+    videoEl.defaultMuted = true;
+    videoEl.volume = 0;
+    var playPromise = videoEl.play();
+    if (!playPromise || !playPromise.then) {
+      if (afterPlay) afterPlay(videoEl);
+      return;
+    }
+    playPromise.then(function () {
+      if (afterPlay) afterPlay(videoEl);
+    }).catch(function (err) {
+      var msg = err && err.message ? err.message : String(err);
+      var interrupted = err && err.name === 'AbortError' ||
+        msg.indexOf('interrupted') !== -1 ||
+        msg.indexOf('aborted') !== -1;
+      if (interrupted && attempt < 6) {
+        setTimeout(function () {
+          playOpponentFeedElement(videoEl, attempt + 1, afterPlay);
+        }, 80 * (attempt + 1));
+        return;
+      }
+      pvpDebug('warn', 'stranger-feed play failed', msg);
+      if (!videoEl.muted) {
+        videoEl.muted = true;
+        playOpponentFeedElement(videoEl, 0, afterPlay);
+        return;
+      }
+      updateRemoteTapOverlay(true);
+    });
+  }
+
+  function bindOpponentFeedElementResilience(el) {
+    if (!el || el.dataset.opponentFeedBound === '1') return;
+    el.dataset.opponentFeedBound = '1';
+    el.addEventListener('ended', function () {
+      if (!hasOpponentFeedActive()) return;
+      try { el.currentTime = 0; } catch (e) { /* ignore */ }
+      playOpponentFeedElement(el);
+    });
+    el.addEventListener('stalled', function () {
+      if (!hasOpponentFeedActive()) return;
+      playOpponentFeedElement(el);
+    });
+    el.addEventListener('waiting', function () {
+      if (!hasOpponentFeedActive() || document.hidden) return;
+      playOpponentFeedElement(el);
+    });
+    el.addEventListener('pause', function () {
+      if (!hasOpponentFeedActive() || document.hidden) return;
+      if (el.readyState >= 2 && el.videoWidth > 0) playOpponentFeedElement(el);
+    });
+    el.addEventListener('canplay', function () {
+      if (!hasOpponentFeedActive()) return;
+      if (el.paused) playOpponentFeedElement(el);
+    });
+  }
+
+  function bindOpponentFeedVisibility() {
+    if (state.opponentFeedVisibilityBound) return;
+    state.opponentFeedVisibilityBound = true;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) return;
+      if (!hasOpponentFeedActive() || !state.matchId) return;
+      attachOpponentFeed(state.opponentFeed);
+    });
+    window.addEventListener('pageshow', function (ev) {
+      if (!ev.persisted) return;
+      if (!hasOpponentFeedActive() || !state.matchId) return;
+      attachOpponentFeed(state.opponentFeed);
+    });
+  }
+
+  function hasOpponentFeedActive() {
+    return !!(state.opponentFeed);
+  }
+
+  function syncMatchMediaFromPayload(data) {
+    if (!data) return;
+    if (data.opponent_feed) {
+      state.opponentFeed = data.opponent_feed;
+    }
+    if (data.opponent_npc) {
+      state.opponentNpc = true;
+    }
+    syncQuickStartFromPayload(data);
+  }
+
+  function isNpcDuel() {
+    return !!(state.opponentNpc || hasOpponentFeedActive());
+  }
+
+  function shouldUseOpponentFeed(data) {
+    syncMatchMediaFromPayload(data);
+    return hasOpponentFeedActive() || isNpcDuel();
+  }
+
+  function enterNpcFeedMode(data) {
+    syncMatchMediaFromPayload(data);
+    stopWebRtcKick();
+    stopRemoteTrackWatchdog();
+    stopRemotePlayWatch();
+    if (state.pc || state.signalTimer) teardownWebRtc({ preserveFeed: true });
+    if (hasOpponentFeedActive()) attachOpponentFeed(state.opponentFeed);
+    updateTurnBanner();
+  }
+
+  function attachOpponentFeed(url) {
+    if (!url) return;
+    bindOpponentFeedVisibility();
+    ['pvp-cam-opp', 'pvp-cam-opp-judge'].forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      if (el.srcObject) el.srcObject = null;
+      var prevSrc = el.getAttribute('src');
+      if (prevSrc !== url) {
+        el.setAttribute('src', url);
+        try { el.load(); } catch (e) { /* ignore */ }
+      }
+      el.loop = true;
+      el.muted = true;
+      el.defaultMuted = true;
+      el.volume = 0;
+      el.autoplay = true;
+      el.playsInline = true;
+      el.setAttribute('muted', '');
+      el.setAttribute('playsinline', '');
+      el.setAttribute('webkit-playsinline', 'true');
+      bindOpponentFeedElementResilience(el);
+      playOpponentFeedElement(el, 0, function () {
+        updateRemoteTapOverlay(false);
+      });
+    });
+    updateWebRtcBanner();
+  }
+
   function isRemoteVideoPlaying() {
+    if (hasOpponentFeedActive()) {
+      var feedEl = $('pvp-cam-opp');
+      return !!(feedEl && feedEl.readyState >= 2 && !feedEl.paused && feedEl.videoWidth > 0);
+    }
     var el = $('pvp-cam-opp');
     return el && el.srcObject && el.videoWidth > 0 && el.readyState >= 2;
   }
@@ -1013,6 +1559,11 @@
   }
 
   function startRemotePlayWatch() {
+    if (hasOpponentFeedActive()) {
+      attachOpponentFeed(state.opponentFeed);
+      return;
+    }
+    if (isNpcDuel()) return;
     stopRemotePlayWatch();
     var attempts = 0;
     state.remotePlayWatchTimer = setInterval(function () {
@@ -1023,18 +1574,69 @@
       }
       if (hasRemoteVideo() && isRemoteVideoPlaying()) {
         stopRemotePlayWatch();
+        updateRemoteTapOverlay(false);
         return;
       }
       if (attempts > 60) {
+        // Switch from fast (500ms) to slow (3s) retry — don't give up entirely
         stopRemotePlayWatch();
-        pvpDebug('warn', 'remote video play watch timed out');
+        pvpDebug('warn', 'remote video play watch switching to slow retry');
+        updateRemoteTapOverlay(true);
+        state.remotePlayWatchTimer = setInterval(function () {
+          if (!state.matchId) { stopRemotePlayWatch(); return; }
+          if (hasRemoteVideo() && isRemoteVideoPlaying()) {
+            stopRemotePlayWatch();
+            updateRemoteTapOverlay(false);
+            return;
+          }
+          tryAutoplayRemoteAfterStream();
+        }, 3000);
         return;
       }
       attachRemoteVideos();
+      tryAutoplayRemoteAfterStream();
     }, 500);
   }
 
+  function stopRemoteTrackWatchdog() {
+    if (state.remoteTrackWatchdog) {
+      clearInterval(state.remoteTrackWatchdog);
+      state.remoteTrackWatchdog = null;
+    }
+  }
+
+  function startRemoteTrackWatchdog() {
+    if (isNpcDuel()) return;
+    stopRemoteTrackWatchdog();
+    state.remoteTrackWatchdog = setInterval(function () {
+      if (!state.matchId || isNpcDuel()) {
+        stopRemoteTrackWatchdog();
+        return;
+      }
+      if (hasRemoteVideo()) {
+        stopRemoteTrackWatchdog();
+        return;
+      }
+      if (!state.pc) return;
+      syncRemoteReceivers();
+      var ice = state.pc.iceConnectionState;
+      var conn = state.pc.connectionState;
+      if (ice === 'connected' || conn === 'connected' || ice === 'completed') {
+        scheduleAttachRemoteVideos();
+        tryAutoplayRemoteAfterStream();
+      }
+    }, 1500);
+  }
+
   function attachRemoteVideos() {
+    if (hasOpponentFeedActive() || isNpcDuel()) {
+      if (state.opponentFeed && !isRemoteVideoPlaying()) attachOpponentFeed(state.opponentFeed);
+      return;
+    }
+    var feedEl = $('pvp-cam-opp');
+    if (feedEl && feedEl.getAttribute('src')) {
+      return;
+    }
     if (!state.remoteStream) {
       var now = Date.now();
       if (now - (state.lastRemoteStreamWarnAt || 0) > 8000) {
@@ -1049,22 +1651,23 @@
     }
     attachStream($('pvp-cam-opp'), state.remoteStream, {
       muted: true,
-      unmuteAfterPlay: true,
       label: 'stranger',
     });
-    attachStream($('pvp-cam-opp-judge'), state.remoteStream, {
-      muted: true,
-      unmuteAfterPlay: true,
-      label: 'stranger-judge',
-    });
-    enableStrangerAudio(false);
-    attachRemoteAudio();
-    updateWebRtcBanner();
-    if (state.remoteStream.getAudioTracks().length) {
-      showStrangerAudioPrompt(true);
+    var judgeSection = $('pvp-judging');
+    var judgeVisible = judgeSection && !judgeSection.classList.contains('hidden');
+    if (judgeVisible) {
+      attachStream($('pvp-cam-opp-judge'), state.remoteStream, {
+        muted: true,
+        label: 'stranger-judge',
+      });
     }
+    updateWebRtcBanner();
     if (!isRemoteVideoPlaying()) {
+      updateRemoteTapOverlay(true);
       startRemotePlayWatch();
+      tryAutoplayRemoteAfterStream();
+    } else {
+      updateRemoteTapOverlay(false);
     }
   }
 
@@ -1088,11 +1691,19 @@
     state.remoteAttachTimer = setTimeout(function () {
       state.remoteAttachTimer = null;
       attachRemoteVideos();
+      tryAutoplayRemoteAfterStream();
+      // Extra retry for mobile — stream may not be ready immediately
+      setTimeout(function () {
+        if (state.remoteStream && !isRemoteVideoPlaying()) {
+          attachRemoteVideos();
+          tryAutoplayRemoteAfterStream();
+        }
+      }, 800);
     }, 100);
   }
 
   function setRemoteTrack(track) {
-    if (!track) return;
+    if (!track || isNpcDuel()) return;
     if (track.kind === 'video' && track.readyState === 'ended') return;
     if (!state.remoteStream) {
       state.remoteStream = new MediaStream();
@@ -1105,9 +1716,17 @@
     state.remoteStream.addTrack(track);
     track.enabled = true;
     scheduleAttachRemoteVideos();
+    if (track.kind === 'video') {
+      tryAutoplayRemoteAfterStream();
+      maybeStartAutoJudging();
+    }
   }
 
   function hasRemoteVideo() {
+    if (hasOpponentFeedActive()) {
+      var feedEl = $('pvp-cam-opp');
+      return !!(feedEl && (feedEl.currentSrc || feedEl.getAttribute('src')));
+    }
     if (!state.remoteStream) return false;
     return state.remoteStream.getVideoTracks().some(function (t) {
       return t.readyState === 'live' && t.enabled;
@@ -1159,6 +1778,7 @@
   }
 
   async function postSignal(signalType, payloadStr) {
+    if (isNpcDuel()) return { ok: true };
     var res = await pvpPost('signal', {
       match_id: state.matchId,
       signal_type: signalType,
@@ -1189,26 +1809,94 @@
   }
 
   function scoreText(val) {
-    return val != null ? String(val) : PLACEHOLDER;
+    const n = Number(val);
+    if (!Number.isFinite(n)) return PLACEHOLDER;
+    return String(n);
+  }
+
+  function liveScoreValue(val, frameCount) {
+    if (val == null || val === '') return null;
+    const n = Number(val);
+    if (!Number.isFinite(n)) return null;
+    if (n === 0 && !(frameCount > 0)) return null;
+    return n;
+  }
+
+  function pickLiveScore(data, side) {
+    const frameCount = side === 'you'
+      ? (data.your_frame_count != null ? data.your_frame_count : (data.frame_count || 0))
+      : (data.opponent_frame_count || 0);
+    if (side === 'you') {
+      var fromDisplay = resolveYouDisplayScore(data);
+      if (fromDisplay != null) return fromDisplay;
+    }
+    const direct = side === 'you' ? data.you_score : data.opponent_score;
+    const snap = side === 'you' ? data.you : data.opponent;
+    let val = direct != null ? direct : (snap && snap.score != null ? snap.score : null);
+    val = liveScoreValue(val, frameCount);
+    const manifest = opponentQuickScore(data);
+    const npcOpp = !!(data.opponent_npc || state.opponentNpc);
+
+    if (side === 'you') {
+      if (frameCount <= 0) return null;
+      if (isFallbackFramePayload(data) && Number(data.frame_score) === VISION_FALLBACK_FLOOR) return null;
+      if (isPlayerFallbackLiveScore(val)) return null;
+      return val != null && Number.isFinite(val) ? val : null;
+    }
+
+    if (npcOpp && manifest != null) {
+      if (val == null || isPlayerFallbackLiveScore(val)) return manifest;
+      if (frameCount <= 0) return manifest;
+    }
+    if (val == null && manifest != null) return manifest;
+    if (isPlayerFallbackLiveScore(val) && frameCount <= 0) {
+      return manifest != null ? manifest : null;
+    }
+    return val != null && Number.isFinite(val) ? val : null;
+  }
+
+  function paintLiveScoreElements(ids, val, opts) {
+    opts = opts || {};
+    var tierPending = !!opts.tierPending;
+    ids.forEach(function (id) {
+      const el = $(id);
+      if (!el) return;
+      el.textContent = scoreText(val);
+      el.classList.toggle('pvp-score-pending', val == null);
+      el.classList.toggle('pvp-score-tier-pending', val != null && tierPending);
+      var overlay = el.closest('.pvp-score-overlay');
+      if (overlay) {
+        overlay.classList.toggle('pvp-score-overlay--tier-pending', val != null && tierPending);
+      }
+    });
   }
 
   function updateLiveScores(data) {
-    let you = data.you_score != null ? data.you_score : (data.you ? data.you.score : null);
-    let opp = data.opponent_score != null ? data.opponent_score : (data.opponent ? data.opponent.score : null);
-    const cached = loadCachedScores();
-    if (you == null && cached && cached.you != null) you = cached.you;
-    if (opp == null && cached && cached.opp != null) opp = cached.opp;
-    if (you != null || opp != null || data.your_average != null || data.your_best != null) {
-      saveCachedScores(you, opp, data.your_average != null ? data.your_average : data.your_best);
+    if (data.frame_skipped || data.no_bike) {
+      applyCachedScoresToUi();
+      return;
     }
-    ['pvp-you-score-live', 'pvp-you-score-judge', 'pvp-you-score'].forEach(function (id) {
-      const el = $(id);
-      if (el) el.textContent = scoreText(you);
-    });
-    ['pvp-opp-score-live', 'pvp-opp-score-judge', 'pvp-opp-score'].forEach(function (id) {
-      const el = $(id);
-      if (el) el.textContent = scoreText(opp);
-    });
+    syncQuickStartFromPayload(data);
+    syncCascadeTierFromPayload(data);
+    let you = pickLiveScore(data, 'you');
+    let opp = pickLiveScore(data, 'opp');
+    const cached = loadCachedScores();
+    if (you == null && cached && cached.you != null && cached.you !== 0 && !isPlayerFallbackLiveScore(cached.you)) {
+      you = cached.you;
+    }
+    if (opp == null && cached && cached.opp != null && cached.opp !== 0) opp = cached.opp;
+    if (opp == null && state.opponentStartingScore != null) {
+      opp = state.opponentStartingScore;
+    }
+    const persistYou = you != null && !isPlayerFallbackLiveScore(you);
+    const persistOpp = opp != null;
+    if (persistYou || persistOpp || data.your_average != null || data.your_best != null) {
+      saveCachedScores(persistYou ? you : null, persistOpp ? opp : null,
+        data.your_average != null ? data.your_average : data.your_best);
+    }
+    var youTierPending = you != null && youTierPendingStyle(data);
+    paintLiveScoreElements(['pvp-you-score-live', 'pvp-you-score-judge', 'pvp-you-score'], you, { tierPending: youTierPending });
+    paintLiveScoreElements(['pvp-opp-score-live', 'pvp-opp-score-judge', 'pvp-opp-score'], opp);
   }
 
   function startCountdown(seconds) {
@@ -1240,7 +1928,7 @@
 
   function initDuelCapture() {
     state.bikeFacing = state.bikeFacing || 'user';
-    setDuelCaptureStatus('Point your top camera at your bike — auto-judging every ~10s. Flip camera if needed.');
+    setDuelCaptureStatus('Point your bike camera at your build — auto-judging every ~5s. Flip camera if needed.');
   }
 
   async function flipBikeCamera() {
@@ -1286,62 +1974,153 @@
       }
       monitorLocalTracks();
       attachSelfVideos();
-      setDuelCaptureStatus('Auto-judging from your top camera every ~10s.');
+      setDuelCaptureStatus('Auto-judging from your bike camera every ~5s.');
     } catch (e) {
       pvpDebug('error', 'Camera switch failed', e.message);
       setDuelCaptureStatus('Camera switch failed. Check permissions.');
     }
   }
 
+  function isModeLiveReady() {
+    return !!(state.matchId && state.modeConfirmed && state.modeConfirmedMatchId === state.matchId);
+  }
+
+  function clearModeRetryTimer() {
+    if (state.modeRetryTimer) clearTimeout(state.modeRetryTimer);
+    state.modeRetryTimer = null;
+  }
+
+  function resetModeLiveState() {
+    state.modeConfirmed = false;
+    state.modeConfirmedMatchId = '';
+    state.modeSetPromise = null;
+    state.modeSetPromiseMatchId = '';
+    clearModeRetryTimer();
+  }
+
   async function ensureDuelModeLive() {
     if (!state.matchId) return false;
-    if (state.modeConfirmed) return true;
-    try {
-      const data = await pvpPost('set_mode', { match_id: state.matchId, mode: 'live' });
-      if (data && data.ok && data.your_mode === 'live') {
-        state.modeConfirmed = true;
-        refreshDuelUi(data);
-        return true;
-      }
-      if (data && data.error) {
-        pvpDebug('warn', 'set_mode', data.error.code || '', data.error.message || '');
-      }
-    } catch (e) {
-      pvpDebug('warn', 'set_mode network error', e && e.message ? e.message : String(e));
+    if (isModeLiveReady()) return true;
+    if (state.modeSetPromise && state.modeSetPromiseMatchId === state.matchId) {
+      return state.modeSetPromise;
     }
-    return false;
+
+    const matchId = state.matchId;
+    state.modeSetPromiseMatchId = matchId;
+    state.modeSetPromise = (async function () {
+      try {
+        const data = await pvpPost('set_mode', { match_id: matchId, mode: 'live' });
+        if (data && data.ok) {
+          state.modeConfirmed = true;
+          state.modeConfirmedMatchId = matchId;
+          if (data.match_id) state.matchId = data.match_id;
+          if (data.status) state.matchStatus = data.status;
+          refreshDuelUi(data);
+          return true;
+        }
+        if (state.modeConfirmedMatchId === matchId) {
+          state.modeConfirmed = false;
+          state.modeConfirmedMatchId = '';
+        }
+        if (data && data.error) {
+          pvpDebug('warn', 'set_mode', data.error.code || '', data.error.message || '');
+        }
+      } catch (e) {
+        if (state.modeConfirmedMatchId === matchId) {
+          state.modeConfirmed = false;
+          state.modeConfirmedMatchId = '';
+        }
+        pvpDebug('warn', 'set_mode network error', e && e.message ? e.message : String(e));
+      }
+      return false;
+    })();
+
+    try {
+      return await state.modeSetPromise;
+    } finally {
+      if (state.modeSetPromiseMatchId === matchId) {
+        state.modeSetPromise = null;
+        state.modeSetPromiseMatchId = '';
+      }
+    }
+  }
+
+  function isLiveFrameStatusReady(status) {
+    return ['matched', 'active', 'dueling'].indexOf(status || '') >= 0;
+  }
+
+  async function syncLiveFrameMatchReady() {
+    if (isLiveFrameStatusReady(state.matchStatus)) return true;
+    try {
+      const st = await pvpStatus();
+      if (st && st.match_id) state.matchId = st.match_id;
+      if (st && st.status) state.matchStatus = st.status;
+      if (st && st.your_mode === 'live' && st.match_id) {
+        state.modeConfirmed = true;
+        state.modeConfirmedMatchId = st.match_id;
+      }
+      return !!(st && st.ok && isLiveFrameStatusReady(st.status));
+    } catch (e) {
+      return false;
+    }
   }
 
   async function sendLiveFrame() {
     if (!state.matchId || state.liveScoringBusy) return;
-    if (!state.modeConfirmed) {
+    if (Date.now() < state.liveFrameCooldownUntil) return;
+    var pollStatus = state.lastPollStatus || state.matchStatus;
+    if (pollStatus === 'complete' || pollStatus === 'expired') {
+      stopLiveScoring();
+      return;
+    }
+    const snapMatchId = state.matchId;
+    const snapToken = getToken();
+    if (!snapMatchId || !snapToken) return;
+    if (!isLiveFrameStatusReady(state.matchStatus)) {
+      const matchReady = await syncLiveFrameMatchReady();
+      if (!matchReady) {
+        setDuelCaptureStatus('Waiting for match…');
+        return;
+      }
+    }
+    if (!isModeLiveReady()) {
       const ready = await ensureDuelModeLive();
       if (!ready) {
         setDuelCaptureStatus('Setting up live judging…');
         return;
       }
     }
-    state.liveScoringBusy = true;
-    setDuelCaptureStatus('Judging your bike...');
 
+    state.liveScoringBusy = true;
+    setDuelCaptureStatus('Judging what we see…');
+
+    var didPost = false;
     try {
-      const camYou = $('pvp-cam-you');
-      if (camYou) await waitForVideoReady(camYou, 4000);
       const blob = await captureBikeJudgingFrame();
-      if (!blob) {
-        setDuelCaptureStatus('Could not capture frame — keep your bike in the top camera view.');
+      if (!blob || snapMatchId !== state.matchId || !snapToken) {
+        if (snapMatchId !== state.matchId) {
+          pvpDebug('info', 'live_frame aborted — match changed during capture');
+          setDuelCaptureStatus('Match ended — waiting for next round…', 8000);
+        } else if (!blob) {
+          setDuelCaptureStatus('Could not capture camera frame — keep your bike in view and check the camera is not blocked.', 12000);
+        }
         return;
       }
 
       const fd = new FormData();
+      const isInitialFrame = !state.initialLiveFrameSent;
       fd.append('action', 'live_frame');
-      fd.append('token', getToken());
-      fd.append('match_id', state.matchId);
+      fd.append('token', snapToken);
+      fd.append('match_id', snapMatchId);
       fd.append('image', blob, 'bike-frame.jpg');
+      if (isInitialFrame) fd.append('initial_frame', '1');
       const bk = bypassKey();
       if (bk) fd.append('bypass_key', bk);
+      if (/[?&]debug=1/.test(location.search)) fd.append('debug_session', 'a3b6cc');
 
+      didPost = true;
       const res = await fetch(PVP_API, { method: 'POST', body: fd, credentials: 'same-origin' });
+      state.liveFrameCooldownUntil = Date.now() + ROAST_PVP_T1_RATE_SEC * 1000;
       let data = null;
       try { data = await res.json(); } catch (e) { /* ignore */ }
       if (!data || data.ok === false) {
@@ -1349,49 +2128,169 @@
         const msg = (data && data.error && data.error.message) || ('Judgment failed (' + res.status + ').');
         if (code === 'RATE') {
           pvpDebug('info', 'live_frame rate limited');
+          setDuelCaptureStatus(msg || 'Next judgment in a few seconds…', 12000);
           return;
         }
-        if (code === 'MODE' || code === 'PVP') {
-          state.modeConfirmed = false;
+        if (code === 'NOT_READY') {
+          pvpDebug('info', 'live_frame not ready', msg);
+          setDuelCaptureStatus(msg || 'Match starting…');
+          return;
+        }
+        if (code === 'EXPIRED') {
+          pvpDebug('info', 'live_frame expired', msg);
+          state.matchStatus = 'expired';
+          state.lastPollStatus = 'expired';
+          setDuelCaptureStatus(msg || 'Round over.', 12000);
+          stopLiveScoring();
+          return;
+        }
+        if (code === 'NO_BIKE') {
+          pvpDebug('info', 'live_frame no bike');
+          setDuelCaptureStatus(msg || 'Nothing e-moto visible — point your bike camera at your build.', 12000);
+          return;
+        }
+        if (code === 'LIVE' || code === 'IMAGE') {
+          pvpDebug('warn', 'live_frame soft fail', code, msg);
+          setDuelCaptureStatus(msg, 12000);
+          return;
+        }
+        if (code === 'MODE' || code === 'PVP' || code === 'NOT_READY') {
+          resetModeLiveState();
           await ensureDuelModeLive();
+          return;
         }
         pvpDebug('error', 'live_frame failed', code || 'UNKNOWN', msg, JSON.stringify(data));
-        setDuelCaptureStatus(code ? (code + ': ' + msg) : msg);
-      } else {
-        updateLiveScores(data);
-        const avg = data.your_average != null ? data.your_average : data.you_score;
-        const count = data.frame_count || data.your_frame_count;
-        if (avg != null && count) {
-          setDuelCaptureStatus('This frame: ' + data.frame_score + ' — match average: ' + avg + ' (' + count + ' judgments). Next auto-judge in ~10s.');
-        } else if (avg != null) {
-          setDuelCaptureStatus('This frame: ' + data.frame_score + ' — match average: ' + avg + '. Next auto-judge in ~10s.');
-        } else {
-          setDuelCaptureStatus('Scored ' + data.frame_score + ' — auto-judging continues.');
+        // #region agent log
+        agentDebugLog({ location: 'roast-pvp.html:sendLiveFrame', message: 'live_frame_fail', data: { http: res.status, code: code, msg: msg }, hypothesisId: 'H6' });
+        // #endregion
+        setDuelCaptureStatus(msg, 12000);
+        return;
+      }
+
+      if (isInitialFrame) state.initialLiveFrameSent = true;
+      if (data.match_id) state.matchId = data.match_id;
+      if (data.status) {
+        state.matchStatus = data.status;
+        state.lastPollStatus = data.status;
+      }
+
+      // #region agent log
+      agentDebugLog({ location: 'roast-pvp.html:sendLiveFrame', message: 'live_frame_ok', data: { http: res.status, frame_score: data.frame_score, display_score: data.display_score, score_tier: data.score_tier, vision_fallback: !!data.frame_fallback, frame_skipped: !!data.frame_skipped, vision_debug: data._vision_debug || null }, hypothesisId: 'H6' });
+      // #endregion
+
+      if (data.frame_skipped) {
+        var skipMsg = data.message || data.vision_hint;
+        if (!skipMsg) {
+          if (data.frame_skip_reason === 'api_failure') {
+            skipMsg = 'AI could not analyze this frame — hold the bike in frame with good light. Next try in ~5s.';
+          } else if (data.frame_skip_reason === 'no_score') {
+            skipMsg = 'Could not score this frame — next try in ~5s.';
+          } else if (data.frame_skip_reason === 'no_bike' || data.no_bike) {
+            skipMsg = 'Nothing e-moto visible — point your bike camera at your build.';
+          } else {
+            skipMsg = 'Judging what we see…';
+          }
+        }
+        pvpDebug('info', 'live_frame skipped', data.frame_skip_reason || 'unknown');
+        setDuelCaptureStatus(skipMsg, 12000);
+        if (data.status) {
+          state.matchStatus = data.status;
+          state.lastPollStatus = data.status;
         }
         if (data.status === 'complete' || data.status === 'expired') {
+          stopLiveScoring();
+          renderResults(data);
+        } else if (data.status === 'dueling') {
+          showJudging(data);
+        } else {
+          applyCachedScoresToUi();
+        }
+      } else if (data && data.ok !== false) {
+        if (data.match_id) state.matchId = data.match_id;
+        if (data.status) {
+          state.matchStatus = data.status;
+          state.lastPollStatus = data.status;
+        }
+        const visionHint = liveFrameVisionHint(data);
+        if (shouldUseVisionHintStatus(data)) {
+          syncQuickStartFromPayload(data);
+          applyCachedScoresToUi();
+          setDuelCaptureStatus(formatLiveFrameVisionStatus(data), 12000);
+        } else {
+          updateLiveScores(data);
+          const avg = data.your_average != null ? data.your_average : data.you_score;
+          const count = data.frame_count || data.your_frame_count;
+          const frameScore = data.frame_score != null ? data.frame_score : '--';
+          if ((data.frame_fallback || isFallbackFramePayload(data)) && visionHint) {
+            setDuelCaptureStatus(visionHint + ' Frame: ' + frameScore + (avg != null ? ' — average: ' + avg : '') + '.', 12000);
+          } else if (avg != null && count) {
+            setDuelCaptureStatus('This frame: ' + frameScore + ' — match average: ' + avg + ' (' + count + ' judgments). Next auto-judge in ~5s.', 12000);
+          } else if (avg != null) {
+            setDuelCaptureStatus('This frame: ' + frameScore + ' — match average: ' + avg + '. Next auto-judge in ~5s.', 12000);
+          } else {
+            setDuelCaptureStatus('Scored ' + frameScore + ' — auto-judging continues.', 12000);
+          }
+        }
+        if (data.status === 'complete' || data.status === 'expired') {
+          stopLiveScoring();
           renderResults(data);
         } else if (data.status === 'dueling') {
           showJudging(data);
         }
       }
     } catch (e) {
+      if (didPost) state.liveFrameCooldownUntil = Date.now() + ROAST_PVP_T1_RATE_SEC * 1000;
       setDuelCaptureStatus('Network error during judgment.');
     } finally {
       state.liveScoringBusy = false;
     }
   }
 
-  function startAutoJudging() {
+  async function startAutoJudging() {
     stopLiveScoring();
-    if (!state.matchId || !state.modeConfirmed) return;
+    if (!isModeLiveReady()) return;
 
+    var videoEl = $('pvp-cam-you');
+    var previewReady = await waitForVideoReady(videoEl, 8000);
+    if (!previewReady) {
+      pvpDebug('warn', 'startAutoJudging video preview not ready yet');
+      setDuelCaptureStatus('Waiting for camera preview before first judgment…', 8000);
+    }
+
+    var firstDelayMs = previewReady ? AUTO_JUDGE_FIRST_MS : AUTO_JUDGE_FIRST_MS + 2500;
     setTimeout(function () {
-      if (!state.liveScoringBusy && state.modeConfirmed) sendLiveFrame();
-    }, AUTO_JUDGE_FIRST_MS);
+      var pollStatus = state.lastPollStatus || state.matchStatus;
+      if (pollStatus === 'complete' || pollStatus === 'expired') {
+        stopLiveScoring();
+        return;
+      }
+      if (!state.liveScoringBusy && isModeLiveReady()) sendLiveFrame();
+    }, firstDelayMs);
 
     state.liveScoringTimer = setInterval(function () {
-      if (!state.liveScoringBusy && state.modeConfirmed) sendLiveFrame();
+      var pollStatus = state.lastPollStatus || state.matchStatus;
+      if (pollStatus === 'complete' || pollStatus === 'expired') {
+        stopLiveScoring();
+        return;
+      }
+      if (!state.liveScoringBusy && isModeLiveReady()) sendLiveFrame();
     }, AUTO_JUDGE_INTERVAL_MS);
+  }
+
+  function scheduleModeRetry() {
+    clearModeRetryTimer();
+    state.modeRetryTimer = setTimeout(async function () {
+      state.modeRetryTimer = null;
+      if (!state.matchId) return;
+      await ensureDuelModeLive();
+      if (isModeLiveReady()) maybeStartAutoJudging();
+    }, 3000);
+  }
+
+  function maybeStartAutoJudging() {
+    if (!state.matchId || state.liveScoringTimer) return;
+    if (!isModeLiveReady()) return;
+    startAutoJudging();
   }
 
   function mediaErrorMessage(err) {
@@ -1593,6 +2492,7 @@
   }
 
   async function enableMedia() {
+    primeMediaPlayback();
     var btn = $('pvp-enable-media');
     var hint = $('pvp-perm-hint');
     if (btn) {
@@ -1925,6 +2825,7 @@
   }
 
   async function goToQueueAfterVerify(queueText) {
+    stopMatchTimers();
     hideAll();
     $('pvp-queue').classList.remove('hidden');
     const qt = $('pvp-queue-text');
@@ -2183,6 +3084,8 @@
 
   async function findOpponent() {
     var joinExtra = { face_hash: state.faceHash };
+    var joinJobId = getAvailableJoinJobId();
+    if (joinJobId) joinExtra.job_id = joinJobId;
     try {
       if (window.RoastCredits) {
         await window.RoastCredits.init(true);
@@ -2194,7 +3097,13 @@
       }
       const data = await pvpPost('join', joinExtra);
       if (!data || !data.ok) {
+        var errCode = (data && data.error && data.error.code) || '';
         var failMsg = (data && data.error && data.error.message) || 'Could not join matchmaking queue.';
+        if (errCode === 'CREDITS_DB') {
+          failMsg = 'Credits system unavailable. Try again shortly.';
+        } else if (errCode === 'CREDITS') {
+          failMsg = failMsg || 'Watch an ad or sign in for PvP credits.';
+        }
         pvpDebug('error', 'join failed', failMsg);
         showError(failMsg);
         return;
@@ -2203,12 +3112,16 @@
         window.RoastCredits.clearUnlockToken();
         window.RoastCredits.refreshBalance();
       }
+      syncMatchMediaFromPayload(data);
       handleState(data);
       if (data.status === 'waiting') {
+        if (state.pollTimer) clearInterval(state.pollTimer);
+        state.pollTimer = null;
         state.pollTimer = setInterval(async function () {
           const st = await pvpStatus();
+          syncMatchMediaFromPayload(st);
           handleState(st);
-          if (['active', 'dueling', 'complete', 'expired'].indexOf(st.status) >= 0) {
+          if (['matched', 'active', 'dueling', 'complete', 'expired'].indexOf(st.status) >= 0) {
             clearInterval(state.pollTimer);
             state.pollTimer = null;
           }
@@ -2222,18 +3135,29 @@
     }
   }
 
-  function clearRemoteVideoElements() {
+  function clearRemoteVideoElements(opts) {
+    opts = opts || {};
+    var keepFeed = opts.preserveFeed === true && hasOpponentFeedActive() && state.opponentFeed;
     ['pvp-cam-opp', 'pvp-cam-opp-judge'].forEach(function (id) {
       var el = $(id);
-      if (el) el.srcObject = null;
+      if (!el) return;
+      el.srcObject = null;
+      if (!keepFeed) {
+        el.removeAttribute('src');
+        try { el.load(); } catch (e) { /* ignore */ }
+      }
     });
-    ['pvp-stranger-audio', 'pvp-stranger-audio-judge'].forEach(function (id) {
-      var el = $(id);
-      if (el) el.srcObject = null;
-    });
+    if (!keepFeed) {
+      ['pvp-stranger-audio', 'pvp-stranger-audio-judge'].forEach(function (id) {
+        var el = $(id);
+        if (el) el.srcObject = null;
+      });
+      updateRemoteTapOverlay(false);
+    }
   }
 
   function pcNeedsRestart() {
+    if (isNpcDuel()) return false;
     if (!state.pc) return true;
     if (hasRemoteVideo() && isRemoteVideoPlaying()) return false;
     var cs = state.pc.connectionState;
@@ -2251,15 +3175,24 @@
   }
 
   function scheduleWebRtcKick() {
+    if (isNpcDuel()) return;
     stopWebRtcKick();
     state.webrtcKickTimer = setTimeout(function () {
       state.webrtcKickTimer = null;
-      if (!state.matchId) return;
-      if (!hasRemoteVideo() || !isRemoteVideoPlaying() || pcNeedsRestart()) {
-        pvpDebug('info', 'WebRTC kick — still no stranger feed');
-        ensureWebRtc(state.role === 'a');
+      if (!state.matchId || isNpcDuel()) return;
+      if (hasRemoteVideo() && isRemoteVideoPlaying() && !pcNeedsRestart()) return;
+      pvpDebug('info', 'WebRTC kick — nudging stranger feed', {
+        hasRemote: hasRemoteVideo(),
+        playing: isRemoteVideoPlaying(),
+        ice: state.pc ? state.pc.iceConnectionState : 'none',
+      });
+      syncRemoteReceivers();
+      pollSignalsOnce();
+      tryAutoplayRemoteAfterStream();
+      if ((!hasRemoteVideo() || !isRemoteVideoPlaying() || pcNeedsRestart()) && state.role === 'a') {
+        ensureWebRtc(true);
       }
-    }, 3000);
+    }, 8000);
   }
 
   async function ensureLocalStreamLive() {
@@ -2288,14 +3221,27 @@
     });
 
     function findTransceiver(kind) {
-      var list = pc.getTransceivers();
-      for (var i = 0; i < list.length; i++) {
+      var list = pc.getTransceivers().filter(function (tc) {
+        return tc.currentDirection !== 'stopped';
+      });
+      var i;
+      for (i = 0; i < list.length; i++) {
         var tc = list[i];
         if (tc.sender && tc.sender.track && tc.sender.track.kind === kind) return tc;
       }
-      for (var j = 0; j < list.length; j++) {
-        var tc2 = list[j];
-        if (tc2.sender && !tc2.sender.track && tc2.direction !== 'stopped') return tc2;
+      for (i = 0; i < list.length; i++) {
+        var tcR = list[i];
+        if (tcR.receiver && tcR.receiver.track && tcR.receiver.track.kind === kind) return tcR;
+      }
+      if (pc.remoteDescription) {
+        if (kind === 'video' && list[0] && list[0].sender) return list[0];
+        if (kind === 'audio' && list[1] && list[1].sender) return list[1];
+      }
+      for (i = 0; i < list.length; i++) {
+        if (list[i].sender && !list[i].sender.track) return list[i];
+      }
+      if (!pc.remoteDescription) {
+        return pc.addTransceiver(kind, { direction: 'sendrecv' });
       }
       return null;
     }
@@ -2334,7 +3280,7 @@
   }
 
   function syncRemoteReceivers() {
-    if (!state.pc) return;
+    if (isNpcDuel() || !state.pc) return;
     var receivers = state.pc.getReceivers();
     var synced = 0;
     receivers.forEach(function (receiver) {
@@ -2348,9 +3294,11 @@
     }
   }
 
-  function teardownWebRtc() {
+  function teardownWebRtc(opts) {
+    opts = opts || {};
     stopWebRtcKick();
     stopRemotePlayWatch();
+    stopRemoteTrackWatchdog();
     if (state.remoteVideoWatchdog) {
       clearTimeout(state.remoteVideoWatchdog);
       state.remoteVideoWatchdog = null;
@@ -2386,12 +3334,15 @@
     if (state.remoteStream) {
       state.remoteStream = null;
     }
-    clearRemoteVideoElements();
+    clearRemoteVideoElements({ preserveFeed: opts.preserveFeed === true });
     state.signalSince = 0;
     state.makingOffer = false;
     state.pendingIce = [];
     state.webrtcMatchId = '';
     state.webrtcStarting = false;
+    if (opts.preserveFeed && hasOpponentFeedActive() && state.opponentFeed) {
+      attachOpponentFeed(state.opponentFeed);
+    }
   }
 
   const DEFAULT_ICE_SERVERS = [
@@ -2400,27 +3351,44 @@
     { urls: 'stun:stun.cloudflare.com:3478' },
   ];
 
+  function needsStrangerWebRtcBanner() {
+    if (isNpcDuel()) return false;
+    var duelEl = $('pvp-duel');
+    return !!(duelEl && !duelEl.classList.contains('hidden') && state.matchId);
+  }
+
   function updateTurnBanner(data) {
     var el = $('pvp-turn-banner');
     if (!el) return;
-    var configured = data && (data.turnConfigured === true || data.turnConfigured === 'true');
+    if (!needsStrangerWebRtcBanner()) {
+      el.classList.add('hidden');
+      el.textContent = '';
+      return;
+    }
+    data = data || {
+      turnConfigured: state.turnConfigured,
+      turnWarning: state.turnWarning,
+      turnKeySet: state.turnKeySet,
+      turnStatus: state.turnStatus,
+    };
+    var configured = data.turnConfigured === true || data.turnConfigured === 'true';
     if (configured) {
       el.classList.add('hidden');
       el.textContent = '';
       return;
     }
-    var msg = (data && data.turnWarning) ? data.turnWarning : 'TURN not configured — stranger video only works on the same Wi‑Fi.';
-    var keySet = data && data.turnKeySet;
-    if (keySet && data.turnStatus === 'invalid_key') {
+    var msg = data.turnWarning || 'TURN not configured — live stranger video only works on the same Wi‑Fi. Pre-recorded opponents still work.';
+    if (data.turnKeySet && data.turnStatus === 'invalid_key') {
       msg = 'TURN API key rejected. Use Metered TURN → Show API Key (not Developers Secret Key).';
-    } else if (!keySet) {
-      msg = 'Server missing PVP_TURN_API_KEY in htdocs/api/.env — upload .env to Ionos, not just your PC.';
+    } else if (data.turnKeySet && data.turnStatus === 'invalid_secret') {
+      msg = 'PVP_TURN_SECRET_KEY rejected — copy Secret Key from Metered Developers tab.';
     }
     el.textContent = msg;
     el.classList.remove('hidden');
   }
 
   async function getIceServers(forceRefresh) {
+    if (isNpcDuel()) return state.iceServersCache || DEFAULT_ICE_SERVERS;
     if (forceRefresh) clearIceServersCache();
     if (state.iceServersCache) return state.iceServersCache;
     try {
@@ -2431,6 +3399,8 @@
         state.turnSource = data.turnSource || '';
         state.turnWarning = data.turnWarning || '';
         state.turnConfigured = !!data.turnConfigured;
+        state.turnKeySet = !!data.turnKeySet;
+        state.turnStatus = data.turnStatus || '';
         updateTurnBanner(data);
         var turnCount = data.iceServers.filter(function (s) {
           var u = s.urls;
@@ -2451,7 +3421,9 @@
     state.turnSource = 'client_fallback';
     state.turnConfigured = false;
     state.turnWarning = 'ICE API unreachable — STUN-only fallback.';
-    updateTurnBanner({ turnConfigured: false, turnWarning: state.turnWarning, turnKeySet: false });
+    state.turnKeySet = false;
+    state.turnStatus = 'fetch_failed';
+    updateTurnBanner({ turnConfigured: false, turnWarning: state.turnWarning, turnKeySet: false, turnStatus: state.turnStatus });
     pvpDebug('warn', 'ICE API failed — STUN-only fallback');
     return state.iceServersCache;
   }
@@ -2481,7 +3453,7 @@
   }
 
   async function clearSignals() {
-    if (!state.matchId) return;
+    if (isNpcDuel() || !state.matchId) return;
     try {
       await pvpPost('clear_signals', { match_id: state.matchId });
     } catch (e) { /* ignore */ }
@@ -2493,7 +3465,7 @@
   }
 
   async function processSignal(sig) {
-    if (!state.pc || !sig) return;
+    if (isNpcDuel() || !state.pc || !sig) return;
     let payload;
     try {
       payload = JSON.parse(sig.payload);
@@ -2517,8 +3489,8 @@
         }
         pvpDebug('info', 'applying remote OFFER');
         await ensureLocalStreamLive();
-        await ensureLocalTracksOnPc(state.pc);
         await state.pc.setRemoteDescription(new RTCSessionDescription(payload));
+        await ensureLocalTracksOnPc(state.pc);
         await flushPendingIce();
         syncRemoteReceivers();
         const answer = await state.pc.createAnswer();
@@ -2549,7 +3521,11 @@
         return;
       }
 
-      if (sig.signal_type === 'ice' && payload && payload.candidate) {
+      if (sig.signal_type === 'ice') {
+        if (!payload || payload.candidate == null || payload.candidate === '') {
+          markSignalProcessed(sig.id);
+          return;
+        }
         countIceCandidate(state.remoteIceCounts, payload.candidate);
         await addRemoteIce(payload);
         pvpDebug('info', 'ICE candidate added', iceCandidateType(payload.candidate) + ' ' + payload.candidate.substring(0, 36) + '...');
@@ -2561,6 +3537,7 @@
   }
 
   async function pollSignalsOnce() {
+    if (isNpcDuel()) return;
     try {
       const res = await pvpSignals();
       if (!res.ok) {
@@ -2574,13 +3551,21 @@
       for (let i = 0; i < res.signals.length; i++) {
         await processSignal(res.signals[i]);
       }
+      if (state.pc) {
+        var ice = state.pc.iceConnectionState;
+        var conn = state.pc.connectionState;
+        if (ice === 'connected' || ice === 'completed' || conn === 'connected') {
+          syncRemoteReceivers();
+          if (hasRemoteVideo()) scheduleAttachRemoteVideos();
+        }
+      }
     } catch (e) {
       pvpDebug('error', 'signal poll exception', e && e.message ? e.message : String(e));
     }
   }
 
   async function fetchSignalStats() {
-    if (!state.matchId) return;
+    if (isNpcDuel() || !state.matchId) return;
     try {
       const url = PVP_API + '?action=signal_stats&match_id=' + encodeURIComponent(state.matchId) +
         '&token=' + encodeURIComponent(getToken());
@@ -2593,8 +3578,16 @@
   function updateWebRtcBanner() {
     const banner = $('pvp-duel-banner');
     if (!banner) return;
+    if (hasOpponentFeedActive() && hasRemoteVideo()) {
+      banner.textContent = isRemoteVideoPlaying()
+        ? 'Stranger connected'
+        : 'Stranger connected — loading video…';
+      return;
+    }
     if (hasRemoteVideo()) {
-      banner.textContent = 'Stranger connected — tap stranger video or Enable audio for sound';
+      banner.textContent = isRemoteVideoPlaying()
+        ? 'Stranger connected'
+        : 'Stranger connected — click stranger video';
       return;
     }
     const cs = state.pc ? state.pc.connectionState : '';
@@ -2613,11 +3606,12 @@
   }
 
   function scheduleWebRtcRetry(isOfferer, delayMs) {
+    if (isNpcDuel()) return;
     if (state.webrtcRetryTimer) clearTimeout(state.webrtcRetryTimer);
     const wait = typeof delayMs === 'number' ? delayMs : 12000;
     state.webrtcRetryTimer = setTimeout(function () {
       state.webrtcRetryTimer = null;
-      if (!state.matchId || hasRemoteVideo()) return;
+      if (isNpcDuel() || !state.matchId || hasRemoteVideo()) return;
       const cs = state.pc ? state.pc.connectionState : '';
       const ice = state.pc ? state.pc.iceConnectionState : '';
       if (cs === 'connected' || ice === 'connected') return;
@@ -2625,13 +3619,24 @@
         scheduleWebRtcRetry(isOfferer, 4000);
         return;
       }
-      pvpDebug('warn', 'WebRTC retry', { connection: cs, ice: ice });
+      pvpDebug('warn', 'WebRTC retry', { connection: cs, ice: ice, isOfferer: isOfferer });
+      if (!isOfferer) {
+        syncRemoteReceivers();
+        pollSignalsOnce();
+        tryAutoplayRemoteAfterStream();
+        scheduleWebRtcRetry(false, 4000);
+        return;
+      }
       clearIceServersCache();
       startWebRtc(isOfferer, true);
     }, wait);
   }
 
   function ensureWebRtc(isOfferer) {
+    if (isNpcDuel()) {
+      if (hasOpponentFeedActive()) attachOpponentFeed(state.opponentFeed);
+      return Promise.resolve();
+    }
     if (!state.matchId || !state.localStream) {
       pvpDebug('warn', 'ensureWebRtc blocked', { matchId: !!state.matchId, localStream: !!state.localStream });
       return Promise.resolve();
@@ -2659,18 +3664,29 @@
   }
 
   function startRemoteVideoWatchdog(isOfferer) {
+    if (isNpcDuel()) return;
     if (state.remoteVideoWatchdog) clearTimeout(state.remoteVideoWatchdog);
     state.remoteVideoWatchdog = setTimeout(function () {
       state.remoteVideoWatchdog = null;
-      if (!state.matchId || hasRemoteVideo()) return;
+      if (isNpcDuel() || !state.matchId || hasRemoteVideo()) return;
       logWebRtcState('watchdog — no remote video');
       fetchSignalStats();
-      startWebRtc(isOfferer, true);
+      if (isOfferer) {
+        startWebRtc(isOfferer, true);
+      } else {
+        syncRemoteReceivers();
+        pollSignalsOnce();
+        tryAutoplayRemoteAfterStream();
+      }
     }, 10000);
   }
 
   async function startWebRtc(isOfferer, isRetry) {
     if (!state.matchId) return;
+    if (isNpcDuel()) {
+      if (hasOpponentFeedActive()) attachOpponentFeed(state.opponentFeed);
+      return;
+    }
     if (state.webrtcStarting) return;
     if (!(await ensureLocalStreamLive())) {
       pvpDebug('error', 'startWebRtc aborted — no live local camera');
@@ -2714,8 +3730,8 @@
       role: state.role,
     });
     try {
-      if (isRetry) {
-        pvpDebug('info', 'clearing old signals');
+      if (isRetry && isOfferer) {
+        pvpDebug('info', 'clearing old signals (offerer retry)');
         await clearSignals();
       }
       if (isRetry || state.webrtcMatchId !== state.matchId) {
@@ -2782,16 +3798,6 @@
         }
       };
 
-      var tracksAdded = await ensureLocalTracksOnPc(state.pc);
-      if (tracksAdded === 0) {
-        await recoverLocalVideo();
-        tracksAdded = await ensureLocalTracksOnPc(state.pc);
-      }
-      await applyOutboundBitrateCaps(state.pc);
-      if (tracksAdded === 0) {
-        pvpDebug('error', 'No live camera track to send — stranger may not see you');
-      }
-
       state.pc.ontrack = function (ev) {
         if (!ev.track) return;
         pvpDebug('info', 'ontrack', {
@@ -2800,11 +3806,35 @@
           state: ev.track.readyState,
           muted: ev.track.muted,
         });
-        setRemoteTrack(ev.track);
+        if (ev.streams && ev.streams.length && ev.streams[0]) {
+          state.remoteStream = ev.streams[0];
+          scheduleAttachRemoteVideos();
+          if (ev.track.kind === 'video') {
+            tryAutoplayRemoteAfterStream();
+            maybeStartAutoJudging();
+          }
+        } else {
+          setRemoteTrack(ev.track);
+        }
         ev.track.onunmute = function () { scheduleAttachRemoteVideos(); };
         ev.track.onended = function () { logWebRtcState('remote track ended'); };
         updateWebRtcBanner();
       };
+
+      var tracksAdded = 0;
+      if (isOfferer) {
+        tracksAdded = await ensureLocalTracksOnPc(state.pc);
+        if (tracksAdded === 0) {
+          await recoverLocalVideo();
+          tracksAdded = await ensureLocalTracksOnPc(state.pc);
+        }
+        await applyOutboundBitrateCaps(state.pc);
+        if (tracksAdded === 0) {
+          pvpDebug('error', 'No live camera track to send — stranger may not see you');
+        }
+      } else {
+        pvpDebug('info', 'answerer — local tracks attach after remote offer');
+      }
 
       state.pc.onicecandidate = function (ev) {
         if (ev.candidate && state.matchId) {
@@ -2818,7 +3848,7 @@
       if (isOfferer) {
         state.makingOffer = true;
         pvpDebug('info', 'creating OFFER');
-        const offer = await state.pc.createOffer();
+        const offer = await state.pc.createOffer(isRetry ? { iceRestart: true } : undefined);
         await state.pc.setLocalDescription(offer);
         await postSignal('offer', JSON.stringify(offer));
         state.makingOffer = false;
@@ -2870,6 +3900,9 @@
   function updateDuelStatus(data) {
     const el = $('pvp-duel-status');
     if (!el) return;
+    if (state.judgmentStatusUntil && Date.now() < state.judgmentStatusUntil) {
+      return;
+    }
     if (data.message) {
       el.textContent = data.message;
       return;
@@ -2877,7 +3910,7 @@
     if (!data.both_modes_ready) {
       el.textContent = 'Connecting… auto-judging starts when both riders are in.';
     } else {
-      el.textContent = 'Best bike score wins. Your top camera auto-judges every ~10s.';
+      el.textContent = 'Best bike score wins. Bike camera auto-judges every ~5s.';
     }
   }
 
@@ -2898,8 +3931,25 @@
     }
   }
 
-  function startDuelPoll() {
-    if (state.duelPollTimer) return;
+  function handleOpponentForfeit(st) {
+    if (!st || !st.opponent_left) return;
+    var sec = st.forfeit_grace_sec != null ? st.forfeit_grace_sec : 5;
+    var banner = $('pvp-duel-banner');
+    if (banner) banner.textContent = 'Opponent left — ending in ' + sec + 's…';
+    var duelStatus = $('pvp-duel-status');
+    if (duelStatus) {
+      duelStatus.textContent = 'Opponent quit — waiting ' + sec + 's before ending the match.';
+    }
+    var judgeLabel = $('pvp-judge-label');
+    if (judgeLabel && !$('pvp-duel').classList.contains('hidden') === false) {
+      judgeLabel.textContent = 'Opponent left — ending in ' + sec + 's…';
+    }
+  }
+
+  function startDuelPoll(forceFast) {
+    if (state.duelPollTimer && !forceFast) return;
+    if (state.duelPollTimer) stopDuelPoll();
+    var interval = state.forfeitPollFast || forceFast ? 1000 : 2500;
     state.duelPollTimer = setInterval(async function () {
       if (!state.matchId) return;
       try {
@@ -2909,6 +3959,15 @@
           renderResults(st);
           return;
         }
+        if (st.opponent_left) {
+          state.forfeitPollFast = true;
+          if (interval > 1000) {
+            stopDuelPoll();
+            startDuelPoll(true);
+            return;
+          }
+          handleOpponentForfeit(st);
+        }
         updateLiveScores(st);
         updateDuelStatus(st);
         if (st.status === 'active') {
@@ -2916,41 +3975,71 @@
         }
         if (st.status === 'dueling') {
           showJudging(st);
+          if (st.opponent_left) handleOpponentForfeit(st);
         }
       } catch (e) { /* ignore */ }
-    }, 2500);
+    }, interval);
   }
 
   function refreshDuelUi(data) {
+    syncMatchMediaFromPayload(data);
     updateLiveScores(data);
     updateDuelStatus(data);
     syncDuelTimer(data);
     attachSelfVideos();
-    attachRemoteVideos();
+    if (hasOpponentFeedActive()) {
+      if (!isRemoteVideoPlaying()) attachOpponentFeed(state.opponentFeed);
+    } else {
+      attachRemoteVideos();
+    }
+    updateTurnBanner();
     updateWebRtcBanner();
   }
 
   async function showDuel(data) {
-    stopQueueAnim();
-    stopJudgeAnim();
+    stopMatchTimers();
+    stopLiveScoring();
+    clearModeRetryTimer();
+    const incomingMatchId = (data && data.match_id) || state.matchId;
+    if (incomingMatchId && state.modeConfirmedMatchId && state.modeConfirmedMatchId !== incomingMatchId) {
+      resetModeLiveState();
+      state.initialLiveFrameSent = false;
+    }
     hideAll();
     $('pvp-duel').classList.remove('hidden');
     $('pvp-quit-top').classList.remove('hidden');
-    pvpDebug('info', 'enter duel', { role: state.role, matchId: state.matchId, status: data && data.status });
+    syncMatchMediaFromPayload(data);
+    var npcFeedDuel = shouldUseOpponentFeed(data);
+    pvpDebug('info', 'enter duel', {
+      role: state.role,
+      matchId: state.matchId,
+      status: data && data.status,
+      npcFeed: npcFeedDuel,
+      opponentFeed: !!(data && data.opponent_feed),
+    });
     initDuelCapture();
-    applyCachedScoresToUi();
+    updateLiveScores(data);
     await ensureLocalStreamLive();
     refreshDuelUi(data);
     await ensureDuelModeLive();
-    await ensureWebRtc(state.role === 'a');
-    scheduleWebRtcKick();
-    if (state.modeConfirmed) {
-      startAutoJudging();
+    syncMatchMediaFromPayload(data);
+    npcFeedDuel = shouldUseOpponentFeed(data);
+    if (npcFeedDuel) {
+      enterNpcFeedMode(data);
+      var npcBanner = $('pvp-duel-banner');
+      if (npcBanner && !hasOpponentFeedActive()) {
+        npcBanner.textContent = 'Stranger connected — loading video…';
+      }
     } else {
-      setTimeout(async function () {
-        await ensureDuelModeLive();
-        if (state.modeConfirmed && !state.liveScoringTimer) startAutoJudging();
-      }, 2500);
+      updateTurnBanner();
+      await ensureWebRtc(state.role === 'a');
+      scheduleWebRtcKick();
+      startRemoteTrackWatchdog();
+    }
+    if (isModeLiveReady()) {
+      maybeStartAutoJudging();
+    } else {
+      scheduleModeRetry();
     }
     if (!state.duelPollTimer) startDuelPoll();
   }
@@ -2960,9 +4049,14 @@
     hideAll();
     $('pvp-judging').classList.remove('hidden');
     $('pvp-quit-top').classList.remove('hidden');
+    syncMatchMediaFromPayload(data);
     updateLiveScores(data);
     attachSelfVideos();
-    attachRemoteVideos();
+    if (hasOpponentFeedActive()) {
+      if (!isRemoteVideoPlaying()) attachOpponentFeed(state.opponentFeed);
+    } else {
+      attachRemoteVideos();
+    }
     const waitingForOpp = !!(data.you_ready && !data.opponent_ready);
     startJudgeAnim(waitingForOpp);
   }
@@ -2970,6 +4064,7 @@
   function renderResults(data) {
     stopAll();
     stopLiveScoring();
+    resetModeLiveState();
     stopDuelPoll();
     teardownWebRtc();
     hideAll();
@@ -2992,22 +4087,49 @@
     }
     state.matchId = data.match_id || state.matchId;
     state.role = data.role || state.role;
+    syncMatchMediaFromPayload(data);
+    if (data.opponent_feed || data.opponent_npc) {
+      updateTurnBanner();
+    } else if (data.status === 'waiting' || data.status === 'idle') {
+      state.opponentFeed = '';
+      state.opponentNpc = false;
+      updateTurnBanner();
+    }
 
     if (data.status === 'waiting') {
+      const duelEl = $('pvp-duel');
+      const prevStatus = state.matchStatus;
+      if (state.matchId && ((duelEl && !duelEl.classList.contains('hidden')) || prevStatus === 'active' || prevStatus === 'matched')) {
+        return;
+      }
       hideAll();
       $('pvp-queue').classList.remove('hidden');
       const qt = $('pvp-queue-text');
       if (qt) qt.textContent = data.message || 'Finding opponent...';
       if (!state.queueAnimTimer) startQueueAnim();
+      state.matchStatus = 'waiting';
       return;
+    }
+
+    if (data.status) {
+      state.matchStatus = data.status;
+      state.lastPollStatus = data.status;
     }
 
     if (data.status === 'matched' || data.status === 'active') {
       const duelEl = $('pvp-duel');
-      if (duelEl && !duelEl.classList.contains('hidden') && state.webrtcMatchId === state.matchId) {
-        refreshDuelUi(data);
-        if (!hasRemoteVideo() || !isRemoteVideoPlaying()) {
-          ensureWebRtc(state.role === 'a');
+      const sameMatch = state.matchId && state.matchId === (data.match_id || state.matchId);
+      if (duelEl && !duelEl.classList.contains('hidden') && sameMatch) {
+        if (shouldUseOpponentFeed(data)) {
+          enterNpcFeedMode(data);
+          refreshDuelUi(data);
+        } else if (state.webrtcMatchId === state.matchId) {
+          refreshDuelUi(data);
+          if (!isNpcDuel() && (!hasRemoteVideo() || !isRemoteVideoPlaying())) {
+            ensureWebRtc(state.role === 'a');
+          }
+        } else {
+          showDuel(data);
         }
         return;
       }
@@ -3019,7 +4141,9 @@
       if (data.you_ready) showJudging(data);
       else {
         const duelEl = $('pvp-duel');
-        if (duelEl && !duelEl.classList.contains('hidden') && state.webrtcMatchId === state.matchId) {
+        const sameMatch = state.matchId && state.matchId === (data.match_id || state.matchId);
+        if (duelEl && !duelEl.classList.contains('hidden') && sameMatch) {
+          if (shouldUseOpponentFeed(data)) enterNpcFeedMode(data);
           refreshDuelUi(data);
         } else {
           showDuel(data);
@@ -3028,13 +4152,20 @@
       if (!state.pollTimer) {
         state.pollTimer = setInterval(async function () {
           const st = await pvpStatus();
+          if (st.status) state.lastPollStatus = st.status;
           if (st.status === 'complete' || st.status === 'expired') {
             clearInterval(state.pollTimer);
             state.pollTimer = null;
+            stopLiveScoring();
             renderResults(st);
           } else {
             updateLiveScores(st);
             if (st.status === 'dueling' && st.you_ready) showJudging(st);
+            if (st.opponent_left) {
+              state.forfeitPollFast = true;
+              handleOpponentForfeit(st);
+              if (!state.duelPollTimer) startDuelPoll(true);
+            }
           }
         }, 2000);
       }
@@ -3085,6 +4216,7 @@
   }
 
   function bindEvents() {
+    bindGlobalTouchUnlock();
     var enableBtn = $('pvp-enable-media');
     if (enableBtn) enableBtn.addEventListener('click', enableMedia);
     var cancelBtn = $('pvp-cancel-btn');
@@ -3101,17 +4233,18 @@
     var quitTop = $('pvp-quit-top');
     if (quitTop) quitTop.addEventListener('click', quitMatch);
     var flipBtn = $('pvp-flip-cam');
-    if (flipBtn) flipBtn.addEventListener('click', flipBikeCamera);
+    if (flipBtn) flipBtn.addEventListener('click', function (ev) {
+      markUserGesture();
+      flipBikeCamera();
+      playRemoteVideoFromGesture(ev);
+    });
     var judgeNowBtn = $('pvp-judge-now');
-    if (judgeNowBtn) judgeNowBtn.addEventListener('click', sendLiveFrame);
-    var oppCam = $('pvp-cam-opp');
-    if (oppCam) oppCam.addEventListener('click', function () {
-      enableStrangerAudio(true);
+    if (judgeNowBtn) judgeNowBtn.addEventListener('click', function (ev) {
+      markUserGesture();
+      sendLiveFrame();
+      playRemoteVideoFromGesture(ev);
     });
-    var enableAudioBtn = $('pvp-enable-audio');
-    if (enableAudioBtn) enableAudioBtn.addEventListener('click', function () {
-      enableStrangerAudio(true);
-    });
+    bindRemoteTapTargets();
     var skipStepBtn = $('pvp-liveness-skip-step');
     if (skipStepBtn) skipStepBtn.addEventListener('click', onLivenessStuckClick);
     var skipLivenessBtn = $('pvp-skip-liveness');
@@ -3158,7 +4291,6 @@
     bindEvents();
     hideAll();
     await loadPvpPublicConfig();
-    await getIceServers(false);
     applyCachedScoresToUi();
     const eventOk = await pingEvent();
     if (eventOk) {

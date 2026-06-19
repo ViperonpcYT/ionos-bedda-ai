@@ -4,6 +4,21 @@ declare(strict_types=1);
 require_once __DIR__ . '/roast-config.php';
 require_once __DIR__ . '/runtime-credits.php';
 
+if (!function_exists('roast_ads_env_flag')) {
+    function roast_ads_env_flag(string $key, bool $default = false): bool
+    {
+        $raw = strtolower(trim(roast_env($key, $default ? '1' : '0')));
+        return !in_array($raw, ['0', 'false', 'no', 'off'], true);
+    }
+}
+
+if (!function_exists('roast_ads_review_mode')) {
+    function roast_ads_review_mode(): bool
+    {
+        return roast_ads_env_flag('ROAST_ADSENSE_REVIEW_MODE', true);
+    }
+}
+
 if (!function_exists('roast_ads_house_promos')) {
     /** @return list<array{title:string,href:string,image:string}> */
     function roast_ads_house_promos(): array
@@ -55,7 +70,7 @@ if (!function_exists('roast_ads_network_configured')) {
     {
         return match ($network) {
             'adsense' => ($cfg['adsense_client'] ?? '') !== '',
-            'monetag' => ($cfg['monetag_zone'] ?? '') !== '',
+            'monetag' => ($cfg['monetag_enabled'] ?? false) && ($cfg['monetag_zone'] ?? '') !== '',
             'house' => true,
             default => false,
         };
@@ -66,12 +81,17 @@ if (!function_exists('roast_ads_build_waterfall')) {
     /** @param array<string, string> $cfg @return list<string> */
     function roast_ads_build_waterfall(array $cfg): array
     {
-        $defaultOrder = 'monetag,adsense,house';
+        // Roast battle modals: Google first. Monetag omitted during AdSense review (popunder policy).
+        $reviewMode = !empty($cfg['adsense_review_mode']);
+        $defaultOrder = $reviewMode ? 'adsense,house' : 'adsense,monetag,house';
         $requested = array_map('trim', explode(',', roast_env('ROAST_AD_WATERFALL', $defaultOrder)));
-        $modalNetworks = ['monetag', 'adsense', 'house'];
+        $modalNetworks = $reviewMode ? ['adsense', 'house'] : ['adsense', 'monetag', 'house'];
         $out = [];
         foreach ($requested as $tier) {
             $tier = strtolower($tier);
+            if ($reviewMode && $tier === 'monetag') {
+                continue;
+            }
             if (!in_array($tier, $modalNetworks, true)) {
                 continue;
             }
@@ -95,10 +115,16 @@ if (!function_exists('roast_ads_public_config')) {
     {
         runtime_credits_define_constants();
 
+        $reviewMode = roast_ads_review_mode();
+        $monetagEnabled = !$reviewMode && roast_ads_env_flag('ROAST_MONETAG_ENABLED', true);
+
         $cfg = [
             'adsense_client' => trim(roast_env('ROAST_ADSENSE_CLIENT', '')),
             'adsense_slot' => trim(roast_env('ROAST_ADSENSE_SLOT', '')),
-            'monetag_zone' => trim(roast_env('ROAST_MONETAG_ZONE_ID', '')),
+            'monetag_enabled' => $monetagEnabled,
+            'monetag_zone' => $monetagEnabled ? trim(roast_env('ROAST_MONETAG_ZONE_ID', '')) : '',
+            'monetag_video_zone' => $monetagEnabled ? trim(roast_env('ROAST_MONETAG_VIDEO_ZONE_ID', '')) : '',
+            'adsense_review_mode' => $reviewMode,
         ];
 
         $fillTimeoutMs = max(1500, (int) roast_env('ROAST_AD_FILL_TIMEOUT_MS', '4500'));
@@ -109,6 +135,9 @@ if (!function_exists('roast_ads_public_config')) {
             'adsense_slot' => $cfg['adsense_slot'],
             'adsense_has_slot' => $cfg['adsense_slot'] !== '',
             'monetag_zone' => $cfg['monetag_zone'],
+            'monetag_enabled' => $cfg['monetag_enabled'],
+            'monetag_video_zone' => $cfg['monetag_video_zone'],
+            'adsense_review_mode' => $cfg['adsense_review_mode'],
             'fill_timeout_ms' => $fillTimeoutMs,
             'house_promos' => roast_ads_house_promos(),
             'min_view_solo_sec' => RUNTIME_AD_MIN_VIEW_SOLO_SEC,

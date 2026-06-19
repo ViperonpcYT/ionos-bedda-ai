@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         runtime_credits_define_constants();
         roast_send_json([
             'ok' => true,
+            'apiVersion' => ROAST_PVP_API_VERSION,
             'turnstileSiteKey' => roast_env('TURNSTILE_SITE_KEY', ''),
             'roundSec' => ROAST_PVP_ROUND_SEC,
             'adMinViewPvpSec' => RUNTIME_AD_MIN_VIEW_PVP_SEC,
@@ -126,19 +127,39 @@ if ($action === 'join') {
         roast_send_json($joinResult);
         exit;
     }
-    try {
-        runtime_credits_commit_pvp_entry(
-            $customerId,
-            $unlockToken,
-            (string) ($creditGate['method'] ?? '')
+    if ($joinResult['fresh_entry'] ?? false) {
+        try {
+            runtime_credits_commit_pvp_entry(
+                $customerId,
+                $unlockToken,
+                (string) ($creditGate['method'] ?? ''),
+                (string) ($joinResult['billing_reference'] ?? $token)
+            );
+        } catch (Throwable $e) {
+            error_log('[Roast PvP] credit commit after join failed: ' . $e->getMessage());
+            roast_pvp_leave($token);
+            roast_send_json([
+                'ok' => false,
+                'error' => roast_error('CREDITS_DB', 'Credits system unavailable. Try again shortly.', true),
+            ], 503);
+            exit;
+        }
+    }
+    $matchId = trim((string) ($joinResult['match_id'] ?? ''));
+    $initialJobId = trim((string) ($_POST['job_id'] ?? ''));
+    $initialFile = $_FILES['image'] ?? null;
+    $hasInitialFile = is_array($initialFile)
+        && ($initialFile['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK;
+    if ($matchId !== '' && ($hasInitialFile || $initialJobId !== '')) {
+        $seeded = roast_pvp_seed_initial_live_score(
+            $matchId,
+            $token,
+            $hasInitialFile ? $initialFile : null,
+            $initialJobId !== '' ? $initialJobId : null
         );
-    } catch (Throwable $e) {
-        error_log('[Roast PvP] credit commit after join failed: ' . $e->getMessage());
-        roast_send_json([
-            'ok' => false,
-            'error' => roast_error('CREDITS_DB', 'Credits system unavailable. Try again shortly.', true),
-        ], 503);
-        exit;
+        if (($seeded['ok'] ?? false) && empty($seeded['skipped'])) {
+            $joinResult = array_merge($joinResult, $seeded);
+        }
     }
     roast_send_json($joinResult);
     exit;
@@ -200,32 +221,55 @@ if ($action === 'set_mode') {
         exit;
     }
     $result = roast_pvp_set_mode($matchId, $token, $mode);
-    if (!$result['ok']) {
-        roast_send_json($result, 400);
+    if (!($result['ok'] ?? false)) {
+        $err = is_array($result['error'] ?? null) ? $result['error'] : null;
+        roast_send_json($result, roast_http_status_for_error($err));
         exit;
+    }
+    if ($mode === 'live') {
+        $initialJobId = trim((string) ($_POST['job_id'] ?? ''));
+        $initialFile = $_FILES['image'] ?? null;
+        $hasInitialFile = is_array($initialFile)
+            && ($initialFile['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK;
+        if ($hasInitialFile || $initialJobId !== '') {
+            $seeded = roast_pvp_seed_initial_live_score(
+                $matchId,
+                $token,
+                $hasInitialFile ? $initialFile : null,
+                $initialJobId !== '' ? $initialJobId : null
+            );
+            if (($seeded['ok'] ?? false) && empty($seeded['skipped'])) {
+                $result = array_merge($result, $seeded);
+            }
+        }
     }
     roast_send_json($result);
     exit;
 }
 
 if ($action === 'live_frame') {
+    require_once dirname(__DIR__) . '/lib/roast-cloud-vision.php';
     $matchId = trim((string) ($_POST['match_id'] ?? ''));
     $file = $_FILES['image'] ?? null;
-    if ($matchId === '' || !is_array($file) || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-        $uploadErr = is_array($file) ? (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) : UPLOAD_ERR_NO_FILE;
+    if ($matchId === '') {
         roast_send_json([
             'ok' => false,
-            'error' => roast_error(
-                'IMAGE',
-                $matchId === '' ? 'match_id required.' : 'Frame upload failed (code ' . $uploadErr . ').',
-                false
-            ),
+            'error' => roast_error('IMAGE', 'Match session missing — refresh and rejoin the duel.', false),
         ], 400);
         exit;
     }
-    $result = roast_pvp_live_frame($matchId, $token, $_FILES['image']);
-    if (!$result['ok']) {
-        roast_send_json($result, 400);
+    $uploadCheck = roast_validate_live_frame_upload(is_array($file) ? $file : null);
+    if (!($uploadCheck['ok'] ?? false)) {
+        roast_send_json([
+            'ok' => false,
+            'error' => roast_error('IMAGE', (string) ($uploadCheck['error'] ?? 'Frame upload failed.'), false),
+        ], 400);
+        exit;
+    }
+    $result = roast_pvp_live_frame($matchId, $token, $file);
+    if (!($result['ok'] ?? false)) {
+        $err = is_array($result['error'] ?? null) ? $result['error'] : null;
+        roast_send_json($result, roast_http_status_for_error($err));
         exit;
     }
     roast_send_json($result);

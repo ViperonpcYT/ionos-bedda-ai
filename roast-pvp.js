@@ -71,10 +71,15 @@
     faceHash: '',
     matchId: '',
     role: '',
+    matchStatus: '',
     localStream: null,
     remoteStream: null,
     bikeFacing: 'environment',
     modeConfirmed: false,
+    modeConfirmedMatchId: '',
+    modeSetPromise: null,
+    modeSetPromiseMatchId: '',
+    modeRetryTimer: null,
     liveScoringTimer: null,
     liveScoringBusy: false,
     duelPollTimer: null,
@@ -366,6 +371,7 @@
     state.remoteStream = null;
     state.matchId = '';
     state.role = '';
+    state.matchStatus = '';
     state.livenessIdx = 0;
     state.livenessLandmarks = [];
     state.livenessAborted = false;
@@ -379,6 +385,11 @@
     state.debugLines = [];
     state.bikeFacing = 'environment';
     state.modeConfirmed = false;
+    state.modeConfirmedMatchId = '';
+    state.modeSetPromise = null;
+    state.modeSetPromiseMatchId = '';
+    if (state.modeRetryTimer) clearTimeout(state.modeRetryTimer);
+    state.modeRetryTimer = null;
     const savedFace = sessionStorage.getItem(FACE_KEY);
     const savedVerified = sessionStorage.getItem(VERIFIED_KEY);
     sessionStorage.removeItem(TOKEN_KEY);
@@ -929,19 +940,97 @@
     }
   }
 
+  function isModeLiveReady() {
+    return !!(state.matchId && state.modeConfirmed && state.modeConfirmedMatchId === state.matchId);
+  }
+
+  function clearModeRetryTimer() {
+    if (state.modeRetryTimer) clearTimeout(state.modeRetryTimer);
+    state.modeRetryTimer = null;
+  }
+
+  function resetModeLiveState() {
+    state.modeConfirmed = false;
+    state.modeConfirmedMatchId = '';
+    state.modeSetPromise = null;
+    state.modeSetPromiseMatchId = '';
+    clearModeRetryTimer();
+  }
+
   async function ensureDuelModeLive() {
-    if (!state.matchId || state.modeConfirmed) return;
+    if (!state.matchId) return false;
+    if (isModeLiveReady()) return true;
+    if (state.modeSetPromise && state.modeSetPromiseMatchId === state.matchId) {
+      return state.modeSetPromise;
+    }
+
+    const matchId = state.matchId;
+    state.modeSetPromiseMatchId = matchId;
+    state.modeSetPromise = (async function () {
+      try {
+        const data = await pvpPost('set_mode', { match_id: matchId, mode: 'live' });
+        if (data && data.ok) {
+          state.modeConfirmed = true;
+          state.modeConfirmedMatchId = matchId;
+          if (data.match_id) state.matchId = data.match_id;
+          if (data.status) state.matchStatus = data.status;
+          refreshDuelUi(data);
+          return true;
+        }
+        if (state.modeConfirmedMatchId === matchId) {
+          state.modeConfirmed = false;
+          state.modeConfirmedMatchId = '';
+        }
+      } catch (e) { /* ignore */ }
+      return false;
+    })();
+
     try {
-      const data = await pvpPost('set_mode', { match_id: state.matchId, mode: 'live' });
-      if (data && data.ok) {
-        state.modeConfirmed = true;
-        refreshDuelUi(data);
+      return await state.modeSetPromise;
+    } finally {
+      if (state.modeSetPromiseMatchId === matchId) {
+        state.modeSetPromise = null;
+        state.modeSetPromiseMatchId = '';
       }
-    } catch (e) { /* ignore */ }
+    }
+  }
+
+  function isLiveFrameStatusReady(status) {
+    return ['matched', 'active', 'dueling'].indexOf(status || '') >= 0;
+  }
+
+  async function syncLiveFrameMatchReady() {
+    if (isLiveFrameStatusReady(state.matchStatus)) return true;
+    try {
+      const st = await pvpStatus();
+      if (st && st.match_id) state.matchId = st.match_id;
+      if (st && st.status) state.matchStatus = st.status;
+      if (st && st.your_mode === 'live' && st.match_id) {
+        state.modeConfirmed = true;
+        state.modeConfirmedMatchId = st.match_id;
+      }
+      return !!(st && st.ok && isLiveFrameStatusReady(st.status));
+    } catch (e) {
+      return false;
+    }
   }
 
   async function sendLiveFrame() {
     if (!state.matchId || state.liveScoringBusy) return;
+    if (!isLiveFrameStatusReady(state.matchStatus)) {
+      const matchReady = await syncLiveFrameMatchReady();
+      if (!matchReady) {
+        setDuelCaptureStatus('Waiting for match…');
+        return;
+      }
+    }
+    if (!isModeLiveReady()) {
+      const ready = await ensureDuelModeLive();
+      if (!ready) {
+        setDuelCaptureStatus('Setting up live judging…');
+        return;
+      }
+    }
     state.liveScoringBusy = true;
     setDuelCaptureStatus('Judging your bike...');
 
@@ -963,9 +1052,25 @@
       const res = await fetch(PVP_API, { method: 'POST', body: fd, credentials: 'same-origin' });
       const data = await res.json();
       if (!data || data.ok === false) {
+        const code = (data && data.error && data.error.code) || '';
         const msg = (data && data.error && data.error.message) || 'Judgment failed.';
+        if (code === 'NOT_READY') {
+          setDuelCaptureStatus(msg || 'Match starting…');
+          return;
+        }
+        if (code === 'EXPIRED') {
+          setDuelCaptureStatus(msg || 'Round over.');
+          return;
+        }
+        if (code === 'MODE' || code === 'PVP' || code === 'NOT_READY') {
+          resetModeLiveState();
+          await ensureDuelModeLive();
+          return;
+        }
         setDuelCaptureStatus(msg);
       } else {
+        if (data.match_id) state.matchId = data.match_id;
+        if (data.status) state.matchStatus = data.status;
         updateLiveScores(data);
         const avg = data.your_average != null ? data.your_average : data.you_score;
         const count = data.frame_count || data.your_frame_count;
@@ -991,15 +1096,31 @@
 
   function startAutoJudging() {
     stopLiveScoring();
-    if (!state.matchId) return;
+    if (!isModeLiveReady()) return;
 
     setTimeout(function () {
-      if (!state.liveScoringBusy) sendLiveFrame();
+      if (!state.liveScoringBusy && isModeLiveReady()) sendLiveFrame();
     }, AUTO_JUDGE_FIRST_MS);
 
     state.liveScoringTimer = setInterval(function () {
-      if (!state.liveScoringBusy) sendLiveFrame();
+      if (!state.liveScoringBusy && isModeLiveReady()) sendLiveFrame();
     }, AUTO_JUDGE_INTERVAL_MS);
+  }
+
+  function scheduleModeRetry() {
+    clearModeRetryTimer();
+    state.modeRetryTimer = setTimeout(async function () {
+      state.modeRetryTimer = null;
+      if (!state.matchId) return;
+      await ensureDuelModeLive();
+      if (isModeLiveReady()) maybeStartAutoJudging();
+    }, 3000);
+  }
+
+  function maybeStartAutoJudging() {
+    if (!state.matchId || state.liveScoringTimer) return;
+    if (!isModeLiveReady()) return;
+    startAutoJudging();
   }
 
   function mediaErrorMessage(err) {
@@ -2125,18 +2246,29 @@
     updateWebRtcBanner();
   }
 
-  function showDuel(data) {
+  async function showDuel(data) {
     stopQueueAnim();
     stopJudgeAnim();
+    stopLiveScoring();
+    clearModeRetryTimer();
+    const incomingMatchId = (data && data.match_id) || state.matchId;
+    if (incomingMatchId && state.modeConfirmedMatchId && state.modeConfirmedMatchId !== incomingMatchId) {
+      resetModeLiveState();
+    }
     hideAll();
     $('pvp-duel').classList.remove('hidden');
     $('pvp-quit-top').classList.remove('hidden');
     pvpDebug('info', 'enter duel', { role: state.role, matchId: state.matchId });
+    if (data && data.status) state.matchStatus = data.status;
     initDuelCapture();
     applyCachedScoresToUi();
     refreshDuelUi(data);
-    ensureDuelModeLive();
-    startAutoJudging();
+    await ensureDuelModeLive();
+    if (isModeLiveReady()) {
+      maybeStartAutoJudging();
+    } else {
+      scheduleModeRetry();
+    }
     ensureWebRtc(state.role === 'a');
     if (!state.duelPollTimer) startDuelPoll();
   }
@@ -2156,6 +2288,7 @@
   function renderResults(data) {
     stopAll();
     stopLiveScoring();
+    resetModeLiveState();
     stopDuelPoll();
     teardownWebRtc();
     hideAll();
@@ -2178,6 +2311,7 @@
     }
     state.matchId = data.match_id || state.matchId;
     state.role = data.role || state.role;
+    if (data.status) state.matchStatus = data.status;
 
     if (data.status === 'waiting') {
       hideAll();
@@ -2188,7 +2322,7 @@
       return;
     }
 
-    if (data.status === 'active') {
+    if (data.status === 'matched' || data.status === 'active') {
       const duelEl = $('pvp-duel');
       if (duelEl && !duelEl.classList.contains('hidden') && state.webrtcMatchId === state.matchId) {
         refreshDuelUi(data);

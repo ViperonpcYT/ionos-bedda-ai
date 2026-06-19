@@ -17,6 +17,10 @@ Options -Indexes
     # Declutter public deploy: api/*.html files are restored locally but should never be served.
     RewriteRule \.html$ - [F,L,NC]
     RewriteRule ^(logs|rate-limits|spam-logs|orders|includes)/ - [F,L]
+    # Block public test/diag scripts (CLI-only). test-roast-health.php stays reachable via CRON_SECRET in PHP.
+    RewriteRule ^queue/test- - [F,L,NC]
+    RewriteRule ^roast-limited/test-(?!roast-health\.php)[^/]*\.php$ - [F,L,NC]
+    RewriteRule ^test- - [F,L,NC]
 </IfModule>
 
 <IfModule mod_headers.c>

@@ -13,10 +13,12 @@ require_once dirname(__DIR__) . '/lib/roast-pvp.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $key = trim((string) ($_GET['key'] ?? ''));
-$cronSecret = defined('CRON_SECRET') ? CRON_SECRET : '';
-$validKeys = $GLOBALS['VALID_API_KEYS'] ?? [];
-$authorized = ($cronSecret !== '' && hash_equals($cronSecret, $key))
-    || (is_array($validKeys) && in_array($key, $validKeys, true));
+$cronSecret = defined('CRON_SECRET') ? (string) CRON_SECRET : '';
+if ($cronSecret === '' || !hash_equals($cronSecret, $key)) {
+    http_response_code(403);
+    echo json_encode(['ok' => false, 'message' => 'Unauthorized'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 $local = roast_local_models_ready();
 $cloud = roast_cloud_models_ready();
@@ -84,7 +86,7 @@ try {
         $pdo->query('SELECT 1 FROM roast_jobs LIMIT 1');
     }
 } catch (Throwable $e) {
-    $checks['analytics_db_error'] = $authorized ? $e->getMessage() : '(auth required)';
+    $checks['analytics_db_error'] = $e->getMessage();
 }
 $checks['analytics_db_ok'] = $dbOk;
 
@@ -95,7 +97,7 @@ try {
     $rcPdo->query('SELECT 1 FROM runtime_balances LIMIT 1');
     $runtimeDbOk = true;
 } catch (Throwable $e) {
-    $checks['runtime_db_error'] = $authorized ? $e->getMessage() : '(auth required)';
+    $checks['runtime_db_error'] = $e->getMessage();
 }
 $checks['runtime_db_ok'] = $runtimeDbOk;
 $checks['groq_budget'] = roast_groq_budget_status();

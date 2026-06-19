@@ -32,7 +32,11 @@ if ($action === 'session' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     $balance = null;
     $cooldownRemaining = 0;
     $pendingUnlock = null;
+    $creditsDbOk = runtime_credits_db_ping();
     try {
+        if (!$creditsDbOk) {
+            throw new RuntimeException('Runtime credits database unavailable');
+        }
         $pdo = runtime_credits_pdo();
         runtime_credits_ensure_schema($pdo);
         $cooldownRemaining = runtime_credits_cooldown_remaining_sec(
@@ -71,6 +75,7 @@ if ($action === 'session' && $_SERVER['REQUEST_METHOD'] === 'GET') {
         'logged_in' => $customerId !== null,
         'customer_id' => $customerId,
         'balance' => $balance,
+        'credits_db_ok' => $creditsDbOk,
         'ads' => roast_ads_public_config(),
         'costs' => [
             'solo' => RUNTIME_COST_SOLO,

@@ -870,9 +870,28 @@ if (!function_exists('runtime_credits_check_pvp')) {
     }
 }
 
-if (!function_exists('runtime_credits_commit_pvp_entry')) {
-  function runtime_credits_commit_pvp_entry(?int $customerId, string $unlockToken, string $method): void
+if (!function_exists('runtime_credits_pvp_spend_exists')) {
+    function runtime_credits_pvp_spend_exists(PDO $pdo, int $customerId, string $referenceId): bool
     {
+        if ($referenceId === '') {
+            return false;
+        }
+        $stmt = $pdo->prepare(
+            "SELECT id FROM runtime_ledger
+             WHERE customer_id = ? AND type = 'pvp_spend' AND reference_id = ? LIMIT 1"
+        );
+        $stmt->execute([$customerId, $referenceId]);
+        return (bool) $stmt->fetchColumn();
+    }
+}
+
+if (!function_exists('runtime_credits_commit_pvp_entry')) {
+    function runtime_credits_commit_pvp_entry(
+        ?int $customerId,
+        string $unlockToken,
+        string $method,
+        string $referenceId = ''
+    ): void {
         if ($method === 'bypass') {
             return;
         }
@@ -881,14 +900,23 @@ if (!function_exists('runtime_credits_commit_pvp_entry')) {
         $pdo = runtime_credits_pdo();
         runtime_credits_ensure_schema($pdo);
 
+        $referenceId = trim($referenceId);
+
         if ($method === 'balance' && $customerId !== null && $customerId > 0) {
+            if ($referenceId !== '' && runtime_credits_pvp_spend_exists($pdo, $customerId, $referenceId)) {
+                return;
+            }
             runtime_credits_apply_delta(
                 $pdo,
                 $customerId,
                 -RUNTIME_COST_PVP,
                 0,
                 'pvp_spend',
-                ['note' => 'PvP match entry']
+                [
+                    'reference_type' => 'pvp_join',
+                    'reference_id' => $referenceId !== '' ? $referenceId : null,
+                    'note' => 'PvP match entry',
+                ]
             );
             return;
         }
@@ -896,6 +924,10 @@ if (!function_exists('runtime_credits_commit_pvp_entry')) {
         if ($method === 'ad_token' && $unlockToken !== '') {
             $consumed = runtime_credits_consume_unlock_token($unlockToken, 'pvp');
             if (!$consumed['ok']) {
+                $code = (string) ($consumed['code'] ?? '');
+                if ($code === 'USED' && $referenceId !== '') {
+                    return;
+                }
                 throw new RuntimeException($consumed['error'] ?? 'Unlock token consume failed');
             }
         }
@@ -972,5 +1004,20 @@ if (!function_exists('runtime_credits_customer_id_from_session')) {
         }
         $id = onlybikes_points_session_customer_id();
         return $id !== null && $id > 0 ? $id : null;
+    }
+}
+
+if (!function_exists('runtime_credits_db_ping')) {
+    function runtime_credits_db_ping(): bool
+    {
+        try {
+            $pdo = runtime_credits_pdo();
+            runtime_credits_ensure_schema($pdo);
+            $pdo->query('SELECT 1');
+            return true;
+        } catch (Throwable $e) {
+            error_log('[OnlyBikes][runtime_credits] db_ping: ' . $e->getMessage());
+            return false;
+        }
     }
 }

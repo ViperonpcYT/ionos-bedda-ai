@@ -11,15 +11,39 @@
     balance: { pvp_credits: 0, solo_credits: 0 },
     costs: { solo: 1, pvp: 1 },
     ads: {
-      waterfall: ['monetag', 'adsense', 'house'],
+      waterfall: ['adsense', 'monetag', 'house'],
       min_view_solo_sec: 18,
       min_view_pvp_sec: 15,
       fill_timeout_ms: 4500,
       house_promos: []
     },
     pending_unlock: {},
-    pendingUnlockToken: null
+    pendingUnlockToken: null,
+    creditsDbOk: true
   };
+
+  function creditsUnavailableMessage() {
+    return 'Credits system unavailable. Try again shortly.';
+  }
+
+  async function parseJsonResponse(res) {
+    var text = await res.text();
+    if (!text) {
+      return { ok: false, error: 'Empty response from credits API' };
+    }
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      return { ok: false, error: 'Credits API returned invalid JSON' };
+    }
+  }
+
+  function extractApiError(data, fallback) {
+    if (!data) return fallback;
+    if (typeof data.error === 'string' && data.error) return data.error;
+    if (data.error && data.error.message) return data.error.message;
+    return fallback;
+  }
 
   function el(id) {
     return document.getElementById(id);
@@ -137,8 +161,15 @@
     return 'house';
   }
 
-  function waitMs(ms) {
-    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+  function showMonetagSlot(slotEl) {
+    if (!slotEl) return;
+    slotEl.innerHTML = [
+      '<p class="roast-ad-provider-tag mb-2">Sponsored</p>',
+      '<p class="text-sm text-zinc-300 text-center px-2 leading-relaxed">',
+      'A sponsored message may appear while the timer runs. Keep this tab open — thanks for supporting free roasts.',
+      '</p>'
+    ].join('');
+    slotEl.dataset.filled = 'monetag';
   }
 
   function tryAdSense(slotEl, client, slot) {
@@ -204,45 +235,69 @@
     return true;
   }
 
+  function loadMonetagZones(ads) {
+    var loaded = false;
+    if (ads.monetag_video_zone) {
+      loaded = loadMonetagScript(ads.monetag_video_zone) || loaded;
+    }
+    if (ads.monetag_zone) {
+      loaded = loadMonetagScript(ads.monetag_zone) || loaded;
+    }
+    return loaded;
+  }
+
+  function showAdSenseWaitingSlot(slotEl) {
+    if (!slotEl) return;
+    slotEl.innerHTML = [
+      '<p class="roast-ad-provider-tag mb-2">Sponsored</p>',
+      '<p class="text-sm text-zinc-300 text-center px-2 leading-relaxed">',
+      'Keep this tab open while the timer runs — thanks for supporting free roasts.',
+      '</p>'
+    ].join('');
+    slotEl.dataset.filled = 'adsense';
+  }
+
+  function hasRoastPaidNetwork(ads) {
+    ads = ads || {};
+    if (ads.adsense_client) return true;
+    if (ads.adsense_review_mode) return false;
+    var monetagOn = ads.monetag_enabled !== false;
+    return !!(monetagOn && (ads.monetag_zone || ads.monetag_video_zone));
+  }
+
   async function fillAdSlotWaterfall(slotEl, scope) {
     var ads = state.ads || {};
-    var chain = ads.waterfall || ['house'];
-    var providerUsed = 'house';
-    var monetagLoaded = false;
-
-    if (ads.monetag_zone) {
-      monetagLoaded = loadMonetagScript(ads.monetag_zone);
-    }
+    var chain = ads.waterfall || ['adsense', 'monetag', 'house'];
+    var reviewMode = !!ads.adsense_review_mode;
+    var monetagOn = !reviewMode && ads.monetag_enabled !== false;
+    var paidConfigured = hasRoastPaidNetwork(ads);
 
     for (var i = 0; i < chain.length; i++) {
       var tier = chain[i];
-      if (tier === 'monetag') {
-        if (monetagLoaded) {
-          providerUsed = 'monetag';
+      if (tier === 'adsense' && ads.adsense_client) {
+        var displayOk = await tryAdSense(slotEl, ads.adsense_client, ads.adsense_slot || '');
+        if (displayOk) return 'adsense';
+      } else if (tier === 'monetag' && monetagOn && (ads.monetag_zone || ads.monetag_video_zone)) {
+        if (loadMonetagZones(ads)) {
+          showMonetagSlot(slotEl);
+          return 'monetag';
         }
-        continue;
-      }
-      if (tier === 'adsense' && ads.adsense_client && ads.adsense_slot) {
-        var ok = await tryAdSense(slotEl, ads.adsense_client, ads.adsense_slot);
-        if (ok) {
-          providerUsed = 'adsense';
-          break;
-        }
-      } else if (tier === 'house') {
-        providerUsed = loadHouseAd(slotEl, scope);
-        break;
+      } else if (tier === 'house' && !paidConfigured) {
+        return loadHouseAd(slotEl, scope);
       }
     }
 
-    if (!slotEl.dataset.filled) {
-      providerUsed = loadHouseAd(slotEl, scope);
+    if (monetagOn && (ads.monetag_zone || ads.monetag_video_zone) && loadMonetagZones(ads)) {
+      showMonetagSlot(slotEl);
+      return 'monetag';
     }
 
-    if (providerUsed === 'house' && monetagLoaded) {
-      providerUsed = 'monetag';
+    if (ads.adsense_client) {
+      showAdSenseWaitingSlot(slotEl);
+      return 'adsense';
     }
 
-    return providerUsed;
+    return loadHouseAd(slotEl, scope);
   }
 
   function runAdTimerModal(scope, onContinue) {
@@ -328,9 +383,9 @@
           ad_provider: adProvider
         })
       });
-      var data = await res.json();
-      if (!data.ok) {
-        throw new Error(data.error || 'Ad unlock failed');
+      var data = await parseJsonResponse(res);
+      if (!res.ok || !data.ok) {
+        throw new Error(extractApiError(data, creditsUnavailableMessage()));
       }
       state.pendingUnlockToken = data.ad_unlock_token;
       return data.ad_unlock_token;
@@ -350,8 +405,10 @@
           ad_provider: adProvider
         })
       });
-      var data = await res.json();
-      if (!data.ok) throw new Error(data.error || 'Ad bonus failed');
+      var data = await parseJsonResponse(res);
+      if (!res.ok || !data.ok) {
+        throw new Error(extractApiError(data, creditsUnavailableMessage()));
+      }
       if (data.balance) state.balance = data.balance;
       updateBalanceUI();
       state.pendingUnlockToken = null;
@@ -384,6 +441,9 @@
 
   async function gate(scope) {
     await init(true);
+    if (state.creditsDbOk === false) {
+      throw new Error(creditsUnavailableMessage());
+    }
     if (hasCredits(scope)) {
       state.pendingUnlockToken = null;
       return { method: 'balance', token: null };
@@ -419,17 +479,26 @@
     injectStyles();
     injectMarkup();
 
-    var res = await fetch(API + '?action=session', { credentials: 'include' });
-    var data = await res.json();
-    if (data.ok) {
+    try {
+      var res = await fetch(API + '?action=session', { credentials: 'include' });
+      var data = await parseJsonResponse(res);
+      if (!res.ok || !data.ok) {
+        state.creditsDbOk = false;
+        throw new Error(extractApiError(data, 'Could not load roast credits session.'));
+      }
       state.guestId = data.guest_id || '';
       state.sessionId = data.session_id || '';
       state.loggedIn = !!data.logged_in;
       state.customerId = data.customer_id || null;
+      state.creditsDbOk = data.credits_db_ok !== false;
       if (data.balance) state.balance = data.balance;
       if (data.ads) state.ads = data.ads;
       if (data.costs) state.costs = data.costs;
       applySessionMeta(data);
+    } catch (err) {
+      state.ready = true;
+      updateBalanceUI();
+      throw err;
     }
     state.ready = true;
     updateBalanceUI();

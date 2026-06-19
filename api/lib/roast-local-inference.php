@@ -482,7 +482,9 @@ if (!function_exists('roast_agent_vision_step')) {
 
         string $modelPath = '',
 
-        string $mmprojPath = ''
+        string $mmprojPath = '',
+
+        array $ctx = []
 
     ): array {
 
@@ -490,7 +492,7 @@ if (!function_exists('roast_agent_vision_step')) {
 
 
 
-        $result = roast_cloud_vision($imagePath, $prompt, $validator, $phase);
+        $result = roast_cloud_vision($imagePath, $prompt, $validator, $phase, $ctx);
 
         if ($result['ok']) {
 

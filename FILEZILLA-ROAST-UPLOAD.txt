@@ -3,6 +3,37 @@ ONLYBIKES ROAST — FILEZILLA UPLOAD CHECKLIST
 Local folder:  d:\Ebike Part selling
 Remote root:   /htdocs/   (Ionos — same level as index.html)
 
+BUILD STAMP (verify after upload — purge Cloudflare cache for roast-pvp.html)
+  roast-pvp.html  →  pvp-inline-v38  (  v1.2.6-pvp-cred  )
+  Console: [Roast PvP] DEPLOY CHECK — build=pvp-inline-v38
+  Face-check screen footer: "Build: pvp-inline-v38"
+
+CASCADE VISION v38 DELTA (2026-06-18 — Tier 0/1/2)
+  roast-pvp.html                     — inline build v38, 2s/5s timers, score_tier UI
+  roast-credits-ui.js                — PvP/solo credit banner + balance
+  api/lib/roast-score.php            — roast_compute_pvp_cred_score (hero 75–95+, fallback floor 54)
+  api/lib/roast-pvp.php              — Tier 0/1 fast path, tier merge, tier2 enqueue
+  api/lib/roast-pvp-npc.php          — NPC manifest grades via cred scorer
+  api/lib/roast-config.php           — ROAST_PVP_NPC_GRADE_DELAY_SEC, cascade env constants
+  api/lib/roast-cloud-vision.php     — roast_pvp_vision_t1() OR-Qwen-first (NO Groq on live_frame)
+  api/lib/roast-pvp-vision-cache.php — sha256 image-hash cache (upload when present in repo)
+  api/roast-limited/pvp.php          — queue/match/live_frame API + poll tier fields
+  api/roast-limited/cron-tier2.php   — Tier 2 background vision (upload when present; WebCron)
+  api/data/pvp-opponents.json        — stranger starting_score manifest
+
+  Server env (edit htdocs/api/.env — do NOT commit secrets):
+    ROAST_OPENROUTER_API_KEY=<required for Tier 1>
+    ROAST_VISION_SKIP_GROQ=1         # interim until Tier 1/2 split verified on prod
+    ROAST_PVP_T1_TIMEOUT_SEC=3       # fast-path vision cap (Tier 1 live_frame)
+    ROAST_VISION_VPS_URL=            # optional sidecar POST URL (Phase 2)
+    ROAST_GROQ_DAILY_MAX=25          # reserve Groq for Tier 2 cron only
+    ROAST_PVP_NPC_ENABLED=1
+    ROAST_PVP_NPC_FALLBACK_SEC=10
+    ROAST_PVP_NPC_GRADE_DELAY_SEC=11
+
+FRAME-READ FIX (already in repo — upload if server still errors "could not read frame")
+  api/roast-limited/agents/agent1-identify.php  — degraded live identity path
+
 Upload these paths (keep folder structure):
 
 MODELS & BINARY (from GitHub Action artifacts)
@@ -17,6 +48,9 @@ API — ROAST PIPELINE
   api/roast-limited/resume.php
   api/roast-limited/purge-temp.php
   api/roast-limited/test-roast-health.php
+  api/roast-limited/pvp.php
+  api/roast-limited/cron-tier2.php         (when present — register in IONOS WebCron)
+  api/roast-limited/validate-pvp-manifest.php
   api/roast-limited/agents/agent1-identify.php
   api/roast-limited/agents/agent2-condition.php
   api/roast-limited/agents/agent3-mods.php
@@ -32,14 +66,25 @@ API — ROAST PIPELINE
   api/lib/roast-cloud-api.php
   api/lib/roast-cloud-vision.php
   api/lib/roast-cloud-text.php
+  api/lib/roast-cloud-budget.php
+  api/lib/roast-pvp-vision-cache.php       (when present)
   api/lib/bike-stock-specs.php
+  api/lib/roast-pvp.php
+  api/lib/roast-pvp-npc.php
+  api/lib/runtime-credits.php
+  api/runtime-credits.php
 
   api/data/bike-stock-specs.json
   api/data/roast-ads.json
+  api/data/pvp-opponents.json
   api/cache/roast-tmp/.htaccess
+
+  images/pvp-opponents/          (MP4 stranger clips + reference JPGs for AI grading)
 
 FRONTEND
   roast-limited.html
+  roast-pvp.html
+  roast-credits-ui.js
   js/roast-limited.js
   includes/roast-ad-slots.html
 
@@ -49,6 +94,30 @@ FILEZILLA TIPS
   3. Drag folders api, js, models, llama-b9285 — merge/overwrite when asked
   4. For api/.env: upload as BINARY or Auto, overwrite Yes
 
-AFTER UPLOAD
-  https://onlybikes.shop/api/roast-limited/test-roast-health.php?key=YOUR_CRON_SECRET
-  https://onlybikes.shop/roast-limited.html
+CLOUDFLARE PURGE (required for roast-pvp.html — inline script is cached aggressively)
+  1. Cloudflare dashboard → Caching → Purge Everything
+     OR Custom Purge → URL: https://onlybikes.shop/roast-pvp.html
+  2. Hard refresh browser: Ctrl+Shift+R (Cmd+Shift+R on Mac)
+
+AFTER UPLOAD — SMOKE TESTS
+  Health:
+    https://onlybikes.shop/api/roast-limited/test-roast-health.php?key=YOUR_CRON_SECRET
+    → groq_api_key_set, openrouter_api_key_set, judge_gguf_ok, text_cli, tmp_dir_writable
+  Solo:
+    https://onlybikes.shop/roast-limited.html
+  PvP deploy check (must show pvp-inline-v38):
+    https://onlybikes.shop/roast-pvp.html?debug=1
+    View Source → search "pvp-inline-v38" (NOT v37/v36/v35)
+    Console → [Roast PvP] DEPLOY CHECK — build=pvp-inline-v38
+  PvP ICE + config:
+    https://onlybikes.shop/api/roast-limited/pvp.php?action=ice
+    https://onlybikes.shop/api/roast-limited/pvp.php?action=config
+  Credits API:
+    https://onlybikes.shop/api/runtime-credits.php?action=session
+  Tier 2 cron (when cron-tier2.php uploaded + WebCron registered):
+    https://onlybikes.shop/api/roast-limited/cron-tier2.php?key=YOUR_CRON_SECRET
+  SSH/CLI smoke (optional):
+    php api/roast-limited/test-pvp-cred-scores.php
+    php api/roast-limited/test-pvp-live-frame.php
+    php api/roast-limited/test-agent1-live-frame.php
+    php api/roast-limited/validate-pvp-manifest.php

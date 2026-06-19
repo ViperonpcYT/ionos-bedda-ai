@@ -182,6 +182,9 @@ if (!function_exists('roast_define_constants')) {
         if (!defined('ROAST_FAIL_LOG')) {
             define('ROAST_FAIL_LOG', roast_env('ROAST_FAIL_LOG', $apiDir . '/logs/roast-failures.log'));
         }
+        if (!defined('ROAST_PVP_METRICS_LOG')) {
+            define('ROAST_PVP_METRICS_LOG', roast_env('ROAST_PVP_METRICS_LOG', $apiDir . '/logs/pvp-metrics.log'));
+        }
         if (!defined('ROAST_SHAME_SCORE_ENABLED')) {
             define('ROAST_SHAME_SCORE_ENABLED', roast_env('ROAST_SHAME_SCORE_ENABLED', '1') === '1');
         }
@@ -190,6 +193,9 @@ if (!function_exists('roast_define_constants')) {
         }
         if (!defined('ROAST_BYPASS_KEY')) {
             define('ROAST_BYPASS_KEY', roast_env('ROAST_BYPASS_KEY', ''));
+        }
+        if (!defined('ROAST_PVP_API_VERSION')) {
+            define('ROAST_PVP_API_VERSION', roast_env('ROAST_PVP_API_VERSION', 'v1.2.6-pvp-cred'));
         }
         if (!defined('ROAST_PVP_ROUND_SEC')) {
             define('ROAST_PVP_ROUND_SEC', max(60, (int) roast_env('ROAST_PVP_ROUND_SEC', '180')));
@@ -214,6 +220,30 @@ if (!function_exists('roast_define_constants')) {
         }
         if (!defined('ROAST_PVP_MIXED_SEC')) {
             define('ROAST_PVP_MIXED_SEC', max(60, (int) roast_env('ROAST_PVP_MIXED_SEC', '120')));
+        }
+        if (!defined('ROAST_PVP_FORFEIT_GRACE_SEC')) {
+            define('ROAST_PVP_FORFEIT_GRACE_SEC', max(3, min(30, (int) roast_env('ROAST_PVP_FORFEIT_GRACE_SEC', '5'))));
+        }
+        if (!defined('ROAST_PVP_NPC_ENABLED')) {
+            define('ROAST_PVP_NPC_ENABLED', roast_env('ROAST_PVP_NPC_ENABLED', '1') === '1');
+        }
+        if (!defined('ROAST_PVP_NPC_FALLBACK_SEC')) {
+            define('ROAST_PVP_NPC_FALLBACK_SEC', max(5, (int) roast_env('ROAST_PVP_NPC_FALLBACK_SEC', '10')));
+        }
+        if (!defined('ROAST_PVP_NPC_GRADE_DELAY_SEC')) {
+            define(
+                'ROAST_PVP_NPC_GRADE_DELAY_SEC',
+                max(10, min(12, (int) roast_env('ROAST_PVP_NPC_GRADE_DELAY_SEC', '11')))
+            );
+        }
+        if (!defined('ROAST_PVP_T1_TIMEOUT_SEC')) {
+            define('ROAST_PVP_T1_TIMEOUT_SEC', max(2, min(8, (int) roast_env('ROAST_PVP_T1_TIMEOUT_SEC', '3'))));
+        }
+        if (!defined('ROAST_PVP_T1_RATE_SEC')) {
+            define('ROAST_PVP_T1_RATE_SEC', max(3, min(9, (int) roast_env('ROAST_PVP_T1_RATE_SEC', '4'))));
+        }
+        if (!defined('ROAST_MIN_FRAME_BYTES')) {
+            define('ROAST_MIN_FRAME_BYTES', max(512, (int) roast_env('ROAST_MIN_FRAME_BYTES', '2048')));
         }
         if (!defined('ROAST_INTERPRETATION_NOTICE')) {
             define(
@@ -376,6 +406,106 @@ if (!function_exists('roast_log_failure')) {
         ], JSON_UNESCAPED_UNICODE);
         if ($line !== false) {
             @file_put_contents(ROAST_FAIL_LOG, $line . "\n", FILE_APPEND | LOCK_EX);
+        }
+    }
+}
+
+if (!function_exists('roast_pvp_metric_groq_budget_remaining')) {
+    function roast_pvp_metric_groq_budget_remaining(): ?int
+    {
+        if (!function_exists('roast_groq_budget_status')) {
+            $budgetFile = __DIR__ . '/roast-cloud-budget.php';
+            if (is_readable($budgetFile)) {
+                require_once $budgetFile;
+            }
+        }
+        if (!function_exists('roast_groq_budget_status')) {
+            return null;
+        }
+        $status = roast_groq_budget_status();
+        $remaining = $status['remaining'] ?? null;
+
+        return $remaining === null ? null : max(0, (int) $remaining);
+    }
+}
+
+if (!function_exists('roast_pvp_metric_cascade_fields')) {
+    /**
+     * Normalize cascade observability fields for PvP metrics emissions.
+     *
+     * @param array<string, mixed> $ctx
+     * @return array<string, int|bool|null>
+     */
+    function roast_pvp_metric_cascade_fields(array $ctx = []): array
+    {
+        $tier1 = $ctx['tier1_latency_ms'] ?? $ctx['ms'] ?? null;
+        $tier2 = $ctx['tier2_latency_ms'] ?? null;
+        $cacheHit = $ctx['vision_cache_hit'] ?? $ctx['cache_hit'] ?? false;
+        $scoreTier = $ctx['score_tier'] ?? null;
+        $remaining = array_key_exists('groq_budget_remaining', $ctx)
+            ? $ctx['groq_budget_remaining']
+            : roast_pvp_metric_groq_budget_remaining();
+
+        return [
+            'tier1_latency_ms' => $tier1 === null ? null : max(0, (int) $tier1),
+            'tier2_latency_ms' => $tier2 === null ? null : max(0, (int) $tier2),
+            'vision_cache_hit' => (bool) $cacheHit,
+            'score_tier' => $scoreTier === null ? null : max(0, (int) $scoreTier),
+            'groq_budget_remaining' => $remaining === null ? null : max(0, (int) $remaining),
+        ];
+    }
+}
+
+if (!function_exists('roast_pvp_metric_from_scored')) {
+    /**
+     * Extract cascade fields from roast_pvp_score_frame() (or compatible) results.
+     *
+     * @param array<string, mixed> $scored
+     * @return array<string, int|bool|null>
+     */
+    function roast_pvp_metric_from_scored(array $scored): array
+    {
+        $scoreTier = $scored['score_tier'] ?? null;
+        if ($scoreTier === null) {
+            if (!empty($scored['from_job'])) {
+                $scoreTier = 0;
+            } elseif (!empty($scored['vision_fallback'])) {
+                $scoreTier = 1;
+            } elseif (($scored['score_source'] ?? '') === 'vision' || !empty($scored['vision_real'])) {
+                $scoreTier = 1;
+            } else {
+                $scoreTier = 1;
+            }
+        }
+
+        return roast_pvp_metric_cascade_fields([
+            'tier1_latency_ms' => $scored['tier1_latency_ms'] ?? null,
+            'tier2_latency_ms' => $scored['tier2_latency_ms'] ?? null,
+            'vision_cache_hit' => $scored['vision_cache_hit'] ?? false,
+            'score_tier' => $scoreTier,
+        ]);
+    }
+}
+
+if (!function_exists('roast_log_pvp_metric')) {
+    /** @param array<string, mixed> $fields */
+    function roast_log_pvp_metric(string $event, array $fields = []): void
+    {
+        static $cascadeEvents = ['live_frame', 'tier2_cron', 'npc_grade'];
+        if (in_array($event, $cascadeEvents, true)) {
+            $fields = array_merge(roast_pvp_metric_cascade_fields($fields), $fields);
+        }
+
+        $dir = dirname(ROAST_PVP_METRICS_LOG);
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0750, true);
+        }
+        $line = json_encode(array_merge([
+            'ts' => date('c'),
+            'event' => $event,
+        ], $fields), JSON_UNESCAPED_UNICODE);
+        if ($line !== false) {
+            @file_put_contents(ROAST_PVP_METRICS_LOG, $line . "\n", FILE_APPEND | LOCK_EX);
         }
     }
 }

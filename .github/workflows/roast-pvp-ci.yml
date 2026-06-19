@@ -1,0 +1,47 @@
+name: Roast PvP CI
+
+# Phase 3 merge gates — PHP 8.2, no repository secrets.
+# Opponent video/reference files under images/pvp-opponents/ MUST be committed
+# alongside api/data/pvp-opponents.json; CI only checks out the repo, so missing
+# assets fail the pvp-manifest job even when files exist on the server.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pvp-unit:
+    name: Cred scores + determinism
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      # assert_deterministic() in test-pvp-cred-scores.php — same-input-twice + 10-run stability
+      - name: PvP cred score regression and determinism (merge gate)
+        run: php api/roast-limited/test-pvp-cred-scores.php
+
+  pvp-manifest:
+    name: Opponent manifest validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Validate PvP opponent manifest and assets
+        run: php api/roast-limited/validate-pvp-manifest.php

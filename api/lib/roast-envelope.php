@@ -85,11 +85,54 @@ if (!function_exists('roast_build_result')) {
     }
 }
 
+if (!function_exists('roast_http_status_for_error')) {
+    /** Map roast_error codes to HTTP status for API handlers. */
+    function roast_http_status_for_error(?array $error, int $default = 400): int
+    {
+        if ($error === null) {
+            return $default;
+        }
+        $code = strtoupper((string) ($error['code'] ?? ''));
+        switch ($code) {
+            case 'RATE':
+            case 'RATE_LIMIT':
+            case 'NOT_READY':
+                return 429;
+            case 'PVP':
+                $msg = strtolower((string) ($error['message'] ?? ''));
+                if (str_contains($msg, 'not found')) {
+                    return 404;
+                }
+                if (str_contains($msg, 'not in') || str_contains($msg, 'not active')) {
+                    return 403;
+                }
+                return 403;
+            case 'EXPIRED':
+                return 410;
+            case 'DB':
+            case 'JOIN':
+            case 'STATUS':
+            case 'LIVE':
+                return 503;
+            case 'IMAGE':
+            case 'MODE':
+            case 'ACTION':
+            case 'TOKEN':
+                return 400;
+            default:
+                return $default;
+        }
+    }
+}
+
 if (!function_exists('roast_send_json')) {
     /** @param array<string, mixed> $payload */
     function roast_send_json(array $payload, int $code = 200): void
     {
         roast_json_headers();
+        if ($code === 429 && isset($payload['retry_after']) && !headers_sent()) {
+            header('Retry-After: ' . max(1, (int) $payload['retry_after']));
+        }
         http_response_code($code);
         echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }

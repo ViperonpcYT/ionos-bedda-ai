@@ -8,6 +8,8 @@ _ProviderRestore/
 api/.env
 api/secure-config.php
 api/config/
+api/IONOS-CRON-PASTE.txt
+ROAST-PVP-UPLOAD.txt
 
 # Runtime / logs / caches
 api/rate-limits/

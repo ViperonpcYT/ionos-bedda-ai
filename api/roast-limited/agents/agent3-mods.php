@@ -7,7 +7,7 @@ require_once dirname(__DIR__, 2) . '/lib/roast-envelope.php';
 require_once dirname(__DIR__, 2) . '/lib/roast-local-agents.php';
 
 /** Agent 3 — Mod spotter (cloud vision + stock RAG; heuristic fallback if all cloud routes fail) */
-function roast_agent3_mods(string $imagePath, array $identity): array
+function roast_agent3_mods(string $imagePath, array $identity, array $ctx = []): array
 {
     $make = (string) ($identity['make'] ?? 'Unknown');
     $model = (string) ($identity['model'] ?? 'Unknown');
@@ -28,7 +28,10 @@ PROMPT;
         $imagePath,
         $prompt,
         'roast_validate_mods',
-        'mods'
+        'mods',
+        '',
+        '',
+        $ctx
     );
 
     if ($result['ok']) {

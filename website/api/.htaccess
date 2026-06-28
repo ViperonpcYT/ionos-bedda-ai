@@ -1,0 +1,111 @@
+# Bedda Skincare - API Directory Security (Ionos-compatible)
+# ============================================================================
+# Ionos shared hosting: do NOT use php_flag, php_value, or php_admin_value
+# in this file — they cause HTTP 500 for the entire /api/ directory.
+# Configure PHP error logging in Ionos control panel or api/includes/php.ini.
+# ============================================================================
+
+# ============================================================================
+# PROTECT SENSITIVE FILES
+# ============================================================================
+
+<Files ".env">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+<Files ".env.example">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+<FilesMatch "\.md$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(log|err)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "^(secure-config|config\.local)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ============================================================================
+# DIRECTORY PROTECTION
+# ============================================================================
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block access to sensitive directories
+    RewriteRule ^(logs|rate-limits|spam-logs|orders|includes)/ - [F,L]
+
+    # Preflight OPTIONS — return 204 without redirect loops
+    RewriteCond %{REQUEST_METHOD} =OPTIONS
+    RewriteRule ^ - [R=204,L]
+</IfModule>
+
+# ============================================================================
+# SECURITY HEADERS & CORS
+# ============================================================================
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+    # Stripe webhook: no CORS (server-to-server)
+    SetEnvIf Request_URI "stripe-webhook\.php$" IS_WEBHOOK
+
+    # Allowed browser origins (production + local dev)
+    SetEnvIf Origin "^https://bedda\.ca$" CORS_ORIGIN=https://bedda.ca
+    SetEnvIf Origin "^https://www\.bedda\.ca$" CORS_ORIGIN=https://www.bedda.ca
+    SetEnvIf Origin "^http://localhost$" CORS_ORIGIN=http://localhost
+    SetEnvIf Origin "^http://localhost:[0-9]+$" CORS_ORIGIN=$0
+    SetEnvIf Origin "^http://127\.0\.0\.1$" CORS_ORIGIN=http://127.0.0.1
+    SetEnvIf Origin "^http://127\.0\.0\.1:[0-9]+$" CORS_ORIGIN=$0
+
+    # One Header line per variable — avoids Ionos 500 from stacked env= flags
+    Header always set Access-Control-Allow-Origin "%{CORS_ORIGIN}e" env=CORS_ORIGIN env=!IS_WEBHOOK
+    Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS" env=CORS_ORIGIN env=!IS_WEBHOOK
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With" env=CORS_ORIGIN env=!IS_WEBHOOK
+    Header always set Access-Control-Max-Age "86400" env=CORS_ORIGIN env=!IS_WEBHOOK
+</IfModule>
+
+# ============================================================================
+# PHP SETTINGS — removed from .htaccess (Ionos forbids php_flag/php_value here)
+# Use Ionos PHP settings or api/includes/.user.ini if your plan allows it.
+# ============================================================================

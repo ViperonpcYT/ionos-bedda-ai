@@ -1,0 +1,10 @@
+# Bedda — Apache rules (Ionos shared hosting)
+RewriteEngine On
+
+# /cart → cart.html (fixes 404)
+RewriteRule ^cart/?$ cart.html [L,R=302]
+
+# Optional: pretty URLs without .html (uncomment if desired)
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME}.html -f
+# RewriteRule ^(.+)$ $1.html [L]

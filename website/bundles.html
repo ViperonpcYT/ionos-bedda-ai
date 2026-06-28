@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curated Collections | Tallow Soap & Balm Sets | Bedda</title>
+    <meta name="description" content="Curated tallow skincare bundles by Bedda. Complete routines for sensitive skin, exfoliation & gifting. Handmade in Mississauga. Free local pickup. Shop natural soap bundles online Canada.">
+    <meta name="keywords" content="skincare bundles Canada, tallow soap gift set, natural skincare routine, sensitive skin bundle, handmade soap gift">
+    <meta property="og:title" content="Natural Skincare Bundles | Bedda">
+    <meta property="og:description" content="Curated tallow soap and balm bundles for sensitive skin, exfoliation, and gifting. The complete collection, less than separate.">
+    <meta property="og:type" content="product.group">
+    <meta property="og:url" content="https://bedda.ca/bundles.html">
+    <script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        sage: {
+          50: '#F5F3EF',
+          100: '#F0ECE6',
+          200: '#E8E4DC',
+          300: '#D9CDBF',
+          400: '#CFC8B8',
+          500: '#B5A183',
+          600: '#9C8C73',
+          700: '#7E6D58',
+          800: '#5A4D3F',
+          900: '#2C2C2C',
+        }
+      }
+    }
+  }
+}
+</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .bundle-card { 
+            background: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%);
+            border: 2px solid #E8E4DC;
+            transition: all 0.3s ease;
+        }
+        .bundle-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: #9C8C73;
+        }
+        .bundle-highlight {
+            background: linear-gradient(135deg, #F0ECE6 0%, #E8E4DC 100%);
+            border: 2px solid #B5A183;
+        }
+        .savings-pill {
+            background: linear-gradient(90deg, #9C8C73 0%, #7E6D58 100%);
+            color: white;
+            transform: rotate(-3deg);
+            box-shadow: 0 4px 6px rgba(90, 123, 94, 0.3);
+        }
+        .process-visual {
+            background: repeating-linear-gradient(
+                45deg,
+                #fafaf9,
+                #fafaf9 10px,
+                #f5f5f4 10px,
+                #f5f5f4 20px
+            );
+        }
+        #mobile-menu {
+            display: none;
+            max-height: calc(100dvh - 4rem);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        #mobile-menu.open { display: block; }
+    </style>
+</head>
+<body class="font-inter bg-stone-50">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <a href="index.html" class="text-sage-600 font-medium flex items-center space-x-2 flex-shrink-0">
+                <img src="images/bedda-logo.jpg" alt="Bedda logo" class="h-10 w-auto">
+                <span class="hidden sm:inline text-xl">Bedda</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-6 items-center">
+                <!-- Collections Dropdown -->
+                <div class="relative group">
+                    <button class="text-stone-700 hover:text-sage-600 font-medium flex items-center">
+                        Collections
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-stone-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50" role="menu" aria-label="Collections">
+                        <div class="px-4 py-2">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Curated</span>
+                        </div>
+                        <a href="bundles.html" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">
+                            Curated Sets
+                            <span class="block text-xs text-stone-500 font-normal mt-0.5">Complete routines</span>
+                        </a>
+
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">By Need</span>
+                        </div>
+                        <a href="products.html?category=sensitive" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Sensitive Skin</a>
+                        <a href="products.html?category=dryness" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Dryness &amp; Repair</a>
+                        <a href="products.html?category=exfoliation" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Exfoliation</a>
+
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Create</span>
+                        </div>
+                        <a href="build-loaf.html" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">Build Your Own Loaf</a>
+
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Browse</span>
+                        </div>
+                        <a href="products.html" role="menuitem" class="block px-4 py-3 text-sm font-semibold text-sage-700 bg-sage-50 hover:bg-sage-100 border-l-4 border-sage-500">All Products</a>
+                    </div>
+                </div>
+                <a href="ingredients.html" class="text-stone-700 hover:text-sage-600 font-medium">Ingredients</a>
+                <a href="about.html" class="text-stone-700 hover:text-sage-600 font-medium">Our Story</a>
+                <a href="contact.html" class="text-stone-700 hover:text-sage-600 font-medium">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <button id="login-btn" class="relative p-2 text-stone-700 hover:text-sage-600" aria-label="Account">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </button>
+                <button id="cart-btn" class="relative p-2 text-stone-700 hover:text-sage-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6"/></svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-sage-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-stone-700 hover:text-sage-600 border border-stone-300 rounded" type="button" aria-label="Open menu">
+                    <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="fixed top-16 left-0 w-full bg-white border-b border-stone-200 shadow-lg z-[60]">
+        <div class="px-4 py-6 space-y-4">
+            <!-- Collections Accordion -->
+            <div class="space-y-2">
+                <button id="mobile-shop-toggle" class="flex items-center justify-between w-full text-stone-700 hover:text-sage-600 font-medium py-2 text-left">
+                    <span>Collections</span>
+                    <svg class="w-4 h-4 transition-transform duration-200" id="mobile-shop-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                
+                <div id="mobile-shop-submenu" class="hidden pl-4 space-y-2">
+                    <div class="px-3 py-2">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Curated</span>
+                    </div>
+                    <a href="bundles.html" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">
+                        Curated Sets
+                        <span class="block text-xs text-stone-500 font-normal mt-0.5">Complete routines</span>
+                    </a>
+
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">By Need</span>
+                    </div>
+                    <a href="products.html?category=sensitive" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Sensitive Skin</a>
+                    <a href="products.html?category=dryness" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Dryness &amp; Repair</a>
+                    <a href="products.html?category=exfoliation" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Exfoliation</a>
+
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Create</span>
+                    </div>
+                    <a href="build-loaf.html" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">Build Your Own Loaf</a>
+
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Browse</span>
+                    </div>
+                    <a href="products.html" class="block px-3 py-3 text-sm font-semibold text-sage-700 bg-sage-50 hover:bg-sage-100 border-l-4 border-sage-500 rounded">All Products</a>
+                </div>
+            </div>
+
+            <a href="ingredients.html" class="block text-stone-700 hover:text-sage-600 font-medium py-2">Ingredients</a>
+            <a href="about.html" class="block text-stone-700 hover:text-sage-600 font-medium py-2">Our Story</a>
+            <a href="contact.html" class="block text-stone-700 hover:text-sage-600 font-medium py-2">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="pt-24 pb-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto">
+            <h1 class="font-playfair text-5xl font-bold text-stone-800 mb-4">Curated collections. Better together.</h1>
+            <p class="text-xl text-stone-600 mb-6">Complete routines designed to work together. The full collection, less than separate.</p>
+            <div class="flex justify-center items-center gap-2 text-sm text-stone-500">
+                <span class="inline-flex items-center px-3 py-1 rounded-full bg-sage-100 text-sage-800">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    Complimentary Products
+                </span>
+                <span class="inline-flex items-center px-3 py-1 rounded-full bg-sage-100 text-sage-800">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
+                    Save Up To 30%
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bundle 1: Sensitive Skin Bundle - UPDATED PRICING -->
+<section class="py-16 bg-stone-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bundle-highlight bundle-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-4 right-4 z-20 savings-pill px-4 py-2 rounded-lg font-bold text-lg shadow-lg">SAVE $3.50</div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="relative"><img src="images/sensitive-bundle.jpg" alt="Sensitive Skin Bundle" class="w-full rounded-xl shadow-2xl">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-sage-100 text-sage-800 text-sm font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.699-3.181a1 1 0 011.827 1.035L17.475 6.5l.969.323a1 1 0 01.647 1.242l-1.04 3.121a1 1 0 01-.978.706l-3.213-.037 1.36 2.721a1 1 0 11-1.792.894l-1.36-2.72-1.792.894 1.36 2.72a1 1 0 11-1.792-.894l1.36-2.721-3.212.037a1 1 0 01-.979-.706l-1.04-3.121a1 1 0 01.647-1.242l.969-.323-1.15-2.162a1 1 0 111.792-.894L9.5 3.5V3a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                        Best Value for Sensitive Skin
+                    </div>
+                    <h2 class="font-playfair text-4xl font-bold text-stone-800">Sensitive Skin Bundle</h2>
+                    <p class="text-lg text-stone-600">Everything you need for a gentle, effective routine. Start with our mildest cleanser and follow with healing hydration.</p>
+                    <div class="flex items-center gap-4 py-4 process-visual rounded-lg p-4">
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">🧼</div><div class="text-xs font-semibold text-stone-600">Step 1</div><div class="text-sm font-bold text-stone-800">Cleanse</div></div>
+                        <svg class="w-6 h-6 text-sage-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">✨</div><div class="text-xs font-semibold text-stone-600">Step 2</div><div class="text-sm font-bold text-stone-800">Nourish</div></div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Plain Jane Soap (5 x 100g)</span><p class="text-sm text-stone-600">Unscented, gentle cleansing</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Plain Jane Face &amp; Body Balm (2 x 1oz)</span><p class="text-sm text-stone-600">Instant relief for dry patches</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Soap Saver Exfoliating Bag</span><p class="text-sm text-stone-600">Complimentary gentle exfoliation bag</p></div></li>
+                    </ul>
+                    <div class="flex items-end gap-4 pt-4 border-t border-sage-200">
+                        <div><div class="text-sm text-stone-500 line-through">Individual Total: $50.95</div><div class="text-4xl font-bold text-stone-800">$47.45</div><div class="text-sm text-stone-600 font-semibold">The complete collection, $3.50 less than separate.</div></div>
+                        <button class="flex-1 bg-sage-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl add-to-cart-bundle" data-bundle="sensitive-skin" data-price="47.45" data-items='[{"product":"Plain Jane Soap","price":4.05,"qty":5},{"product":"Plain Jane Face & Body Balm","price":13.60,"qty":2},{"product":"Soap Saver Exfoliating Bag","price":0.00,"qty":1}]'>Add Bundle to Bag</button>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-stone-600 bg-white/50 p-3 rounded-lg"><svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Perfect for: Eczema-prone, rosacea, allergen-sensitive skin</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bundle 2: Be Glamorous Bundle - UPDATED PRICING -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bundle-card rounded-2xl p-8 md:p-12 border-2 border-stone-200">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Image Column: No order classes → natural source order (top on mobile, left on desktop) -->
+                <div class="relative">
+                    <img src="images/glamorous-bundle.jpg" alt="Be Glamorous Bundle" class="w-full rounded-xl shadow-2xl">
+                    <!-- Savings pill: z-10 ensures it renders above the image -->
+                    <div class="absolute top-4 left-4 z-10 savings-pill px-4 py-2 rounded-lg font-bold text-lg shadow-lg">SAVE $7.72</div>
+                </div>
+                
+                <!-- Content Column: No order classes → displays after image on all screens -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-stone-100 text-stone-800 text-sm font-semibold">Premium Exfoliation Collection</div>
+                    <h2 class="font-playfair text-4xl font-bold text-stone-800">Be Glamorous Bundle</h2>
+                    <p class="text-lg text-stone-600">Face-to-toe nourishment with exfoliating power. Our most comprehensive bundle covers cleansing, treatment, and protection for total skin health.</p>
+                    
+                    <div class="grid grid-cols-3 gap-4 py-4">
+                        <div class="text-center p-3 bg-stone-50 rounded-lg"><div class="text-2xl mb-1">🧼</div><div class="text-sm font-bold text-stone-800">Cleanse</div><div class="text-xs text-stone-600">Uni + She-Ra</div></div>
+                        <div class="text-center p-3 bg-stone-50 rounded-lg"><div class="text-2xl mb-1">✨</div><div class="text-sm font-bold text-stone-800">Treat</div><div class="text-xs text-stone-600">Holy Grail + Creamsicle</div></div>
+                        <div class="text-center p-3 bg-stone-50 rounded-lg"><div class="text-2xl mb-1">👄</div><div class="text-sm font-bold text-stone-800">Protect</div><div class="text-xs text-stone-600">Minty Lip (Free)</div></div>
+                    </div>
+                    
+                    <ul class="space-y-2 text-stone-700">
+                        <li class="flex justify-between border-b border-stone-200 py-2"><span>Uni Exfoliating Soap x2 (100g)</span><span class="font-semibold">$10.99</span></li>
+                        <li class="flex justify-between border-b border-stone-200 py-2"><span>She-Ra Exfoliating Soap x3 (100g)</span><span class="font-semibold">$16.99</span></li>
+                        <li class="flex justify-between border-b border-stone-200 py-2"><span>Holy Grail Balm (1.0oz)</span><span class="font-semibold">$14.30</span></li>
+                        <li class="flex justify-between border-b border-stone-200 py-2"><span>Creamsicle Balm (1.0oz)</span><span class="font-semibold">$14.30</span></li>
+                        <li class="flex justify-between border-b border-stone-200 py-2"><span>Lip Balm (0.5oz)</span><span class="font-semibold text-sage-600">FREE</span></li>
+                    </ul>
+                    
+                    <div class="flex items-end gap-4 pt-4">
+                        <div>
+                            <div class="text-sm text-stone-500 line-through">$64.30</div>
+                            <div class="text-4xl font-bold text-stone-800">$56.58</div>
+                            <div class="text-sm text-stone-600 font-semibold">The complete collection, $7.72 less than separate.</div>
+                        </div>
+                        <button class="flex-1 bg-stone-800 text-white py-4 rounded-lg font-bold text-lg hover:bg-stone-900 transition-colors shadow-lg add-to-cart-bundle" data-bundle="be-glamorous" data-price="56.58" data-items='[{"product":"Uni Exfoliating Soap","price":5.50,"qty":2},{"product":"She-Ra Exfoliating Soap","price":5.66,"qty":3},{"product":"Holy Grail Balm","price":14.30,"qty":1},{"product":"Creamsicle Balm","price":14.30,"qty":1},{"product":"Minty Lip Balm","price":0.00,"qty":1}]'>Get the Collection</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bundle 3: Sampler Pack -->
+<section class="py-16 bg-stone-100 border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Image Column -->
+            <div class="bundle-card rounded-2xl p-8 md:p-12 border-2 border-stone-200">
+                <div class="relative order-2 lg:order-1">
+                <img src="images/sampler-pack.jpg" alt="Bedda Sampler Pack with four mini soaps and Holy Grail balm tin" class="w-full rounded-xl shadow-2xl object-cover">
+                    <div class="absolute top-4 left-4 savings-pill px-4 py-2 rounded-lg font-bold text-lg shadow-lg">
+                        TRY ALL 4
+                    </div>
+                </div>
+                <!-- Content Column -->
+                <div class="order-1 lg:order-2 space-y-6">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-sage-100 text-sage-800 text-sm font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.699-3.181a1 1 0 011.827 1.035L17.475 6.5l.969.323a1 1 0 01.647 1.242l-1.04 3.121a1 1 0 01-.978.706l-3.213-.037 1.36 2.721a1 1 0 11-1.792.894l-1.36-2.72-1.792.894 1.36 2.72a1 1 0 11-1.792-.894l1.36-2.721-3.212.037a1 1 0 01-.979-.706l-1.04-3.121a1 1 0 01.647-1.242l.969-.323-1.15-2.162a1 1 0 111.792-.894L9.5 3.5V3a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                        Best for First-Time Buyers
+                    </div>
+                    
+                    <h2 class="font-playfair text-4xl font-bold text-stone-800">The Sampler Pack</h2>
+                    <p class="text-lg text-stone-600">Not sure which soap is right for you? Try our curated sampler with travel-friendly minis of our bestsellers. Perfect for first-time buyers, gifting, or travel.</p>
+                    
+                    <!-- Sampler Items Grid -->
+                    <div class="grid grid-cols-2 gap-4 py-4 bg-stone-50 rounded-lg p-4">
+                        <div class="text-center p-3 bg-white rounded-lg border border-stone-100">
+                            <div class="text-2xl mb-1">🧼</div>
+                            <div class="text-sm font-bold text-stone-800">Uni</div>
+                            <div class="text-xs text-stone-500">Cinnamon & citrus</div>
+                            <div class="text-xs font-semibold text-sage-600 mt-1">$2.80</div>
+                        </div>
+                        <div class="text-center p-3 bg-white rounded-lg border border-stone-100">
+                            <div class="text-2xl mb-1">🧼</div>
+                            <div class="text-sm font-bold text-stone-800">He-Man</div>
+                            <div class="text-xs text-stone-500">Cedarwood & patchouli</div>
+                            <div class="text-xs font-semibold text-sage-600 mt-1">$3.00</div>
+                        </div>
+                        <div class="text-center p-3 bg-white rounded-lg border border-stone-100">
+                            <div class="text-2xl mb-1">🧼</div>
+                            <div class="text-sm font-bold text-stone-800">She-Ra</div>
+                            <div class="text-xs text-stone-500">Turmeric & orange</div>
+                            <div class="text-xs font-semibold text-sage-600 mt-1">$2.80</div>
+                        </div>
+                        <div class="text-center p-3 bg-white rounded-lg border border-stone-100">
+                            <div class="text-2xl mb-1">✨</div>
+                            <div class="text-sm font-bold text-stone-800">Holy Grail</div>
+                            <div class="text-xs text-stone-500">Frankincense repair</div>
+                            <div class="text-xs font-semibold text-sage-600 mt-1">$2.35</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="space-y-2 text-stone-700">
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-sm">4 travel-sized minis (50g soaps + 0.1oz balm)</span></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-sm">Compact packaging — TSA-friendly</span></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-sm">Discover your signature scent risk-free</span></li>
+                    </ul>
+                    
+                    <div class="flex items-end gap-4 pt-4 border-t border-sage-200">
+                        <div>
+                            <div class="text-sm text-stone-500 line-through">Individual Total: $10.95</div>
+                            <div class="text-4xl font-bold text-stone-800">$10.95</div>
+                            <div class="text-sm text-sage-700 font-semibold">All 4 minis in one set</div>
+                        </div>
+                        <button class="flex-1 bg-sage-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl add-to-cart-bundle" data-bundle="sampler-pack" data-price="10.95" data-items='[{"product":"Sampler Pack - Uni","price":2.80,"qty":1},{"product":"Sampler Pack - He-Man","price":3.00,"qty":1},{"product":"Sampler Pack - She-Ra","price":2.80,"qty":1},{"product":"Sampler Pack - Holy Grail","price":2.35,"qty":1}]'>
+                            Add Sampler Pack to Bag
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 text-sm text-stone-600 bg-white/50 p-3 rounded-lg">
+                        <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Perfect for: Gifting, travel, or finding your favorite before buying full-size</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bundle 4: Mother's Day Gift Package - Mama 1 - UPDATED PRICING -->
+<section class="py-16 bg-white border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bundle-card rounded-2xl p-8 md:p-12 border-2 border-sage-300 relative overflow-hidden">
+        <div class="absolute top-4 right-4 z-20 savings-pill px-4 py-2 rounded-lg font-bold text-lg shadow-lg">SAVE $4.35</div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="relative"><img src="images/mothers-day-bundle-1.jpg" alt="Little Heart " class="w-full rounded-xl shadow-2xl">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-sage-200 text-sage-800 text-sm font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
+                        Limited Edition Gift
+                    </div>
+                    <h2 class="font-playfair text-4xl font-bold text-stone-800">Little Heart Suprise</h2>
+                    <p class="text-lg text-stone-600">Featuring our Little Heart Surprise Soap with a hidden heart inside. Lavender-lemon blend with Rubia Cordifolia, paired with our bestselling Holy Grail Balm and Minty Lip Balm. A heartfelt gift that reveals love with every use.</p>
+                    <div class="flex items-center gap-4 py-4 process-visual rounded-lg p-4">
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">❤️</div><div class="text-xs font-semibold text-stone-600">Step 1</div><div class="text-sm font-bold text-stone-800">Cleanse</div></div>
+                        <svg class="w-6 h-6 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">✨</div><div class="text-xs font-semibold text-stone-600">Step 2</div><div class="text-sm font-bold text-stone-800">Nourish</div></div>
+                        <svg class="w-6 h-6 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">🎁</div><div class="text-xs font-semibold text-stone-600">Step 3</div><div class="text-sm font-bold text-stone-800">Gift</div></div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Little Heart Surprise Soap (120g)</span><p class="text-sm text-stone-600">Hidden heart inside, lemon-lavender scent</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Holy Grail Balm (1.0oz)</span><p class="text-sm text-stone-600">Frankincense repair formula</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Minty Lip Balm (0.5oz amber jar)</span><p class="text-sm text-stone-600">Peppermint hydration</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Soap Saver Exfoliating Bag</span><p class="text-sm text-stone-600">Complimentary gentle exfoliation bag</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Premium Gift Packaging</span><p class="text-sm text-stone-600">White bag, pink ribbon, rhinestone accents, premium tissue paper</p></div></li>
+                    </ul>
+                    <div class="flex items-end gap-4 pt-4 border-t border-sage-300">
+                        <div><div class="text-sm text-stone-500 line-through">Individual Total: $34.34</div><div class="text-4xl font-bold text-stone-800">$29.99</div><div class="text-sm text-stone-600 font-semibold">The complete collection, $4.35 less than separate.</div></div>
+                        <button class="flex-1 bg-sage-700 text-white py-4 rounded-lg font-bold text-lg hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl add-to-cart-bundle" data-bundle="Little Hearts" data-price="29.99" data-items='[{"product":"Little Heart Surprise Soap","price":7.66,"qty":1},{"product":"Soap Saver Exfoliating Bag","price":0.00,"qty":1},{"product":"Gift Bag","price":5.00,"qty":1},{"product":"Holy Grail Balm","price":13.18,"qty":1},{"product":"Minty Lip Balm Amber Jar","price":4.15,"qty":1}]'>Add Gift Package to Bag - Pickup Only</button>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-stone-600 bg-sage-100 p-3 rounded-lg"><svg class="w-5 h-5 text-sage-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Perfect for: Mother's Day, birthdays, special occasions</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bundle 5: Mother's Day Gift Package - Mama 2 - UPDATED PRICING -->
+<section class="py-16 bg-stone-50 border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bundle-card rounded-2xl p-8 md:p-12 border-2 border-sage-300 relative overflow-hidden">
+        <div class="absolute top-4 right-4 z-20 savings-pill px-4 py-2 rounded-lg font-bold text-lg shadow-lg">SAVE $4.35</div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="relative"><img src="images/mothers-day-bundle-2.jpg" alt="Specail Occasion" class="w-full rounded-xl shadow-2xl">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-sage-200 text-sage-800 text-sm font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
+                        Limited Edition Gift
+                    </div>
+                    <h2 class="font-playfair text-4xl font-bold text-stone-800">Special Occasion Gift Set — Lavender Heart</h2>
+                    <p class="text-lg text-stone-600">Featuring our My Heart Soap, a pure lavender heart-shaped bar that soothes tired skin and restless minds. Bundled with Holy Grail Balm and Minty Lip Balm for the ultimate self-care ritual. Hand-wrapped and ready to gift.</p>
+                    <div class="flex items-center gap-4 py-4 process-visual rounded-lg p-4">
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">❤️</div><div class="text-xs font-semibold text-stone-600">Step 1</div><div class="text-sm font-bold text-stone-800">Cleanse</div></div>
+                        <svg class="w-6 h-6 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">✨</div><div class="text-xs font-semibold text-stone-600">Step 2</div><div class="text-sm font-bold text-stone-800">Nourish</div></div>
+                        <svg class="w-6 h-6 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <div class="text-center"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md mb-2">🎁</div><div class="text-xs font-semibold text-stone-600">Step 3</div><div class="text-sm font-bold text-stone-800">Gift</div></div>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">My Heart Soap (120g)</span><p class="text-sm text-stone-600">Lavender essential oil with Rubia Cordifolia</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Holy Grail Balm (1.0oz)</span><p class="text-sm text-stone-600">Frankincense repair formula</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Minty Lip Balm (0.5oz amber jar)</span><p class="text-sm text-stone-600">Peppermint hydration</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Soap Saver Exfoliating Bag</span><p class="text-sm text-stone-600">Complimentary gentle exfoliation bag</p></div></li>
+                        <li class="flex items-start"><svg class="w-5 h-5 text-sage-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><div><span class="font-semibold text-stone-800">Premium Gift Packaging</span><p class="text-sm text-stone-600">White bag, pink ribbon, rhinestone accents, premium tissue paper</p></div></li>
+                    </ul>
+                    <div class="flex items-end gap-4 pt-4 border-t border-sage-300">
+                        <div><div class="text-sm text-stone-500 line-through">Individual Total: $34.34</div><div class="text-4xl font-bold text-stone-800">$29.99</div><div class="text-sm text-stone-600 font-semibold">The complete collection, $4.35 less than separate.</div></div>
+                        <button class="flex-1 bg-sage-700 text-white py-4 rounded-lg font-bold text-lg hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl add-to-cart-bundle" data-bundle="Specail occasions" data-price="29.99" data-items='[{"product":"My Heart Soap","price":7.66,"qty":1},{"product":"Soap Saver Exfoliating Bag","price":0.00,"qty":1},{"product":"Gift Bag","price":5.00,"qty":1},{"product":"Holy Grail Balm","price":13.18,"qty":1},{"product":"Minty Lip Balm Amber Jar","price":4.15,"qty":1}]'>Add Gift Package to Bag - Pickup Only</button>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-stone-600 bg-sage-100 p-3 rounded-lg"><svg class="w-5 h-5 text-sage-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Perfect for: Mother's Day, birthdays, special occasions</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-stone-50 border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="font-playfair text-4xl md:text-5xl font-bold text-stone-800 mb-4">Choose Your Routine</h2>
+            <p class="text-lg text-stone-600">Auto-replenish your favorites and never run out. Skip or cancel anytime.</p>
+        </div>
+
+        <!-- 4‑column grid (mobile: 2, desktop: 4) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
+            
+            <!-- TIER 1: Sampler (Decoy) -->
+            <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div class="mb-4">
+                    <span class="inline-block px-3 py-1 bg-stone-100 text-stone-600 text-xs font-semibold rounded-full mb-3">Discover Your Favorites</span>
+                    <h3 class="font-playfair text-xl font-bold text-stone-800">The Sampler Pack</h3>
+                    <p class="text-xs text-stone-500 mt-1">4 travel-sized minis</p>
+                </div>
+                <div class="mb-4">
+                    <span class="text-3xl font-bold text-stone-800">$10.95</span>
+                    <span class="text-sm text-stone-500 block">one‑time</span>
+                </div>
+                <ul class="space-y-2 text-sm text-stone-600 mb-6 flex-grow">
+                    <li class="flex items-start"><svg class="w-4 h-4 text-stone-400 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Uni & She-Ra minis</li>
+                    <li class="flex items-start"><svg class="w-4 h-4 text-stone-400 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>He-Man mini</li>
+                    <li class="flex items-start"><svg class="w-4 h-4 text-stone-400 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Holy Grail balm mini</li>
+                </ul>
+                <button class="w-full border-2 border-stone-800 text-stone-800 font-bold py-2.5 rounded-lg text-sm hover:bg-stone-800 hover:text-white transition-colors add-to-cart-bundle" 
+                        data-bundle="sampler-pack" data-price="10.95" 
+                        data-items='[{"product":"Sampler Pack - Uni","price":2.80,"qty":1},{"product":"Sampler Pack - He-Man","price":3.00,"qty":1},{"product":"Sampler Pack - She-Ra","price":2.80,"qty":1},{"product":"Sampler Pack - Holy Grail","price":2.35,"qty":1}]'>
+                    Add Sampler
+                </button>
+            </div>
+
+            <!-- TIER 2: Daily Essentials (NEW – bridges the gap) -->
+            <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div class="mb-4">
+                    <span class="inline-block px-3 py-1 bg-sage-100 text-sage-800 text-xs font-semibold rounded-full mb-3">Daily Starter</span>
+                    <h3 class="font-playfair text-xl font-bold text-stone-800">Daily Essentials</h3>
+                    <p class="text-xs text-stone-500 mt-1">2 soaps + 1 full-size balm</p>
+                </div>
+                <!-- Auto-ship pre-selected -->
+                <div class="mb-3">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-bold text-stone-800" id="daily-sub-price">$20.62</span>
+                        <span class="text-sm text-stone-400 line-through">$21.70</span>
+                        <span class="bg-sage-100 text-sage-800 text-xs font-semibold px-2 py-0.5 rounded-full">Save 5%</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-1">Exclusive auto-replenishment every 60 days — skip or cancel anytime.</p>
+                    <p class="text-xs text-sage-600 mt-1">🎁 Complimentary soap saver bag included with subscription</p>
+                </div>
+                <!-- Toggle -->
+                <div class="bg-stone-50 rounded-lg p-2 mb-4 border border-stone-200">
+                    <label class="flex items-center justify-between cursor-pointer py-1">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="daily-essentials-cadence" value="once" class="w-3 h-3 text-stone-400">
+                            <span class="text-xs text-stone-600">One‑time</span>
+                        </div>
+                        <span class="text-sm font-semibold text-stone-800">$21.70</span>
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer py-1 bg-sage-50/40 -mx-1 px-1 rounded">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="daily-essentials-cadence" value="sub" checked class="w-3 h-3 text-sage-600">
+                            <div>
+                                <span class="text-xs font-bold text-stone-900">Auto-replenish</span>
+                                <span class="text-[9px] text-sage-700 block">every 60 days • skip anytime</span>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold text-stone-800">$20.62</span>
+                    </label>
+                </div>
+                <p class="text-[10px] text-stone-500 mb-4">Subscription is pre-selected for effortless replenishment; feel free to switch before checkout.</p>
+                <ul class="space-y-2 text-sm text-stone-600 mb-6 flex-grow">
+                    <li class="flex items-start"><svg class="w-4 h-4 text-sage-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="font-medium">2x</span> Plain Jane Soaps</li>
+                    <li class="flex items-start"><svg class="w-4 h-4 text-sage-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="font-medium">1x</span> Plain Jane Face & Body Balm</li>
+                    <li class="flex items-start text-sage-700"><svg class="w-4 h-4 text-sage-600 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Free soap saver bag (sub only)</li>
+                </ul>
+                <button class="w-full bg-sage-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-sage-700 transition-colors add-to-cart-bundle-dynamic"
+                        data-bundle="daily-essentials"
+                        data-once-price="21.70"
+                        data-sub-price="20.62"
+                        data-items-once='[{"product":"Plain Jane Soap","price":4.05,"qty":2},{"product":"Plain Jane Face & Body Balm","price":13.60,"qty":1}]'
+                        data-items-sub='[{"product":"Plain Jane Soap","price":3.85,"qty":2},{"product":"Plain Jane Face & Body Balm","price":12.92,"qty":1}]'>
+                    Select Routine →
+                </button>
+                <p class="bundle-feedback mt-3 hidden text-xs text-sage-700" data-bundle-feedback="daily-essentials" aria-live="polite"></p>
+            </div>
+
+            <!-- TIER 3: Sensitive Skin Bundle (CENTER-STAGE, tallest) -->
+            <div class="bg-white rounded-2xl p-6 border-2 border-sage-500 shadow-xl flex flex-col relative transform lg:-translate-y-2">
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-sage-500 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                    ⭐ Most Popular
+                </div>
+                <div class="mb-4 mt-2">
+                    <span class="inline-block px-3 py-1 bg-sage-100 text-sage-800 text-xs font-semibold rounded-full mb-3">Family Size</span>
+                    <h3 class="font-playfair text-xl font-bold text-stone-800">Sensitive Skin Bundle</h3>
+                    <p class="text-xs text-stone-500 mt-1">5 soaps + 2 balms – <span class="font-medium">just $6.35 per item</span></p>
+                </div>
+                <div class="mb-3">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-bold text-sage-700" id="sensitive-sub-price">$45.08</span>
+                        <span class="text-sm text-stone-400 line-through">$47.45</span>
+                        <span class="bg-sage-100 text-sage-800 text-xs font-semibold px-2 py-0.5 rounded-full">Save 5%</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-1">Exclusive auto-replenishment every 60 days — skip or cancel anytime.</p>
+                    <p class="text-xs text-sage-600 mt-1">🎁 Complimentary soap saver bag with subscription</p>
+                </div>
+                <div class="bg-stone-50 rounded-lg p-2 mb-4 border border-stone-200">
+                    <label class="flex items-center justify-between cursor-pointer py-1">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="sensitive-skin-cadence" value="once" class="w-3 h-3 text-stone-400">
+                            <span class="text-xs text-stone-600">One‑time</span>
+                        </div>
+                        <span class="text-sm font-semibold text-stone-800">$47.45</span>
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer py-1 bg-sage-50/40 -mx-1 px-1 rounded">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="sensitive-skin-cadence" value="sub" checked class="w-3 h-3 text-sage-600">
+                            <div>
+                                <span class="text-xs font-bold text-stone-900">Auto-replenish</span>
+                                <span class="text-[9px] text-sage-700 block">every 60 days • skip anytime</span>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold text-stone-800">$45.08</span>
+                    </label>
+                </div>
+                <p class="text-[10px] text-stone-500 mb-4">Subscription is pre-selected for convenience—adjust cadence whenever you like.</p>
+                <ul class="space-y-2 text-sm text-stone-600 mb-6 flex-grow">
+                    <li class="flex items-start"><svg class="w-4 h-4 text-sage-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="font-medium">5x</span> Plain Jane Soaps</li>
+                    <li class="flex items-start"><svg class="w-4 h-4 text-sage-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="font-medium">2x</span> Plain Jane Balms</li>
+                    <li class="flex items-start"><svg class="w-4 h-4 text-sage-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Free soap saver bag</li>
+                </ul>
+                <button class="w-full bg-sage-600 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-sage-700 transition-colors add-to-cart-bundle-dynamic"
+                        data-bundle="sensitive-skin"
+                        data-once-price="47.45"
+                        data-sub-price="45.08"
+                        data-items-once='[{"product":"Plain Jane Soap","price":4.05,"qty":5},{"product":"Plain Jane Face & Body Balm","price":13.60,"qty":2},{"product":"Soap Saver Exfoliating Bag","price":0.00,"qty":1}]'
+                        data-items-sub='[{"product":"Plain Jane Soap","price":3.85,"qty":5},{"product":"Plain Jane Face & Body Balm","price":12.92,"qty":2},{"product":"Soap Saver Exfoliating Bag","price":0.00,"qty":1}]'>
+                    Select Family Pack →
+                </button>
+                <p class="bundle-feedback mt-3 hidden text-xs text-sage-700" data-bundle-feedback="sensitive-skin" aria-live="polite"></p>
+            </div>
+
+            <!-- TIER 4: Be Glamorous (Premium anchor) -->
+            <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div class="mb-4">
+                    <span class="inline-block px-3 py-1 bg-stone-100 text-stone-800 text-xs font-semibold rounded-full mb-3">Ultimate Collection</span>
+                    <h3 class="font-playfair text-xl font-bold text-stone-800">Be Glamorous Bundle</h3>
+                    <p class="text-xs text-stone-500 mt-1">5 premium soaps + 2 scented balms + free lip balm</p>
+                </div>
+                <div class="mb-3">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-bold text-stone-800" id="glam-sub-price">$53.75</span>
+                        <span class="text-sm text-stone-400 line-through">$56.58</span>
+                        <span class="bg-sage-100 text-sage-800 text-xs font-semibold px-2 py-0.5 rounded-full">Save 5%</span>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-1">Exclusive auto-replenishment every 60 days — skip or cancel anytime.</p>
+                </div>
+                <div class="bg-stone-50 rounded-lg p-2 mb-4 border border-stone-200">
+                    <label class="flex items-center justify-between cursor-pointer py-1">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="be-glamorous-cadence" value="once" class="w-3 h-3 text-stone-400">
+                            <span class="text-xs text-stone-600">One‑time</span>
+                        </div>
+                        <span class="text-sm font-semibold text-stone-800">$56.58</span>
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer py-1 bg-sage-50/40 -mx-1 px-1 rounded">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="be-glamorous-cadence" value="sub" checked class="w-3 h-3 text-sage-600">
+                            <div>
+                                <span class="text-xs font-bold text-stone-900">Auto-replenish</span>
+                                <span class="text-[9px] text-sage-700 block">every 60 days • skip anytime</span>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold text-stone-800">$53.75</span>
+                    </label>
+                </div>
+                <p class="text-[10px] text-stone-500 mb-4">Subscription is pre-selected for effortless glamour—tweak it before confirming.</p>
+                <ul class="space-y-2 text-sm text-stone-600 mb-6 flex-grow">
+                    <li class="flex items-start"><svg class="w-4 h-4 text-stone-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="font-medium">5x</span> Exfoliating soaps (Uni/She-Ra)</li>
+                    <li class="flex items-start"><svg class="w-4 h-4 text-stone-500 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="font-medium">2x</span> Scented balms (Holy Grail + Creamsicle)</li>
+                    <li class="flex items-start text-sage-700"><svg class="w-4 h-4 text-sage-600 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Free Minty Lip Balm</li>
+                </ul>
+                <button class="w-full bg-stone-800 text-white font-bold py-2.5 rounded-lg text-sm hover:bg-stone-900 transition-colors add-to-cart-bundle-dynamic"
+                        data-bundle="be-glamorous"
+                        data-once-price="56.58"
+                        data-sub-price="53.75"
+                        data-items-once='[{"product":"Uni Exfoliating Soap","price":5.50,"qty":2},{"product":"She-Ra Exfoliating Soap","price":5.66,"qty":3},{"product":"Holy Grail Balm","price":14.30,"qty":1},{"product":"Creamsicle Balm","price":14.30,"qty":1},{"product":"Minty Lip Balm","price":0.00,"qty":1}]'
+                        data-items-sub='[{"product":"Uni Exfoliating Soap","price":5.23,"qty":2},{"product":"She-Ra Exfoliating Soap","price":5.38,"qty":3},{"product":"Holy Grail Balm","price":13.59,"qty":1},{"product":"Creamsicle Balm","price":13.59,"qty":1},{"product":"Minty Lip Balm","price":0.00,"qty":1}]'>
+                    Get Ultimate Collection →
+                </button>
+                <p class="bundle-feedback mt-3 hidden text-xs text-sage-700" data-bundle-feedback="be-glamorous" aria-live="polite"></p>
+            </div>
+        </div>
+
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-2 border-t border-stone-200 pt-6 text-center text-[11px] font-medium text-stone-400 uppercase tracking-wider">
+            <div>📦 Free Local Pickup</div>
+            <div>🔄 Cancel Anytime</div>
+            <div>🎁 Free Gift w/ Sub</div>
+            <div>🛡️ Price Locked</div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Bundles Work -->
+<section class="py-16 bg-stone-50 border-t border-stone-200">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <h3 class="font-playfair text-2xl font-bold text-stone-800 mb-8">Why Buy the Bundle?</h3>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="p-6"><div class="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">💰</div><h4 class="font-bold text-stone-800 mb-2">Better Value</h4><p class="text-stone-600 text-sm">Save 9-30% compared to buying individually.</p></div>
+            <div class="p-6"><div class="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🧴</div><h4 class="font-bold text-stone-800 mb-2">Curated to Work</h4><p class="text-stone-600 text-sm">Products selected to complement each other. No guesswork on pairings.</p></div>
+            <div class="p-6"><div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">♻️</div><h4 class="font-bold text-stone-800 mb-2">Less Waste</h4><p class="text-stone-600 text-sm">One box, one shipment. Better for the environment and your carbon footprint.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-4xl mx-auto py-12 px-4 bg-stone-50 rounded-lg">
+  <h2 class="font-playfair text-3xl font-bold mb-8 text-stone-800">Skincare Bundle Questions</h2>
+  <div class="space-y-6">
+    <div>
+      <h3 class="font-bold text-stone-700">Why buy a skincare bundle instead of individual products?</h3>
+      <p class="text-stone-600 mt-2">Bundles save you 10-30% versus buying items separately, and each set is curated by our founder to ensure products work synergistically. No guesswork—just a complete routine that cleanses, treats, and protects your skin.</p>
+    </div>
+    <div>
+      <h3 class="font-bold text-stone-700">Are Bedda bundles good for gifts?</h3>
+      <p class="text-stone-600 mt-2">Absolutely. Our Mother's Day and Special Occasion bundles include premium gift packaging with ribbon, tissue paper, and a personalized note option. All bundles ship ready-to-gift across Canada or available for local pickup in Mississauga and Vaughan.</p>
+    </div>
+    <div>
+      <h3 class="font-bold text-stone-700">Can I mix and match products in a bundle?</h3>
+      <p class="text-stone-600 mt-2">Our curated bundles feature pre-selected pairings for optimal results. For fully custom combinations, visit our <a href="build-loaf.html" class="text-sage-600 hover:underline">Build Your Own Loaf</a> page to design a personalized soap set.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-stone-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
+            <div>
+                <div class="font-playfair text-3xl font-bold mb-2">Bedda</div>
+                <p class="text-stone-300 text-sm">Natural tallow skincare handmade in Mississauga, Canada.</p>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-3">Shop</h3>
+                <ul class="space-y-2 text-stone-300 text-sm">
+                    <li><a href="products.html" class="hover:text-white">All Products</a></li>
+                    <li><a href="bundles.html" class="hover:text-white">Curated Sets</a></li>
+                    <li><a href="build-loaf.html" class="hover:text-white">Build Your Loaf</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-3">Help &amp; Legal</h3>
+                <ul class="space-y-2 text-stone-300 text-sm">
+                    <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+                    <li><a href="shipping-policy.html" class="hover:text-white">Shipping Policy</a></li>
+                    <li><a href="return-policy.html" class="hover:text-white">Returns Policy</a></li>
+                    <li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-stone-700 pt-6 text-center">
+            <p class="text-stone-400 text-sm">&copy; 2025 Bedda by Josie Chaves. All rights reserved. | Handcrafted with love and care.</p>
+            <p class="text-stone-500 text-xs mt-2">Questions? <a href="mailto:orders@bedda.ca" class="underline hover:text-white">orders@bedda.ca</a></p>
+        </div>
+    </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="bedda-ai.js?v=4" defer></script>
+<script src="logger-backend.js"></script>
+
+<!-- Login/Register Modal -->
+<div id="auth-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+        <button id="close-auth-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        
+        <div id="auth-login-view">
+            <h2 class="text-2xl font-playfair font-bold text-stone-800 mb-2">Welcome Back</h2>
+            <p class="text-stone-600 mb-6">Sign in to access your Bedda Rewards points</p>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                    <input type="email" id="login-email" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Password</label>
+                    <input type="password" id="login-password" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <button type="submit" class="w-full bg-sage-600 text-white py-3 rounded-lg font-semibold hover:bg-sage-700 transition-colors">Sign In</button>
+            </form>
+            
+            <p class="text-center mt-4 text-sm text-stone-600">
+                Don't have an account? <button id="show-register" class="text-sage-600 font-semibold hover:underline">Create one</button>
+            </p>
+        </div>
+        
+        <div id="auth-register-view" class="hidden">
+            <h2 class="text-2xl font-playfair font-bold text-stone-800 mb-2">Create Account</h2>
+            <p class="text-stone-600 mb-6">Join Bedda Rewards and start earning points</p>
+            
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">First Name</label>
+                    <input type="text" id="register-first-name" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Last Name</label>
+                    <input type="text" id="register-last-name" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                    <input type="email" id="register-email" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Password (min 8 characters)</label>
+                    <input type="password" id="register-password" required minlength="8" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <button type="submit" class="w-full bg-sage-600 text-white py-3 rounded-lg font-semibold hover:bg-sage-700 transition-colors">Create Account</button>
+            </form>
+            
+            <p class="text-center mt-4 text-sm text-stone-600">
+                Already have an account? <button id="show-login" class="text-sage-600 font-semibold hover:underline">Sign in</button>
+            </p>
+        </div>
+        
+        <div id="auth-loading" class="hidden py-6">
+            <div class="skeleton skeleton-title mb-4"></div>
+            <div class="skeleton skeleton-text long mb-2"></div>
+            <div class="skeleton skeleton-text medium mb-6"></div>
+            <div class="skeleton skeleton-input"></div>
+            <div class="skeleton skeleton-input"></div>
+            <div class="skeleton skeleton-button"></div>
+            <div class="skeleton skeleton-text short mx-auto mt-4" style="width:120px"></div>
+        </div>
+        
+        <div id="auth-error" class="hidden mt-4 p-3 bg-stone-50 border border-stone-200 rounded-lg text-stone-700 text-sm"></div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+// Dynamic bundle pricing for subscription toggles — FIXED VERSION
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Helper: Safely parse JSON from dataset with fallback
+    function safeParseItems(btn, isSub) {
+        const key = isSub ? 'itemsSub' : 'itemsOnce';
+        const raw = btn.dataset[key];
+        try {
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            console.error(`Failed to parse ${key} for bundle ${btn.dataset.bundle}:`, e);
+            return [];
+        }
+    }
+    
+    // Helper: Update button dataset with selected price/items
+    // NOTE: Always use one-time priced items in the cart. The subscription
+    // 5% discount is applied automatically by the order summary when the
+    // isSubscription flag is set, so passing pre-discounted items would
+    // result in a double 5% reduction (~10% off).
+    function updateButtonDataset(btn, isSub) {
+        const priceKey = isSub ? 'subPrice' : 'oncePrice';
+        btn.dataset.price = btn.dataset[priceKey];
+        btn.dataset.items = JSON.stringify(safeParseItems(btn, false));
+    }
+    
+    // Generic handler for any bundle toggle
+    function setupBundleToggle(bundleKey, priceElementId) {
+        const radios = document.querySelectorAll(`input[name="${bundleKey}-cadence"]`);
+        const btn = document.querySelector(`.add-to-cart-bundle-dynamic[data-bundle="${bundleKey}"]`);
+        
+        if (!radios.length || !btn) return;
+        
+        // Sync toggle changes to button dataset
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const isSub = this.value === 'sub';
+                updateButtonDataset(btn, isSub);
+                // Update displayed price if element exists
+                if (priceElementId) {
+                    const priceEl = document.getElementById(priceElementId);
+                    if (priceEl) {
+                        const price = parseFloat(btn.dataset.price) || 0;
+                        priceEl.innerText = `$${price.toFixed(2)}`;
+                    }
+                }
+            });
+        });
+        
+        // Initial sync on page load
+        const initialSub = document.querySelector(`input[name="${bundleKey}-cadence"][value="sub"]`)?.checked;
+        updateButtonDataset(btn, initialSub);
+    }
+
+    function showBundleFeedback(bundleKey, isSubscription, isLoggedIn) {
+        const feedback = document.querySelector(`[data-bundle-feedback="${bundleKey}"]`);
+        if (!feedback) return;
+
+        if (isSubscription && !isLoggedIn) {
+            feedback.innerHTML = '✓ Added to Bag — <button type="button" class="open-auth-modal underline font-semibold">log in</button> to lock in your subscription benefits and rewards.';
+        } else if (isSubscription) {
+            feedback.textContent = '✓ Added to Bag — your subscription is pre-selected and can be adjusted at checkout.';
+        } else {
+            feedback.textContent = '✓ Added to Bag — your selection is ready for checkout.';
+        }
+        feedback.classList.remove('hidden');
+        feedback.classList.add('bg-sage-50', 'border', 'border-sage-200', 'rounded-lg', 'px-3', 'py-2');
+
+        const loginBtn = feedback.querySelector('.open-auth-modal');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                document.getElementById('login-btn')?.click();
+            });
+        }
+
+        clearTimeout(feedback._hideTimer);
+        feedback._hideTimer = setTimeout(() => {
+            feedback.classList.add('hidden');
+        }, 12000);
+    }
+    
+    // ✅ Setup ALL three dynamic bundles (was missing daily-cadence!)
+    setupBundleToggle('daily-essentials', 'daily-sub-price');
+    setupBundleToggle('sensitive-skin', 'sensitive-sub-price');
+    setupBundleToggle('be-glamorous', 'glam-sub-price');
+
+    // Click handler for dynamic bundle buttons
+    document.querySelectorAll('.add-to-cart-bundle-dynamic').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // ✅ Safe parse with fallback
+            let items;
+            try {
+                items = typeof this.dataset.items === 'string' 
+                    ? JSON.parse(this.dataset.items) 
+                    : safeParseItems(this, document.querySelector(`input[name="${this.dataset.bundle}-cadence"][value="sub"]`)?.checked);
+            } catch (err) {
+                console.error('Failed to parse items:', err);
+                alert('Sorry, there was an error loading this bundle. Please refresh and try again.');
+                return;
+            }
+            
+            const price = parseFloat(this.dataset.price) || 0;
+            const bundleKey = this.dataset.bundle;
+            const isLoggedIn = !!window.currentUser;
+            
+            // Detect subscription state
+            const isSubscription = document.querySelector(`input[name="${bundleKey}-cadence"][value="sub"]`)?.checked || false;
+            const interval = isSubscription ? '2' : null; // Default 60 days for bundles
+            
+            if (window.cartManager) {
+                items.forEach(item => {
+                    for (let i = 0; i < (item.qty || 1); i++) {
+                        window.cartManager.addItem(item.product, item.price, 1, {
+                            isSubscription: isSubscription,
+                            subscriptionInterval: interval
+                        });
+                    }
+                });
+                
+                // Set global flag for checkout modal
+                if (isSubscription) {
+                    window.pendingBundleSubscription = {
+                        interval: interval,
+                        bundleName: bundleKey
+                    };
+                }
+            } else {
+                // Fallback localStorage logic
+                let cart = JSON.parse(localStorage.getItem('bedda_cart') || '[]');
+                items.forEach(item => {
+                    for (let i = 0; i < (item.qty || 1); i++) {
+                        cart.push({
+                            id: Date.now() + Math.random().toString(36).substr(2, 5),
+                            product: item.product,
+                            price: item.price,
+                            quantity: 1,
+                            timestamp: new Date().toISOString(),
+                            isSubscription: isSubscription,
+                            subscriptionInterval: interval
+                        });
+                    }
+                });
+                localStorage.setItem('bedda_cart', JSON.stringify(cart));
+                if (typeof updateCartCount === 'function') updateCartCount();
+            }
+            
+            // Visual feedback
+            const originalText = this.innerText;
+            this.innerText = isSubscription
+                ? (isLoggedIn ? '✓ Added — Subscription Selected' : '✓ Added — Log In for Sub Benefits')
+                : '✓ Added to Bag!';
+            this.classList.add('bg-sage-600');
+            showBundleFeedback(bundleKey, isSubscription, isLoggedIn);
+            setTimeout(() => {
+                this.innerText = originalText;
+                this.classList.remove('bg-sage-600');
+                if (window.cartManager) window.cartManager.toggleCartModal();
+            }, 2500);
+        });
+    });
+});
+</script>

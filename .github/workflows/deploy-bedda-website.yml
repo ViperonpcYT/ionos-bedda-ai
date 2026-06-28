@@ -1,0 +1,39 @@
+# Optional: deploy website/ to Ionos via FTP when repository secrets are configured.
+# Secrets: IONOS_FTP_HOST, IONOS_FTP_USER, IONOS_FTP_PASSWORD, IONOS_FTP_REMOTE_DIR (e.g. /)
+name: Deploy Bedda website (FTP)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cursor/fix-api-500-errors-3f73
+    paths:
+      - 'website/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.IONOS_FTP_HOST != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Upload website to Ionos
+        env:
+          FTP_HOST: ${{ secrets.IONOS_FTP_HOST }}
+          FTP_USER: ${{ secrets.IONOS_FTP_USER }}
+          FTP_PASS: ${{ secrets.IONOS_FTP_PASSWORD }}
+          FTP_DIR: ${{ secrets.IONOS_FTP_REMOTE_DIR }}
+        run: |
+          lftp -c "
+            set ssl:verify-certificate no;
+            open -u $FTP_USER,$FTP_PASS $FTP_HOST;
+            lcd website;
+            cd ${FTP_DIR:-/};
+            mirror --reverse --delete --verbose \
+              --exclude-glob secure-config.php \
+              --exclude-glob api/data/ \
+              . .;
+          "

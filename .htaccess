@@ -19,7 +19,9 @@ Options -Indexes
     RewriteEngine On
 
     # Keep crawlers on the AdSense-approved canonical origin.
-    RewriteCond %{HTTP_HOST} ^www\.onlybikes\.shop$ [NC,OR]
+    RewriteCond %{HTTP_HOST} ^www\.onlybikes\.shop$ [NC]
+    RewriteRule ^ https://onlybikes.shop%{REQUEST_URI} [R=301,L,NE]
+
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP:X-Forwarded-Proto} !https
     RewriteRule ^ https://onlybikes.shop%{REQUEST_URI} [R=301,L,NE]

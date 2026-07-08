@@ -18,6 +18,12 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Keep crawlers on the AdSense-approved canonical origin.
+    RewriteCond %{HTTP_HOST} ^www\.onlybikes\.shop$ [NC,OR]
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://onlybikes.shop%{REQUEST_URI} [R=301,L,NE]
+
     # Scripts live at site root on IONOS; HTML references /js/*.js
     RewriteRule ^js/(site-config|onlybikes-ui|site-layout|conversion|stock-badges|onlybikes-app)\.js$ /$1.js [L]
 

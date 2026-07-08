@@ -4,9 +4,14 @@ Allow: /
 User-agent: AdsBot-Google
 Allow: /
 
+User-agent: Google-Display-Ads-Bot
+Allow: /
+
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /email-admin/
+Disallow: /analytics.html
+Disallow: /analytics-backend.html
 
 Sitemap: https://onlybikes.shop/sitemap.xml

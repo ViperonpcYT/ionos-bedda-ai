@@ -151,25 +151,25 @@ function bedda_reward_catalog(): array
         'plainjane' => [
             'id' => 'plainjane',
             'name' => 'Plain Jane Balm',
-            'points' => 310,
+            'points' => 200,
             'items' => [['product' => 'Plain Jane Face Balm', 'price' => 0.0, 'quantity' => 1]],
         ],
         'holygrail' => [
             'id' => 'holygrail',
             'name' => 'Holy Grail Balm',
-            'points' => 310,
+            'points' => 200,
             'items' => [['product' => 'Holy Grail Balm', 'price' => 0.0, 'quantity' => 1]],
         ],
         'creamsicle' => [
             'id' => 'creamsicle',
             'name' => 'Creamsicle Balm',
-            'points' => 310,
+            'points' => 200,
             'items' => [['product' => 'Creamsicle Balm', 'price' => 0.0, 'quantity' => 1]],
         ],
         'sensitive' => [
             'id' => 'sensitive',
             'name' => 'Sensitive Skin Set',
-            'points' => 949,
+            'points' => 754,
             'items' => [
                 ['product' => 'Plain Jane Soap', 'price' => 0.0, 'quantity' => 5],
                 ['product' => 'Plain Jane Face Balm', 'price' => 0.0, 'quantity' => 2],

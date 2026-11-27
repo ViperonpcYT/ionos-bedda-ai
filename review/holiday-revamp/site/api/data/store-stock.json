@@ -49,7 +49,7 @@
     },
     "BEDDA-PLAINJANE-BALM": {
         "name": "Plain Jane - Unscented Face & Body Balm",
-        "price": 15.5,
+        "price": 9.99,
         "stock_in_stock": 99,
         "low_stock_threshold": 10,
         "stock_sold": 0,
@@ -80,8 +80,8 @@
         "cost": 0
     },
     "BEDDA-SET-HOLIDAY-BASKET": {
-        "name": "Holiday Basket",
-        "price": 89.00,
+        "name": "Bedda Holiday Sanctuary Basket",
+        "price": 89.99,
         "stock_in_stock": 99,
         "low_stock_threshold": 5,
         "stock_sold": 0,

@@ -766,6 +766,11 @@ if ($subtotal > 5000) {
 }
 
 // Handle fulfillment method FIRST
+$pickupOnlyName = bedda_pickup_only_in_cart($data['items'] ?? []);
+if (($data['fulfillment_method'] ?? 'shipping') === 'shipping' && $pickupOnlyName !== null) {
+    orderErrorResponse($pickupOnlyName . ' is pickup only. We are not shipping baskets or gift bags yet.');
+}
+
 $fulfillmentMethod = $data['fulfillment_method'] ?? 'shipping';
 $pickupLocation = $data['pickup_location'] ?? null;
 $pickupDate = $data['pickup_date'] ?? null;

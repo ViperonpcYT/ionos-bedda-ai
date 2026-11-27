@@ -432,10 +432,11 @@ function bedda_store_merge_allowed_prices(array $prices, float $catalogPrice): a
 function bedda_holiday_sets(): array
 {
     return [
-        'holiday basket' => [
+        'bedda holiday sanctuary basket' => [
             'sku' => 'BEDDA-SET-HOLIDAY-BASKET',
-            'name' => 'Holiday Basket',
-            'price' => 89.00,
+            'name' => 'Bedda Holiday Sanctuary Basket',
+            'price' => 89.99,
+            'pickup_only' => true,
             'components' => [
                 'Uni Exfoliating Soap',
                 'The Massager Soap',
@@ -448,9 +449,39 @@ function bedda_holiday_sets(): array
             'sku' => 'BEDDA-SET-HOLIDAY-BAG',
             'name' => 'Holiday Gift Bag',
             'price' => 24.99,
+            'pickup_only' => true,
             'components' => [
                 'The Massager Soap',
                 'She-Ra Exfoliating Soap',
+                'Creamsicle Balm',
+                'Minty Lip Balm',
+            ],
+        ],
+        'sensitive skin bundle' => [
+            'sku' => 'BEDDA-SET-SENSITIVE',
+            'name' => 'Sensitive Skin Bundle',
+            'price' => 37.69,
+            'components' => [
+                'Plain Jane Soap',
+                'Plain Jane Soap',
+                'Plain Jane Soap',
+                'Plain Jane Soap',
+                'Plain Jane Soap',
+                'Plain Jane Face Balm',
+                'Plain Jane Face Balm',
+            ],
+        ],
+        'be glamorous bundle' => [
+            'sku' => 'BEDDA-SET-GLAMOROUS',
+            'name' => 'Be Glamorous Bundle',
+            'price' => 47.96,
+            'components' => [
+                'Uni Exfoliating Soap',
+                'Uni Exfoliating Soap',
+                'She-Ra Exfoliating Soap',
+                'She-Ra Exfoliating Soap',
+                'She-Ra Exfoliating Soap',
+                'Holy Grail Balm',
                 'Creamsicle Balm',
                 'Minty Lip Balm',
             ],
@@ -463,6 +494,20 @@ function bedda_store_set_by_name(string $name): ?array
     $key = bedda_store_normalize_name($name);
     $sets = bedda_holiday_sets();
     return $sets[$key] ?? null;
+}
+
+function bedda_pickup_only_in_cart(array $items): ?string
+{
+    foreach ($items as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $set = bedda_store_set_by_name((string) ($item['product'] ?? $item['name'] ?? ''));
+        if ($set !== null && !empty($set['pickup_only'])) {
+            return (string) $set['name'];
+        }
+    }
+    return null;
 }
 
 function bedda_store_bundle_only_sku(string $name): string

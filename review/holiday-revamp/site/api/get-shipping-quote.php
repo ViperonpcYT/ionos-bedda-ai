@@ -20,7 +20,7 @@ define('ENVELOPE_MAX_WEIGHT', 500);
 $PRODUCT_WEIGHTS = [
     'Be Mine Soap' => 120, 'Uni Exfoliating Soap' => 120, 'He-Man Exfoliating Soap' => 120,
     'The Massager Soap' => 120, 'Mama 1 - Little heart surprise Soap' => 120,
-    'Holiday Ginger Soap' => 120, 'Holiday Basket' => 1100, 'Holiday Gift Bag' => 320, 'She-Ra Exfoliating Soap' => 120, 'Holy Grail Balm' => 37,
+    'Holiday Ginger Soap' => 120, 'Bedda Holiday Sanctuary Basket' => 1100, 'Holiday Gift Bag' => 320, 'She-Ra Exfoliating Soap' => 120, 'Holy Grail Balm' => 37,
     'Plain Jane Face & Body Balm' => 37, 'Creamsicle Balm' => 37,
     'Minty Lip Balm' => 14, 'Plain Jane Soap Loaf' => 1188
 ];

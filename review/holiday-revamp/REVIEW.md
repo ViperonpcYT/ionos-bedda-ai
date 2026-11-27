@@ -1,3 +1,17 @@
+# Gemini — owner decisions override the earlier prices
+
+Josie (owner) locked these. Do not talk her out of them.
+
+- Holiday Ginger ingredients, highest to lowest: sodium olivate, sodium tallowate, sodium cocoate, orange essential oil, dried ginger root essential oil, cedarwood essential oil, cinnamon leaf essential oil, clove bud essential oil, zinc oxide, cocoa powder, turmeric powder, spirulina powder, rubia cordifolia powder. Spelling is corrected. The list is not invented.
+- Plain Jane balm is on the Black Friday price too: strike $15.50, charge $9.99. Leaving the bestseller off the sale makes the sale look like leftovers. Points for Plain Jane, Holy Grail, and Creamsicle are 200 while the cash price is $9.99. That is the promo rule: a point stays worth 5 cents, so redemption matches the cash price, and there is no extra earn rate on top of the sale. Put the points back to 310 when the cash price returns to $15.50. Frontend and `order-totals.php` both say 200.
+- Bedda Holiday Sanctuary Basket is **$89.99**. That is the floor she accepted. Pickup only. Do not ship it.
+- Holiday Gift Bag stays **$24.99**. Pickup only. Do not ship it. Do not call it a saving while Creamsicle is $9.99.
+- Sensitive Skin Bundle is **$37.69**. Shown as 5 Plain Jane soaps $17.70, 2 Plain Jane balms $19.99, soap saver free. Charged as one line so those splits do not become a cheaper price for a single bar.
+- Be Glamorous Bundle is **$47.96**. Shown as 2 Uni $10.99, 3 She-Ra $16.99, Holy Grail $9.99, Creamsicle $9.99, Minty free. One line. Minty at $0 is not added to the allowlist.
+- Sensitive Skin reward points are **754**, because $37.69 is the new price and a point is 5 cents. It was 949 when the set was $47.45.
+- Curated page has an inquiry form. It opens a note to orders@bedda.ca. No account.
+- Stripe stays live. Do not switch the store to test keys. Nothing in this pull request uploads to Ionos.
+
 # Gemini — read this before you ship anything
 
 Cursor did not touch `D:\Bedda\Ionos Bedda Website` and did not upload to Ionos. This pull request is the proposal. You decide whether it ships.
@@ -20,9 +34,7 @@ Holiday Ginger is **$9.99**, 120g, red bow. No ingredient list was invented. The
 
 Holiday Gift Bag is **$24.99**. Cost $14.59 including labour, about 42% margin. At regular Creamsicle ($15.50) the three shelf pieces are $27.50 and the 0.2 oz tin is not sold alone. While Creamsicle is $9.99, Massager + She-Ra + Creamsicle is $21.99, so the bag costs **more** than buying those three on sale. Do not strike a higher number and do not call it a saving. The card is one price.
 
-Holiday Basket is **$89.00**. Cost $56.56 including labour. Uni $5.60 + Massager $6.25 + Ginger $9.99 + Holy Grail at the regular $15.50 + Minty jar $4.85 = $42.19, which is **under** the cost. The basket cannot be cheaper than the pieces and still pay Josie. No crossed-out “value”. The exclusive Spring Clean spray, cloth, headband, soap saver, gua sha, and the basket are the reason it is $89.00. Profit about $32.44, about 36% margin.
-
-Josie has the last word on $89.00 before it goes live.
+Bedda Holiday Sanctuary Basket is **$89.99**, pickup only. Cost $56.56 including labour. The pieces a customer can already buy add up to less than that cost, so the price is the basket, the exclusive spray, and the tools, not a discount. No crossed-out total. Profit about $33.43 before Stripe fees.
 
 Removed: both Special Occasion soaps, Little Heart Surprise, and the Lavender Heart set.
 
@@ -53,7 +65,7 @@ function bedda_holiday_sets(): array
         'holiday basket' => [
             'sku' => 'BEDDA-SET-HOLIDAY-BASKET',
             'name' => 'Holiday Basket',
-            'price' => 89.00,
+            'price' => 89.99,
             'components' => [
                 'Uni Exfoliating Soap',
                 'The Massager Soap',

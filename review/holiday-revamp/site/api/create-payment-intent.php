@@ -115,6 +115,13 @@ $pointsDiscount = $totals['points_discount'];
 $pointsUsed = $totals['points_used'];
 
 // Convert to cents (Stripe requires integer)
+$pickupOnly = bedda_pickup_only_in_cart($data['items'] ?? []);
+if (($data['fulfillment_method'] ?? 'shipping') === 'shipping' && $pickupOnly !== null) {
+    http_response_code(400);
+    echo json_encode(['error' => $pickupOnly . ' is pickup only. We are not shipping baskets or gift bags yet.']);
+    exit;
+}
+
 if (($data['fulfillment_method'] ?? 'shipping') === 'shipping' && $shippingCost <= 0) {
     http_response_code(400);
     echo json_encode(['error' => 'A shipping quote is required before payment.']);

@@ -136,7 +136,7 @@ const PRODUCT_WEIGHTS = {
     'Plain Jane Face Balm': 135,
     'Plain Jane Soap Loaf': 1350,
     'Holiday Ginger Soap': 120,
-    'Holiday Basket': 1100,
+    'Bedda Holiday Sanctuary Basket': 1100,
     'Holiday Gift Bag': 320,
     'Sampler Pack - Uni': 50,
     'Sampler Pack - He-Man': 50,
@@ -181,10 +181,10 @@ const BEDDA_REWARDS = Object.freeze([
     Object.freeze({ id: 'uni', name: 'Uni Exfoliating Soap', points: 112 }),
     Object.freeze({ id: 'shera', name: 'She-Ra Exfoliating Soap', points: 115 }),
     Object.freeze({ id: 'massager', name: 'The Massager', points: 125 }),
-    Object.freeze({ id: 'plainjane', name: 'Plain Jane Balm', points: 310 }),
+    Object.freeze({ id: 'plainjane', name: 'Plain Jane Balm', points: 200 }),
     Object.freeze({ id: 'holygrail', name: 'Holy Grail Balm', points: 200 }),
     Object.freeze({ id: 'creamsicle', name: 'Creamsicle Balm', points: 200 }),
-    Object.freeze({ id: 'sensitive', name: 'Sensitive Skin Set', points: 949 })
+    Object.freeze({ id: 'sensitive', name: 'Sensitive Skin Set', points: 754 })
 ]);
 
 function beddaEscapeHtml(value) {

@@ -4,11 +4,16 @@ declare(strict_types=1);
 require_once __DIR__ . '/lib/security-helpers.php';
 bedda_require_admin_api_auth('get_summary_unauth');
 
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/lib/bootstrap.php';
 header('Content-Type: application/json');
 
 try {
-    $pdo = getDatabase();
+    $pdo = bedda_pdo_optional();
+    if (!$pdo instanceof PDO) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to fetch summary data']);
+        exit;
+    }
     $period = $_GET['period'] ?? '24h';
 
     $timeFilter = '';

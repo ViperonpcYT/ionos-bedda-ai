@@ -87,7 +87,7 @@ function getOrderPackageDetails(string $itemsJson): array {
         'She-Ra Exfoliating Soap' => 120,
         'The Massager Soap' => 130,
         'Holiday Ginger Soap' => 120,
-        'Holiday Basket' => 1100,
+        'Bedda Holiday Sanctuary Basket' => 1100,
         'Holiday Gift Bag' => 320,
         'Holy Grail Balm' => 135,
         'Plain Jane Face & Body Balm' => 135,

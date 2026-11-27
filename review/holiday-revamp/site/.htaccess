@@ -1,0 +1,92 @@
+# Bedda — Ionos-safe site root (no PHP whitelist, no RequireAll)
+# Upload to htdocs/ (site root). API rules live in api/.htaccess only.
+
+Options -Indexes -MultiViews
+
+<IfModule mod_authz_core.c>
+    <Files ".htaccess">
+        Require all denied
+    </Files>
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "\.(env|sql|sqlite|db|log|bak|old|zip|tar|gz)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# model-viewer needs correct types; Apache often defaults .glb to octet-stream
+<IfModule mod_mime.c>
+    AddType model/gltf-binary .glb
+    AddType model/gltf+json .gltf
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Shop analytics pages are not public. The HTML stays on disk; this opens the login gate.
+    RewriteRule ^analytics(?:-backend)?\.html$ /analytics-backend.php [R=302,L]
+
+    # Do not rewrite /api/* (PHP routes stay in api/.htaccess)
+    RewriteRule ^api(?:/|$) - [L]
+
+    # Never fold 3D assets into extensionless .html (Ionos/clean-URL safety)
+    RewriteRule ^models/.*\.(?:glb|gltf)$ - [L,NC]
+    RewriteRule \.(?:glb|gltf)$ - [L,NC]
+
+    # Extensionless /foo → foo.html must not swallow real static files.
+    # Missing .css/.js/.png must 404 as-is (Apache default), never as rewritten HTML.
+    RewriteRule \.(?:css|js|mjs|map|png|jpe?g|gif|webp|ico|svg|woff2?|ttf|eot|json|xml|txt|pdf|glb|gltf)$ - [L,NC]
+
+    # 301: /index.html → /
+    RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+    RewriteRule ^index\.html$ / [R=301,L]
+
+    # 301: /something.html → /something (query string preserved; skip real dirs)
+    RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+    RewriteCond %{REQUEST_URI} !^/api/ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+
+    # Internal: /foo → foo.html (Products, About, Contact, etc.)
+    # Ionos often leaves %{REQUEST_FILENAME} as a URL path, so
+    # %{REQUEST_FILENAME}.html -f fails and every clean URL 404s.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.[a-z0-9]{1,8}$ [NC]
+    RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+    RewriteRule ^(.+?)/?$ $1.html [L]
+
+    # Fallback when DOCUMENT_ROOT is empty/wrong: extensionless → .html
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.[a-z0-9]{1,8}$ [NC]
+    RewriteRule ^(.+?)/?$ $1.html [L]
+
+    # Block sensitive paths (not /api/*.php — handled in api/.htaccess)
+    RewriteRule ^(\.git|node_modules|vendor|backups)/ - [F,L,NC]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    # model-viewer: blob: required on connect-src + worker-src (decoders / workers)
+    Header always set Content-Security-Policy "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: data: blob:; worker-src 'self' blob: https:; child-src 'self' blob: https:; media-src 'self' data: blob: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://checkout.stripe.com;"
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType model/gltf-binary "access plus 1 month"
+    ExpiresByType model/gltf+json "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json
+</IfModule>

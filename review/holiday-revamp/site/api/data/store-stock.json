@@ -1,0 +1,98 @@
+{
+    "BEDDA-UNI-EXFOL": {
+        "name": "Uni - Exfoliating Soap",
+        "price": 5.6,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-HEMAN-EXFOL": {
+        "name": "He-Man - Exfoliating Soap",
+        "price": 5.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-SHERA-EXFOL": {
+        "name": "She-Ra - Exfoliating Soap",
+        "price": 5.75,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-MASSAGER": {
+        "name": "The Massager - Soap",
+        "price": 6.25,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-HOLYGRAIL-BALM": {
+        "name": "Holy Grail - Face and Body Balm",
+        "price": 9.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-CREAMSICLE-BALM": {
+        "name": "Creamsicle - Face & Body Balm",
+        "price": 9.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-PLAINJANE-BALM": {
+        "name": "Plain Jane - Unscented Face & Body Balm",
+        "price": 9.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-MINTY-LIP": {
+        "name": "Minty - Lip Balm",
+        "price": 4.85,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-PLAINJANE-LOAF": {
+        "name": "Plain Jane - Soap Loaf",
+        "price": 44.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-HOLIDAY-GINGER": {
+        "name": "Holiday Ginger Soap",
+        "price": 9.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 10,
+        "stock_sold": 0,
+        "cost": 0
+    },
+    "BEDDA-SET-HOLIDAY-BASKET": {
+        "name": "Bedda Holiday Sanctuary Basket",
+        "price": 89.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 5,
+        "stock_sold": 0,
+        "cost": 56.56
+    },
+    "BEDDA-SET-HOLIDAY-BAG": {
+        "name": "Holiday Gift Bag",
+        "price": 24.99,
+        "stock_in_stock": 99,
+        "low_stock_threshold": 5,
+        "stock_sold": 0,
+        "cost": 14.59
+    }
+}

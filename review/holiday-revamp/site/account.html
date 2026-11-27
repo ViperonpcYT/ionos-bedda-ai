@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <script src="theme.js?v=20261002"></script>
+    <title>My Account | Bedda Rewards</title>
+    <meta name="description" content="Manage your Bedda account, view rewards points, and track your skincare journey.">
+    <script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        sage: {
+          50: '#F5F3EF',
+          100: '#F0ECE6',
+          200: '#E8E4DC',
+          300: '#D9CDBF',
+          400: '#CFC8B8',
+          500: '#B5A183',
+          600: '#9C8C73',
+          700: '#7E6D58',
+          800: '#5A4D3F',
+          900: '#2C2C2C',
+        }
+      }
+    }
+  }
+}
+</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .reward-progress {
+            width: 100%;
+            height: 0.5rem;
+            border: 0;
+            border-radius: 999px;
+            overflow: hidden;
+            appearance: none;
+            background: #E8E4DC;
+        }
+        .reward-progress::-webkit-progress-bar {
+            background: #E8E4DC;
+            border-radius: 999px;
+        }
+        .reward-progress::-webkit-progress-value {
+            background: #5A4D3F;
+            border-radius: 999px;
+        }
+        .reward-progress::-moz-progress-bar {
+            background: #5A4D3F;
+            border-radius: 999px;
+        }
+        .reward-card[data-state="ready"] {
+            background: #F5F3EF;
+            border-color: #5A4D3F;
+        }
+        .reward-card[data-state="next"] {
+            border-color: #7E6D58;
+        }
+        .hero-bg { background: linear-gradient(135deg, #F5F3EF 0%, #E8E4DC 100%); }
+
+        /* Mobile menu styles */
+        #mobile-menu, #mobile-menu-panel {
+            display: none;
+            max-height: calc(100dvh - 4rem);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+        #mobile-menu.open, #mobile-menu-panel.open {
+            display: block;
+        }
+    </style>
+</head>
+<body class="font-inter bg-stone-50">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <a href="/" class="text-sage-600 font-medium flex items-center space-x-2 flex-shrink-0">
+                <img src="images/bedda-logo.png" alt="Bedda logo" class="site-logo h-10 w-auto">
+                <span class="hidden sm:inline text-xl text-stone-800">Bedda</span>
+            </a>
+                <!-- ✅ CLEANED UP NAVIGATION -->
+            <div class="hidden md:flex space-x-6 items-center">
+                <!-- Collections Dropdown -->
+                <div class="relative group">
+                    <button class="text-stone-700 hover:text-sage-600 font-medium flex items-center">
+                        Collections
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-stone-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50" role="menu" aria-label="Collections">
+                        <div class="px-4 py-2">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Curated</span>
+                        </div>
+                        <a href="/bundles" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">
+                            Curated Sets
+                            <span class="block text-xs text-stone-500 font-normal mt-0.5">Complete routines</span>
+                        </a>
+
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">By Need</span>
+                        </div>
+                        <a href="/products?category=sensitive" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Sensitive Skin</a>
+                        <a href="/products?category=dryness" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Dryness &amp; Repair</a>
+                        <a href="/products?category=exfoliation" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Exfoliation</a>
+
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Create</span>
+                        </div>
+                        <a href="/build-loaf" role="menuitem" class="block px-4 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">Build Your Own Loaf</a>
+
+                        <div class="px-4 py-2 border-t border-stone-100">
+                            <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Browse</span>
+                        </div>
+                        <a href="/products" role="menuitem" class="block px-4 py-3 text-sm font-semibold text-sage-700 bg-sage-50 hover:bg-sage-100 border-l-4 border-sage-500">All Products</a>
+                    </div>
+                </div>
+                <a href="/ingredients" class="text-stone-700 hover:text-sage-600 font-medium">Ingredients</a>
+                <a href="/about" class="text-stone-700 hover:text-sage-600 font-medium">Our Story</a>
+                <a href="/contact" class="text-stone-700 hover:text-sage-600 font-medium">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <button type="button" id="theme-toggle" class="theme-toggle relative p-2 text-stone-700 hover:text-sage-600" aria-label="Toggle color theme" data-theme-toggle>
+                    <svg class="theme-icon-sun w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="theme-icon-moon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+                <button id="login-btn" class="relative p-2 text-stone-700 hover:text-sage-600" aria-label="Account">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </button>
+                <button id="cart-btn" type="button" class="relative p-2 text-stone-700 hover:text-sage-600" aria-label="Open cart">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6"/></svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-sage-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-stone-700 hover:text-sage-600 border border-stone-300 rounded" type="button" aria-label="Open menu">
+                    <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="fixed top-16 left-0 w-full bg-white border-b border-stone-200 shadow-lg z-[60]">
+        <div class="px-4 py-6 space-y-4">
+            <!-- Collections Accordion -->
+            <div class="space-y-2">
+                <button id="mobile-shop-toggle" class="flex items-center justify-between w-full text-stone-700 hover:text-sage-600 font-medium py-2 text-left">
+                    <span>Collections</span>
+                    <svg class="w-4 h-4 transition-transform duration-200" id="mobile-shop-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                
+                <div id="mobile-shop-submenu" class="hidden pl-4 space-y-2">
+                    <div class="px-3 py-2">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Curated</span>
+                    </div>
+                    <a href="/bundles" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">
+                        Curated Sets
+                        <span class="block text-xs text-stone-500 font-normal mt-0.5">Complete routines</span>
+                    </a>
+
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">By Need</span>
+                    </div>
+                    <a href="/products?category=sensitive" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Sensitive Skin</a>
+                    <a href="/products?category=dryness" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Dryness &amp; Repair</a>
+                    <a href="/products?category=exfoliation" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">For Exfoliation</a>
+
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Create</span>
+                    </div>
+                    <a href="/build-loaf" class="block px-3 py-2.5 text-sm text-stone-700 hover:bg-sage-50 hover:text-sage-700">Build Your Own Loaf</a>
+
+                    <div class="px-3 py-2 border-t border-stone-100">
+                        <span class="text-xs font-medium text-stone-400 uppercase tracking-wide">Browse</span>
+                    </div>
+                    <a href="/products" class="block px-3 py-3 text-sm font-semibold text-sage-700 bg-sage-50 hover:bg-sage-100 border-l-4 border-sage-500 rounded">All Products</a>
+                </div>
+            </div>
+
+            <a href="/ingredients" class="block text-stone-700 hover:text-sage-600 font-medium py-2">Ingredients</a>
+            <a href="/about" class="block text-stone-700 hover:text-sage-600 font-medium py-2">Our Story</a>
+            <a href="/contact" class="block text-stone-700 hover:text-sage-600 font-medium py-2">Contact</a>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Account Hero -->
+<section class="pt-24 pb-12 hero-bg">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="font-playfair text-4xl md:text-5xl font-bold text-stone-800 mb-3" id="account-welcome">My Account</h1>
+            <p class="text-stone-600 text-lg" id="account-subtitle">Rewards, orders, and subscriptions</p>
+        </div>
+    </div>
+</section>
+
+<!-- Account Content -->
+<section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="account-signed-out" class="hidden bg-white rounded-2xl shadow-sm border border-stone-200 p-8 text-center">
+            <h2 class="font-playfair text-3xl font-bold text-stone-800 mb-3">Sign in to keep your points</h2>
+            <p class="text-stone-600 max-w-lg mx-auto mb-6">Every order earns 1 point per $1. Points buy a whole item, starting with Minty Lip Balm at 97 points, and they do not come off the price. An account is how those points stay yours.</p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button type="button" id="account-rewards-signin" class="bg-sage-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-sage-700 transition-colors">Sign in</button>
+                <button type="button" id="account-rewards-register" class="border border-stone-300 text-stone-800 px-6 py-3 rounded-full font-semibold hover:bg-stone-50 transition-colors">Create an account</button>
+            </div>
+        </div>
+
+        <!-- Account Skeleton Loading State -->
+        <div id="account-skeleton" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="skeleton skeleton-circle"></div>
+                    <div class="flex-1">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text medium"></div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                        <div class="skeleton skeleton-text short" style="width:120px"></div>
+                        <div class="skeleton skeleton-text short" style="width:80px"></div>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <div class="skeleton skeleton-text short" style="width:120px"></div>
+                        <div class="skeleton skeleton-text short" style="width:60px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                <div class="skeleton skeleton-title mb-4"></div>
+                <div class="skeleton skeleton-box rounded-xl mb-4"></div>
+                <div class="skeleton skeleton-text long"></div>
+                <div class="skeleton skeleton-text medium"></div>
+            </div>
+            <div class="col-span-1 md:col-span-3 mt-2 bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                <div class="skeleton skeleton-title mb-4"></div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                    <div class="skeleton skeleton-box rounded-xl"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account tabs -->
+        <div id="account-tabs" class="hidden mb-8">
+            <div class="flex flex-wrap gap-2 p-1 bg-stone-100 rounded-xl border border-stone-200" role="tablist" aria-label="Account sections">
+                <button type="button" role="tab" data-account-tab="rewards" aria-selected="true" class="account-tab flex-1 min-w-[7rem] px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors bg-white text-sage-700 shadow-sm border border-sage-200">Rewards</button>
+                <button type="button" role="tab" data-account-tab="orders" aria-selected="false" class="account-tab flex-1 min-w-[7rem] px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors text-stone-600 hover:text-sage-700">Orders</button>
+                <button type="button" role="tab" data-account-tab="subscriptions" aria-selected="false" class="account-tab flex-1 min-w-[7rem] px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors text-stone-600 hover:text-sage-700">Subscriptions</button>
+            </div>
+        </div>
+
+        <!-- Actual Account Content (hidden until loaded) -->
+        <div id="account-content" class="hidden">
+            <!-- Rewards panel -->
+            <div id="panel-rewards" data-account-panel="rewards" role="tabpanel">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Profile Card -->
+                    <div class="md:col-span-2 bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div id="account-avatar" class="w-16 h-16 bg-sage-600 text-white rounded-full flex items-center justify-center text-2xl font-bold font-playfair"></div>
+                            <div>
+                                <h2 class="font-playfair text-2xl font-bold text-stone-800" id="account-name">Bedda Member</h2>
+                                <p class="text-stone-500" id="account-email"></p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between py-3 border-b border-stone-100">
+                                <span class="text-stone-600">Member Since</span>
+                                <span class="font-medium text-stone-800" id="account-since">-</span>
+                            </div>
+                            <div class="flex items-center justify-between py-3">
+                                <span class="text-stone-600">Reward points</span>
+                                <span class="font-bold text-stone-800 text-lg" id="account-points">0 points</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rewards Card -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6" id="rewards">
+                        <h3 class="font-playfair text-xl font-bold text-stone-800 mb-4">Rewards</h3>
+                        <div class="space-y-4">
+                            <div class="bg-sage-50 rounded-xl p-4 border border-sage-200">
+                                <p class="text-sm text-stone-700 font-semibold mb-1" id="account-reward-kicker">Next reward</p>
+                                <p class="text-2xl font-bold text-stone-800 leading-snug" id="account-discount">Minty Lip Balm</p>
+                                <p class="text-sm text-stone-700 mt-2" id="account-reward-note">0 points. 97 more points until Minty Lip Balm, which costs 97 points. No reward is ready yet.</p>
+                                <progress id="account-reward-progress" class="reward-progress mt-3" max="97" value="0" aria-labelledby="account-reward-note">0 of 97 points toward Minty Lip Balm</progress>
+                            </div>
+
+                            <div class="text-sm text-stone-700 space-y-2">
+                                <p>Earn <strong>1 point</strong> for every $1 spent.</p>
+                                <p>Points buy one whole item. Leftover points stay.</p>
+                                <p>Choose one ready item at checkout. The rest of the order keeps its price.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rewards shelf -->
+                <div class="mt-8 bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                    <h3 class="font-playfair text-xl font-bold text-stone-800 mb-1">Reward shelf</h3>
+                    <p class="text-sm text-stone-700 mb-4">A balance buys one whole item. Leftover points stay. She-Ra is 115 points. The Sensitive Skin Set is 949 points.</p>
+                    <ul id="reward-shelf" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" aria-label="Rewards and what your balance can buy">
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="minty" data-points="97" data-reward-name="Minty Lip Balm" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">97</span> points for <span class="font-bold">Minty Lip Balm</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 97 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="uni" data-points="112" data-reward-name="Uni Exfoliating Soap" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">112</span> points for <span class="font-bold">Uni Exfoliating Soap</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 112 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="shera" data-points="115" data-reward-name="She-Ra Exfoliating Soap" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">115</span> points for <span class="font-bold">She-Ra Exfoliating Soap</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 115 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="massager" data-points="125" data-reward-name="The Massager" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">125</span> points for <span class="font-bold">The Massager</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 125 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="plainjane" data-points="310" data-reward-name="Plain Jane Balm" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">310</span> points for <span class="font-bold">Plain Jane Balm</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 310 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="holygrail" data-points="200" data-reward-name="Holy Grail Balm" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">200</span> points for <span class="font-bold">Holy Grail Balm</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 200 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="creamsicle" data-points="200" data-reward-name="Creamsicle Balm" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">200</span> points for <span class="font-bold">Creamsicle Balm</span>.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 200 more points.</p>
+                        </li>
+                        <li class="reward-card bg-white rounded-xl p-4 text-left border border-stone-200" data-reward-id="sensitive" data-points="949" data-reward-name="Sensitive Skin Set" data-state="locked">
+                            <p class="text-stone-800"><span class="text-2xl font-bold">949</span> points for <span class="font-bold">Sensitive Skin Set</span>.</p>
+                            <p class="text-sm text-stone-700 mt-1">5 Plain Jane soaps, 2 Plain Jane face balms, and 1 soap saver bag.</p>
+                            <p class="reward-state text-sm text-stone-700 mt-2">Not yet. Needs 949 more points.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Orders panel -->
+            <div id="panel-orders" data-account-panel="orders" role="tabpanel" class="hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                        <div>
+                            <h3 class="font-playfair text-xl font-bold text-stone-800">Order History</h3>
+                            <p class="text-sm text-stone-500 mt-1">Track shipments or reorder past favourites</p>
+                        </div>
+                        <a href="/track" class="text-sm font-semibold text-sage-700 hover:text-sage-800 underline">Track an order</a>
+                    </div>
+                    <div id="orders-loading" class="py-8 text-center text-stone-500 text-sm">Loading orders…</div>
+                    <div id="orders-empty" class="hidden py-10 text-center">
+                        <p class="text-stone-600 mb-4">No orders yet for this account.</p>
+                        <a href="/products" class="inline-flex items-center px-5 py-2.5 bg-sage-600 text-white rounded-lg font-semibold hover:bg-sage-700 transition-colors">Shop products</a>
+                    </div>
+                    <div id="orders-error" class="hidden py-6 text-center text-sm text-stone-700 bg-stone-50 border border-stone-200 rounded-lg px-4"></div>
+                    <div id="orders-list" class="hidden space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- Subscriptions panel -->
+            <div id="panel-subscriptions" data-account-panel="subscriptions" role="tabpanel" class="hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                        <div>
+                            <h3 class="font-playfair text-xl font-bold text-stone-800">Subscriptions</h3>
+                            <p class="text-sm text-stone-500 mt-1">Your recurring Bedda deliveries</p>
+                        </div>
+                        <a href="https://billing.stripe.com/p/login/4gM5kEdep50ogFTeW908g00" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-5 py-2.5 bg-sage-600 text-white rounded-lg font-semibold hover:bg-sage-700 transition-colors text-sm whitespace-nowrap">
+                            Manage in Stripe
+                        </a>
+                    </div>
+                    <div class="mb-6 p-4 bg-sage-50 border border-sage-200 rounded-xl text-sm text-sage-800">
+                        Pause, update payment, or cancel anytime through the Stripe Customer Portal.
+                    </div>
+                    <div id="subscriptions-loading" class="py-8 text-center text-stone-500 text-sm">Loading subscriptions…</div>
+                    <div id="subscriptions-empty" class="hidden py-10 text-center">
+                        <p class="text-stone-600 mb-4">No subscription orders found for this email.</p>
+                        <a href="/products" class="inline-flex items-center px-5 py-2.5 border border-stone-300 text-stone-700 rounded-lg font-semibold hover:bg-stone-50 transition-colors">Browse products</a>
+                    </div>
+                    <div id="subscriptions-error" class="hidden py-6 text-center text-sm text-stone-700 bg-stone-50 border border-stone-200 rounded-lg px-4"></div>
+                    <div id="subscriptions-list" class="hidden space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <a href="/products" class="bg-white rounded-xl border border-stone-200 p-5 hover:border-sage-300 hover:shadow-md transition-all group">
+                <div class="w-10 h-10 bg-sage-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-sage-200 transition-colors">
+                    <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <h4 class="font-semibold text-stone-800">Shop Products</h4>
+                <p class="text-sm text-stone-500 mt-1">Browse our soaps & balms</p>
+            </a>
+            <a href="/bundles" class="bg-white rounded-xl border border-stone-200 p-5 hover:border-sage-300 hover:shadow-md transition-all group">
+                <div class="w-10 h-10 bg-sage-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-sage-200 transition-colors">
+                    <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <h4 class="font-semibold text-stone-800">Bundles</h4>
+                <p class="text-sm text-stone-500 mt-1">Save with curated routines</p>
+            </a>
+            <a href="/contact" class="bg-white rounded-xl border border-stone-200 p-5 hover:border-sage-300 hover:shadow-md transition-all group">
+                <div class="w-10 h-10 bg-stone-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-stone-200 transition-colors">
+                    <svg class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </div>
+                <h4 class="font-semibold text-stone-800">Contact Josie</h4>
+                <p class="text-sm text-stone-500 mt-1">Questions or custom orders</p>
+            </a>
+        </div>
+
+        <!-- Logout -->
+        <div class="mt-8 text-center">
+            <button id="page-logout-btn" type="button" class="inline-flex items-center text-stone-700 hover:text-stone-700 font-medium transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Log Out
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-stone-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <div class="font-playfair text-3xl font-bold mb-4">Bedda</div>
+            <p class="text-stone-300 mb-6">Because when you know better, you do better.</p>
+            <nav class="flex flex-wrap justify-center gap-x-3 gap-y-2 text-sm text-stone-300 mb-6" aria-label="Legal">
+                <a href="/privacy" class="hover:text-white transition-colors">Privacy</a>
+                <span class="text-stone-600" aria-hidden="true">|</span>
+                <a href="/terms" class="hover:text-white transition-colors">Terms</a>
+                <span class="text-stone-600" aria-hidden="true">|</span>
+                <a href="/shipping" class="hover:text-white transition-colors">Shipping</a>
+                <span class="text-stone-600" aria-hidden="true">|</span>
+                <a href="/returns" class="hover:text-white transition-colors">Returns</a>
+                <span class="text-stone-600" aria-hidden="true">|</span>
+                <a href="/contact" class="hover:text-white transition-colors">Contact</a>
+            </nav>
+            <div class="border-t border-stone-700 pt-6">
+                <p class="text-stone-400 text-sm">
+                    &copy; 2026 Bedda Naturals Inc. All rights reserved. Handcrafted with care in Mississauga, ON.
+                </p>
+                <p class="text-stone-500 text-xs mt-2">Bedda is a brand of Bedda Naturals Inc.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Analytics Logger -->
+<script src="logger-backend.js"></script>
+<script src="main.js?v=20261101"></script>
+<script src="main-security.js"></script>
+<script src="bedda-ai.js?v=20261002" defer></script>
+
+<!-- Login/Register Modal -->
+<div id="auth-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+        <button id="close-auth-modal" type="button" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600" aria-label="Close">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+
+        <div id="auth-login-view">
+            <h2 class="text-2xl font-playfair font-bold text-stone-800 mb-2">Welcome Back</h2>
+            <p class="text-stone-600 mb-6">Sign in to access your Bedda Rewards points</p>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                    <input type="email" id="login-email" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Password</label>
+                    <input type="password" id="login-password" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <button type="submit" class="w-full bg-sage-600 text-white py-3 rounded-lg font-semibold hover:bg-sage-700 transition-colors">Sign In</button>
+            </form>
+
+            <p class="text-center mt-4 text-sm text-stone-600">
+                Don't have an account? <button id="show-register" class="text-sage-600 font-semibold hover:underline">Create one</button>
+            </p>
+        </div>
+
+        <div id="auth-register-view" class="hidden">
+            <h2 class="text-2xl font-playfair font-bold text-stone-800 mb-2">Create Account</h2>
+            <p class="text-stone-600 mb-6">Join Bedda Rewards. Earn 1 point per $1 spent. Points buy a whole item.</p>
+
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">First Name</label>
+                    <input type="text" id="register-first-name" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Last Name</label>
+                    <input type="text" id="register-last-name" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                    <input type="email" id="register-email" required class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">Password (min 8 characters)</label>
+                    <input type="password" id="register-password" required minlength="8" class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+                <button type="submit" class="w-full bg-sage-600 text-white py-3 rounded-lg font-semibold hover:bg-sage-700 transition-colors">Create Account</button>
+            </form>
+
+            <p class="text-center mt-4 text-sm text-stone-600">
+                Already have an account? <button id="show-login" class="text-sage-600 font-semibold hover:underline">Sign in</button>
+            </p>
+        </div>
+
+        <div id="auth-loading" class="hidden py-6">
+            <div class="skeleton skeleton-title mb-4"></div>
+            <div class="skeleton skeleton-text long mb-2"></div>
+            <div class="skeleton skeleton-text medium mb-6"></div>
+            <div class="skeleton skeleton-input"></div>
+            <div class="skeleton skeleton-input"></div>
+            <div class="skeleton skeleton-button"></div>
+            <div class="skeleton skeleton-text short mx-auto mt-4" style="width:120px"></div>
+        </div>
+
+        <div id="auth-error" class="hidden mt-4 p-3 bg-stone-50 border border-stone-200 rounded-lg text-stone-700 text-sm"></div>
+    </div>
+</div>
+
+<script>
+function accountRewardCards() {
+    return Array.from(document.querySelectorAll('#reward-shelf [data-reward-id]')).map((el) => ({
+        id: el.getAttribute('data-reward-id') || '',
+        points: parseInt(el.getAttribute('data-points') || '0', 10),
+        name: el.getAttribute('data-reward-name') || '',
+        el,
+    })).filter((reward) => reward.id && Number.isFinite(reward.points));
+}
+
+function pointNoun(count) {
+    return Math.abs(Number(count)) === 1 ? 'point' : 'points';
+}
+
+function formatRewardNames(rewards, conjunction) {
+    const names = rewards.map((reward) => reward.name).filter(Boolean);
+    if (names.length <= 1) return names[0] || '';
+    if (names.length === 2) return `${names[0]} ${conjunction} ${names[1]}`;
+    return `${names.slice(0, -1).join(', ')}, ${conjunction} ${names[names.length - 1]}`;
+}
+
+let accountOrdersCache = null;
+let accountOrdersPromise = null;
+
+function escapeHtml(str) {
+    return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function formatOrderDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return String(dateStr);
+    return d.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function formatMoney(amount) {
+    const n = Number(amount);
+    if (!Number.isFinite(n)) return '$0.00';
+    return '$' + n.toFixed(2);
+}
+
+function formatStatus(status) {
+    const raw = String(status || 'processing').replace(/_/g, ' ');
+    return raw.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function formatInterval(weeks) {
+    const n = parseInt(weeks, 10);
+    if (!Number.isFinite(n) || n < 1) return null;
+    return n === 1 ? 'Every 1 week' : `Every ${n} weeks`;
+}
+
+function switchAccountTab(tabName) {
+    const tabs = document.querySelectorAll('[data-account-tab]');
+    const panels = document.querySelectorAll('[data-account-panel]');
+    tabs.forEach((btn) => {
+        const active = btn.getAttribute('data-account-tab') === tabName;
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        if (active) {
+            btn.className = 'account-tab flex-1 min-w-[7rem] px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors bg-white text-sage-700 shadow-sm border border-sage-200';
+        } else {
+            btn.className = 'account-tab flex-1 min-w-[7rem] px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors text-stone-600 hover:text-sage-700';
+        }
+    });
+    panels.forEach((panel) => {
+        const match = panel.getAttribute('data-account-panel') === tabName;
+        panel.classList.toggle('hidden', !match);
+    });
+
+    if (tabName === 'orders') {
+        loadAccountOrders()
+            .then((orders) => renderOrdersList(orders))
+            .catch((err) => showOrdersError(err.message));
+    } else if (tabName === 'subscriptions') {
+        loadAccountOrders()
+            .then((orders) => renderSubscriptionsList(orders.filter((o) => o.is_subscription)))
+            .catch((err) => showSubscriptionsError(err.message));
+    }
+}
+
+function initAccountTabs() {
+    document.querySelectorAll('[data-account-tab]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            switchAccountTab(btn.getAttribute('data-account-tab'));
+        });
+    });
+}
+
+async function loadAccountOrders() {
+    if (accountOrdersCache) return accountOrdersCache;
+    if (accountOrdersPromise) return accountOrdersPromise;
+
+    accountOrdersPromise = (async () => {
+        const res = await fetch('/api/customer-orders.php', {
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) {
+            throw new Error(json.message || 'Unable to load orders.');
+        }
+        accountOrdersCache = Array.isArray(json.data?.orders) ? json.data.orders : [];
+        return accountOrdersCache;
+    })();
+
+    try {
+        return await accountOrdersPromise;
+    } catch (err) {
+        accountOrdersPromise = null;
+        throw err;
+    }
+}
+
+function buildOrderRow(order, { subscriptionView = false } = {}) {
+    const orderNumber = escapeHtml(order.order_number || '');
+    const trackHref = `/track?order=${encodeURIComponent(order.order_number || '')}`;
+    const orderKey = encodeURIComponent(order.order_number || '');
+    const intervalLabel = formatInterval(order.subscription_interval);
+    const tracking = order.tracking_number
+        ? `<p class="text-xs text-stone-500 mt-1">Tracking: ${escapeHtml(order.tracking_number)}</p>`
+        : '';
+    const subBadge = order.is_subscription && !subscriptionView
+        ? `<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-sage-50 text-sage-700 border border-sage-200">Subscription</span>`
+        : '';
+    const intervalLine = subscriptionView && intervalLabel
+        ? `<p class="text-xs text-sage-700 mt-1">${escapeHtml(intervalLabel)}</p>`
+        : '';
+
+    return `
+        <div class="border border-stone-200 rounded-xl p-4 bg-stone-50/50">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div class="min-w-0">
+                    <p class="font-mono font-semibold text-stone-800 text-sm sm:text-base">${orderNumber}${subBadge}</p>
+                    <p class="text-sm text-stone-500 mt-1">${escapeHtml(formatOrderDate(order.date))} · ${escapeHtml(formatMoney(order.total))}</p>
+                    <p class="text-sm text-stone-600 mt-1">${escapeHtml(formatStatus(order.status))}</p>
+                    ${tracking}
+                    ${intervalLine}
+                </div>
+                <div class="flex flex-wrap gap-2 sm:justify-end">
+                    <a href="${trackHref}" class="inline-flex items-center px-3 py-2 text-sm font-semibold rounded-lg border border-stone-300 text-stone-700 hover:bg-white transition-colors">Track</a>
+                    <button type="button" class="reorder-btn inline-flex items-center px-3 py-2 text-sm font-semibold rounded-lg bg-sage-600 text-white hover:bg-sage-700 transition-colors" data-order="${orderKey}">Reorder</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function bindReorderButtons(container) {
+    if (!container) return;
+    container.querySelectorAll('.reorder-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const orderNumber = decodeURIComponent(btn.getAttribute('data-order') || '');
+            const order = (accountOrdersCache || []).find((o) => o.order_number === orderNumber);
+            const items = order && Array.isArray(order.items) ? order.items : [];
+            if (!items.length) {
+                btn.textContent = 'No items';
+                setTimeout(() => { btn.textContent = 'Reorder'; }, 1800);
+                return;
+            }
+            const cart = window.cartManager;
+            if (!cart || typeof cart.reorderItems !== 'function') {
+                try {
+                    const stored = JSON.parse(localStorage.getItem('bedda_cart') || '[]');
+                    items.forEach((item) => {
+                        if (!item.product) return;
+                        const qty = Math.max(1, parseInt(item.quantity || item.qty || 1, 10) || 1);
+                        const existing = stored.find((s) => s.product === item.product);
+                        if (existing) {
+                            existing.quantity = (existing.quantity || 1) + qty;
+                        } else {
+                            stored.push({
+                                product: item.product,
+                                price: parseFloat(item.price) || 0,
+                                quantity: qty,
+                                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                            });
+                        }
+                    });
+                    localStorage.setItem('bedda_cart', JSON.stringify(stored));
+                    location.href = '/products?openCart=1';
+                } catch (e) {
+                    btn.textContent = 'Failed';
+                    setTimeout(() => { btn.textContent = 'Reorder'; }, 1800);
+                }
+                return;
+            }
+            const added = cart.reorderItems(items, { openCart: true });
+            const original = 'Reorder';
+            btn.textContent = added > 0 ? 'Added!' : 'No items';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.disabled = false;
+            }, 2000);
+        });
+    });
+}
+
+function renderOrdersList(orders) {
+    const loading = document.getElementById('orders-loading');
+    const empty = document.getElementById('orders-empty');
+    const error = document.getElementById('orders-error');
+    const list = document.getElementById('orders-list');
+    if (loading) loading.classList.add('hidden');
+    if (error) error.classList.add('hidden');
+
+    if (!orders || orders.length === 0) {
+        if (list) list.classList.add('hidden');
+        if (empty) empty.classList.remove('hidden');
+        return;
+    }
+
+    if (empty) empty.classList.add('hidden');
+    if (list) {
+        list.innerHTML = orders.map((o) => buildOrderRow(o)).join('');
+        list.classList.remove('hidden');
+        bindReorderButtons(list);
+    }
+}
+
+function renderSubscriptionsList(orders) {
+    const loading = document.getElementById('subscriptions-loading');
+    const empty = document.getElementById('subscriptions-empty');
+    const error = document.getElementById('subscriptions-error');
+    const list = document.getElementById('subscriptions-list');
+    if (loading) loading.classList.add('hidden');
+    if (error) error.classList.add('hidden');
+
+    if (!orders || orders.length === 0) {
+        if (list) list.classList.add('hidden');
+        if (empty) empty.classList.remove('hidden');
+        return;
+    }
+
+    if (empty) empty.classList.add('hidden');
+    if (list) {
+        list.innerHTML = orders.map((o) => buildOrderRow(o, { subscriptionView: true })).join('');
+        list.classList.remove('hidden');
+        bindReorderButtons(list);
+    }
+}
+
+function showOrdersError(message) {
+    const loading = document.getElementById('orders-loading');
+    const error = document.getElementById('orders-error');
+    if (loading) loading.classList.add('hidden');
+    if (error) {
+        error.textContent = message || 'Unable to load orders.';
+        error.classList.remove('hidden');
+    }
+}
+
+function showSubscriptionsError(message) {
+    const loading = document.getElementById('subscriptions-loading');
+    const error = document.getElementById('subscriptions-error');
+    if (loading) loading.classList.add('hidden');
+    if (error) {
+        error.textContent = message || 'Unable to load subscriptions.';
+        error.classList.remove('hidden');
+    }
+}
+
+// Populate account page from current user data
+function populateAccountPage() {
+    const skeleton = document.getElementById('account-skeleton');
+    const content = document.getElementById('account-content');
+    const tabs = document.getElementById('account-tabs');
+    if (skeleton) skeleton.classList.add('hidden');
+    if (content) content.classList.remove('hidden');
+    if (tabs) tabs.classList.remove('hidden');
+
+    const user = window.currentUser;
+    if (!user) return;
+    const first = user.first_name || '';
+    const last = user.last_name || '';
+    const initials = ((first[0] || '') + (last[0] || '')).toUpperCase();
+    const points = Math.max(0, parseInt(user.points, 10) || 0);
+    const shelf = accountRewardCards();
+    const ready = shelf.filter((reward) => points >= reward.points);
+    const upcoming = shelf.find((reward) => reward.points > points) || null;
+    const sameCost = upcoming ? shelf.filter((reward) => reward.points === upcoming.points) : [];
+    const readyText = ready.length
+        ? `Ready now: ${formatRewardNames(ready, 'and')}.`
+        : 'No reward is ready yet.';
+    const nextNames = sameCost.length ? formatRewardNames(sameCost, 'or') : 'Minty Lip Balm';
+    const nextCost = upcoming ? upcoming.points : 949;
+    const remaining = upcoming ? upcoming.points - points : 0;
+    const noteText = upcoming
+        ? `${points} ${pointNoun(points)}. ${remaining} more ${pointNoun(remaining)} until ${nextNames}, which costs ${nextCost} points. ${readyText}`
+        : `${points} ${pointNoun(points)}. ${readyText}`;
+
+    document.getElementById('account-welcome').textContent = first ? `Welcome, ${first}` : 'My Account';
+    document.getElementById('account-name').textContent = first && last ? `${first} ${last}` : (first || 'Bedda Member');
+    document.getElementById('account-email').textContent = user.email || '';
+    document.getElementById('account-points').textContent = `${points} ${pointNoun(points)}`;
+    document.getElementById('account-avatar').textContent = initials || 'B';
+
+    const kicker = document.getElementById('account-reward-kicker');
+    if (kicker) kicker.textContent = upcoming ? 'Next reward' : 'Every reward is ready';
+    document.getElementById('account-discount').textContent = upcoming ? nextNames : 'Sensitive Skin Set';
+    const rewardNote = document.getElementById('account-reward-note');
+    if (rewardNote) rewardNote.textContent = noteText;
+    const progress = document.getElementById('account-reward-progress');
+    if (progress) {
+        progress.max = nextCost;
+        progress.value = upcoming ? Math.min(points, nextCost) : nextCost;
+        progress.textContent = upcoming
+            ? `${points} of ${nextCost} points toward ${nextNames}`
+            : `${points} points. Every reward is ready, including the Sensitive Skin Set at 949 points.`;
+    }
+
+    shelf.forEach((reward) => {
+        const stateEl = reward.el.querySelector('.reward-state');
+        const gap = reward.points - points;
+        let state = 'locked';
+        let stateText = `Not yet. Needs ${gap} more ${pointNoun(gap)}.`;
+        if (points >= reward.points) {
+            state = 'ready';
+            stateText = 'Ready. Your balance covers this item.';
+        } else if (upcoming && reward.points === upcoming.points) {
+            state = 'next';
+            stateText = `Next. Needs ${gap} more ${pointNoun(gap)}.`;
+        }
+        reward.el.setAttribute('data-state', state);
+        if (stateEl) stateEl.textContent = stateText;
+    });
+
+    // Prefetch orders so Orders/Subscriptions tabs feel instant
+    loadAccountOrders().catch(() => {
+        /* errors shown when those tabs open */
+    });
+}
+
+initAccountTabs();
+
+// Logout button on this page
+document.getElementById('page-logout-btn').addEventListener('click', () => {
+    if (typeof logoutUser === 'function') logoutUser();
+});
+
+// Wait for auth check, then populate
+// main.js initAuth runs on DOMContentLoaded; we wait a tick then check
+function waitForAccountAuth() {
+    return new Promise((resolve) => {
+        const finish = () => resolve(!!window.currentUser);
+        if (window.beddaAuthReady) {
+            finish();
+            return;
+        }
+        document.addEventListener('bedda-auth-ready', finish, { once: true });
+        setTimeout(finish, 4000);
+    });
+}
+
+function showAccountSignIn(register) {
+    const skeleton = document.getElementById('account-skeleton');
+    const gate = document.getElementById('account-signed-out');
+    const logout = document.getElementById('page-logout-btn');
+    if (skeleton) skeleton.classList.add('hidden');
+    if (gate) gate.classList.remove('hidden');
+    if (logout) logout.classList.add('hidden');
+    if (typeof openRewardsSignIn === 'function') openRewardsSignIn({ register: !!register });
+}
+
+document.getElementById('account-rewards-signin')?.addEventListener('click', () => showAccountSignIn(false));
+document.getElementById('account-rewards-register')?.addEventListener('click', () => showAccountSignIn(true));
+
+window.beddaOnSignedIn = function () {
+    document.getElementById('account-signed-out')?.classList.add('hidden');
+    document.getElementById('page-logout-btn')?.classList.remove('hidden');
+    populateAccountPage();
+};
+
+waitForAccountAuth().then((ok) => {
+    if (!ok) {
+        const skeleton = document.getElementById('account-skeleton');
+        const gate = document.getElementById('account-signed-out');
+        const logout = document.getElementById('page-logout-btn');
+        if (skeleton) skeleton.classList.add('hidden');
+        if (gate) gate.classList.remove('hidden');
+        if (logout) logout.classList.add('hidden');
+        return;
+    }
+    populateAccountPage();
+
+    // Deep-link: /account?tab=orders|subscriptions
+    const tab = new URLSearchParams(location.search).get('tab');
+    if (tab === 'orders' || tab === 'subscriptions') {
+        switchAccountTab(tab);
+    }
+});
+</script>
+
+</body>
+</html>

@@ -435,7 +435,7 @@ function bedda_holiday_sets(): array
         'holiday basket' => [
             'sku' => 'BEDDA-SET-HOLIDAY-BASKET',
             'name' => 'Holiday Basket',
-            'price' => 89.99,
+            'price' => 89.00,
             'components' => [
                 'Uni Exfoliating Soap',
                 'The Massager Soap',

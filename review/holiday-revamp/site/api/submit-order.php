@@ -1007,11 +1007,9 @@ if (!empty($stripePaymentIntentId) && function_exists('getStripe')) {
                 $verifiedPaymentStatus = $verifiedPaymentIntent->status;
                 $verifiedAmount = $verifiedPaymentIntent->amount; // in cents
                 error_log("[BEDDA] Verified PI {$stripePaymentIntentId}: status={$verifiedPaymentStatus}, amount={$verifiedAmount}");
-            } elseif (strpos($stripePaymentIntentId, 'seti_') === 0) {
-                // Verify SetupIntent (for subscriptions)
-                $si = $stripe->setupIntents->retrieve($stripePaymentIntentId);
-                $verifiedPaymentStatus = $si->status;
-                error_log("[BEDDA] Verified SI {$stripePaymentIntentId}: status={$verifiedPaymentStatus}");
+            } else {
+                error_log("[BEDDA] REJECTED: Not a PaymentIntent: {$stripePaymentIntentId}");
+                orderErrorResponse('Payment was not successful. Please check your payment details and try again.', 400);
             }
         } catch (\Stripe\Exception\ApiErrorException $e) {
             error_log("[BEDDA] Stripe verification failed: " . $e->getMessage());
@@ -1021,7 +1019,7 @@ if (!empty($stripePaymentIntentId) && function_exists('getStripe')) {
 }
 
 // For paid orders, MUST verify status is actually succeeded
-if ($verifiedPaymentStatus !== 'succeeded') {
+if (strpos((string) $stripePaymentIntentId, 'pi_') !== 0 || $verifiedPaymentStatus !== 'succeeded' || $verifiedAmount < 50) {
     // Payment not successful - don't save order
     error_log("[BEDDA] REJECTED: Payment status is '{$verifiedPaymentStatus}', not succeeded. Order {$orderNumber} NOT saved.");
     orderErrorResponse('Payment was not successful. Please check your payment details and try again.', 400);

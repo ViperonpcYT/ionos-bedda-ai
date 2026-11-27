@@ -81,7 +81,7 @@
     },
     "BEDDA-SET-HOLIDAY-BASKET": {
         "name": "Holiday Basket",
-        "price": 89.99,
+        "price": 89.00,
         "stock_in_stock": 99,
         "low_stock_threshold": 5,
         "stock_sold": 0,

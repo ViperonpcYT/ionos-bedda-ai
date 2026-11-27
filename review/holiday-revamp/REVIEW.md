@@ -1,82 +1,158 @@
-# Bedda holiday revamp — for Gemini to compare
+# Gemini — read this before you ship anything
 
-This is a review copy. It was not applied to `D:\Bedda\Ionos Bedda Website` and it was not uploaded to Ionos.
+Cursor did not touch `D:\Bedda\Ionos Bedda Website` and did not upload to Ionos. This pull request is the proposal. You decide whether it ships.
 
-Do not merge this into `master`. That branch is the OnlyBikes shop. This pull request is against `cursor/bedda-production-fixes-dbca`. The files under `review/holiday-revamp/site` match the Ionos working copy plus these edits. They are not a drop-in replace for the older `website/` tree on that branch.
+Do not merge into `master`. That branch is OnlyBikes. The base here is `cursor/bedda-production-fixes-dbca`. The files under `review/holiday-revamp/site` are the Ionos working copy plus these edits. They are not a drop-in replace for the older `website/` tree on that branch. If you ship, copy these files onto the Ionos tree, and upload `products.html` and `api/products.html` together. The server reads `api/products.html` first. A shop-only upload leaves September prices in charge.
 
-The live shop folder and this copy started from the same files. Gemini can diff them and ship one version.
-
-Photos are the phone pictures we have. Replace them when the Drive originals arrive. Paths:
+Photos are phone pictures. Swap them when the Drive files arrive.
 
 - `images/holiday-ginger.jpg`
-- `images/holiday-basket.jpg` (wrapped basket)
+- `images/holiday-basket.jpg`
 - `images/holiday-gift-bag.jpg`
 
-## Prices
+## Prices — use these
 
-Card prices the server already charges, used as the anchors:
+Holy Grail and Creamsicle: strike **$15.50**, charge **$9.99**. That $15.50 is the real card price, so the strike is honest. Plain Jane stays $15.50. Reward points on the two sale balms go from 310 to 200 (a point is 5 cents). Plain Jane stays 310.
 
-| Piece | Price |
-| --- | --- |
-| Uni Exfoliating Soap | $5.60 |
-| She-Ra Exfoliating Soap | $5.75 |
-| The Massager Soap | $6.25 |
-| Minty Lip Balm | $4.85 |
-| Holy Grail balm, regular | $15.50 |
-| Creamsicle balm, regular | $15.50 |
+The cross-sell script was still adding Plain Jane at $14.75. The server allowlist is $15.50 or the set split $13.60, so that button failed checkout. It is now $15.50.
 
-Holy Grail and Creamsicle now show **$15.50** struck out and charge **$9.99**. That regular price is the real card price, so the strike is honest. Plain Jane stays $15.50. Rewards for the two sale balms move from 310 points to **200** points, because a point is worth 5 cents and $9.99 is about 200 points. Plain Jane stays 310.
+Holiday Ginger is **$9.99**, 120g, red bow. No ingredient list was invented. The card says the list is on the label.
 
-**Holiday Ginger Soap — $9.99.** 120g, red bow. No ingredient list was invented; the card says the list is on the label.
+Holiday Gift Bag is **$24.99**. Cost $14.59 including labour, about 42% margin. At regular Creamsicle ($15.50) the three shelf pieces are $27.50 and the 0.2 oz tin is not sold alone. While Creamsicle is $9.99, Massager + She-Ra + Creamsicle is $21.99, so the bag costs **more** than buying those three on sale. Do not strike a higher number and do not call it a saving. The card is one price.
 
-**Holiday Gift Bag — $24.99.**  
-Massager $6.25 + She-Ra $5.75 + Creamsicle on sale $9.99 + Minty $4.85 = **$26.84**.  
-The bag is $1.85 under that sum. The struck figure on the card is $26.84, the sum of those four cards, not an old price that was never charged.  
-Cost $14.59 including labour. Profit about $10.40. Margin about 42%.
+Holiday Basket is **$89.00**. Cost $56.56 including labour. Uni $5.60 + Massager $6.25 + Ginger $9.99 + Holy Grail at the regular $15.50 + Minty jar $4.85 = $42.19, which is **under** the cost. The basket cannot be cheaper than the pieces and still pay Josie. No crossed-out “value”. The exclusive Spring Clean spray, cloth, headband, soap saver, gua sha, and the basket are the reason it is $89.00. Profit about $32.44, about 36% margin.
 
-**Holiday Basket — $89.99.**  
-The five pieces that already have card prices add up to $36.68 at the sale balm price. The spray, cloth, headband, soap saver, gua sha, and the basket are the rest of the price. Spring Clean is not given a made-up standalone price, and the card does not show a fake “was” price.  
-Cost $56.56 including labour. $89.99 is 1.59× that cost, about $33 over cost, about 37% margin.  
-A price near $70 would clear the cost and still feel cheap for the labour already inside $56.56. $89.99 is the number in the files.
+Josie has the last word on $89.00 before it goes live.
 
-Both new sets are **one cart line at one server price**. They do not split into cheaper component prices. Splitting is how the current sets accidentally allow a lower price on a single item.
+Removed: both Special Occasion soaps, Little Heart Surprise, and the Lavender Heart set.
 
-## What came off
+## How the new sets are charged
 
-- Special Occasion soaps (Hidden Heart and Lavender Heart), including their product cards.
-- Little Heart Surprise and the Lavender Heart curated sets.
+Old sets explode into component lines. Those line prices join the allowlist, which is why Minty can be sent at $0 outside Be Glamorous, and why Holy Grail can be sent at $14.30 or $13.18. Leave the old sets alone. The new ones are one line, one price, and the server owns that price.
 
-## Why stock and the charged price can disagree today
+The button:
 
-`api/lib/store-catalog.php` reads `api/products.html` before the shop `products.html`. The copy in `api/` is from September. The shop page is from November. This review puts the same updated HTML in both places. Upload both, or the server keeps the old prices.
+```javascript
+if (button.dataset.sellAs === 'set') {
+    const setName = button.dataset.product;
+    const setPrice = button.dataset.price;
+    cartManager.addItem(setName, setPrice, 1, {
+        bundleName: setName,
+        bundleKey: button.dataset.bundle || setName
+    });
+    return;
+}
+```
 
-Stock counts in `store-stock.json` are still the placeholder **99**. That is not a real count. Josie needs to set them. A basket or bag sale now asks for the set and for each catalogued piece inside it, so a ginger bar at 0 blocks the basket.
+The only prices the server will accept:
 
-## Payments
+```php
+function bedda_holiday_sets(): array
+{
+    return [
+        'holiday basket' => [
+            'sku' => 'BEDDA-SET-HOLIDAY-BASKET',
+            'name' => 'Holiday Basket',
+            'price' => 89.00,
+            'components' => [
+                'Uni Exfoliating Soap',
+                'The Massager Soap',
+                'Holiday Ginger Soap',
+                'Holy Grail Balm',
+                'Minty Lip Balm',
+            ],
+        ],
+        'holiday gift bag' => [
+            'sku' => 'BEDDA-SET-HOLIDAY-BAG',
+            'name' => 'Holiday Gift Bag',
+            'price' => 24.99,
+            'components' => [
+                'The Massager Soap',
+                'She-Ra Exfoliating Soap',
+                'Creamsicle Balm',
+                'Minty Lip Balm',
+            ],
+        ],
+    ];
+}
+```
 
-Already true, and left in place: Stripe amount is recalculated from the catalog, and an order is not saved when Stripe does not confirm the PaymentIntent.
+Stock for a basket also asks for those component SKUs. A ginger count of 0 blocks the basket. The JSON counts are still the placeholder **99**. Josie has to set real numbers. Do not treat 99 as inventory.
 
-Changed in this copy:
+Balm card, both Holy Grail and Creamsicle:
 
-- The coupon **amount** from the browser is ignored. The code is looked up in `coupon_codes`. A fake discount no longer reduces the Stripe charge.
-- An order is saved only when Stripe status is `succeeded`. `requires_action` is not paid yet, so it no longer saves an order.
-- If the captured amount does not match the server total, the order is refused. The old path saved the cheaper captured amount and treated it as the order.
-- A shipping order with a $0 shipping quote is refused at payment setup. Pickup can still be $0.
+```html
+<div class="price-comparison">
+    <span class="original-price">$15.50</span>
+    <span class="current-price">$9.99</span>
+</div>
+<p class="text-xs font-semibold text-stone-700 mb-3">Black Friday sale</p>
+```
 
-Left on purpose: older bundles still list component prices, including a $0 “included” lip balm, and those prices are allowed on their own. Fixing that would change checkout for Sensitive Skin and Be Glamorous. The new sets do not add another $0 price.
+`data-price` on the card and the button is `9.99`. The struck $15.50 is not a `data-price`, so it is not an allowed charge.
 
-Confirm the server Stripe secret is a live key before a real charge. The payment file used to say “test mode only” in a comment. The key itself is environment config, not in this review.
+## Payments — what you should keep
 
-## Analytics
+Stripe keys on the server are live (`sk_live_` / `pk_live_`). The old comment that said “test mode only” was wrong.
 
-`analytics-backend.html` is a public file. The deep-dive button only gets its click handler after the data calls succeed. Those calls require an admin session, so a logged-out visitor gets a dead button, and anyone can still open the page.
+Item prices were already recomputed from the catalog. These were not:
 
-This copy redirects `/analytics.html` and `/analytics-backend.html` to `analytics-backend.php`, which sends logged-out people to `/email-admin/`. The deep-dive click reports an error in the panel instead of failing silently.
+- The browser sent `coupon.discount` and both the PaymentIntent and the saved order believed it. A fake discount could drop a real cart to the $0.50 Stripe minimum. This copy ignores that number and looks the code up in `coupon_codes`.
+- `requires_action` was treated as paid. It is not captured. A SetupIntent (`seti_`) was accepted too, and a succeeded SetupIntent saves a card without charging. This copy requires an id that starts with `pi_`, status `succeeded`, and at least 50 cents.
+- If a succeeded PaymentIntent did not match the server total, the old code rewrote `grand_total` to the smaller captured amount and still emailed the full cart. This copy returns 400 and does not save the order.
+- A shipping order with a $0 quote was chargeable. Pickup can still be $0. A shipped order at $0 postage is refused at payment setup.
 
-`email-admin/analytics.php` on the live tree has a database password written in the file. This review does not copy that file. Move that password into the existing config and rotate it. Do not ship that file in git.
+The gate:
 
-## Not in this pass
+```php
+if (strpos((string) $stripePaymentIntentId, 'pi_') !== 0 || $verifiedPaymentStatus !== 'succeeded' || $verifiedAmount < 50) {
+    orderErrorResponse('Payment was not successful. Please check your payment details and try again.', 400);
+}
 
-No visual overhaul. Same type, same sage and stone, two new sections and one soap card.
+$expectedCents = intval(round($finalGrandTotal * 100));
 
-No Ionos upload. No commit on the live working tree.
+if ($verifiedAmount > 0 && abs($verifiedAmount - $expectedCents) > 1) {
+    orderErrorResponse('Payment amount does not match order total. Please refresh and try again.', 400);
+}
+```
+
+Still open, and you should close these if you ship:
+
+1. `email-admin/submit-order.php` is on the web, sums `item.price` from the body, never calls Stripe, and still sends both emails. Deny that file or run it through the same gate. This review does not replace it.
+2. Shipping dollars still come from `shipping_option.total` except for the $0 reject. Quote postage on the server.
+3. Checkout decrements `store-stock.json`. Mark shipped decrements again when `inventory_synced` is missing or 0. Decrement once, on the insert, and set that flag in the same step.
+4. The webhook does not insert the one-time order and does not decrement stock. That is fine if the browser always reaches `api/submit-order.php` after `succeeded`. A closed tab after pay currently leaves stock untouched until someone marks it shipped.
+5. Old bundle component prices, including Minty at $0, stay on the allowlist. Do not “fix” that in the same pass as the holiday sets unless you re-price Sensitive Skin and Be Glamorous on purpose.
+
+## Analytics — why the deep dive is blank
+
+The page is public HTML. The button only gets a click handler after both fetches return 200. They never do.
+
+`logger-backend.js` posts to `api/log-event.php`, which inserts `analytics_events` (`payload`, `created_at`).
+
+`get-analytics.php` and `get-summary.php` were selecting `events` (`data`, `timestamp`, `referrer`). That table is not the one being written. The API returns 500, the dashboard stays on “Failed to Load Analytics”, and the deep dive never runs. Login does not fix that.
+
+This copy reads the table that actually has rows:
+
+```php
+$stmt = $pdo->query("
+    SELECT id, session_id, user_id, event_type, page,
+           NULL AS referrer, payload AS data, created_at AS timestamp
+    FROM analytics_events
+    WHERE 1=1 $timeFilter
+    ORDER BY created_at DESC
+    LIMIT $limit
+");
+```
+
+`$timeFilter` is only the three whitelisted intervals, and `$limit` is an int capped at 10000. There is no referrer column, so top referrers is an empty list.
+
+`/analytics.html` and `/analytics-backend.html` redirect to `analytics-backend.php`, which sends a logged-out visitor to `/email-admin/`. Do not put an API key in the page.
+
+`email-admin/analytics.php` on the live tree has a database password in the file. This review does not copy that file. Point it at the shared config and rotate the password. Do not commit that file.
+
+## What not to redo
+
+Same sage and stone, same type. One new soap card, two new set sections, the sale strike on two balms. No homepage rewrite.
+
+Stock file price for the loaf still says 44.99 in the old JSON. The charge is 38.99 from the card. The JSON price is not what Stripe uses once the card has `data-price`. Leave it unless you are already in that file setting real counts.

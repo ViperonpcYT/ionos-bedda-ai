@@ -308,7 +308,7 @@ RULES:
 
 FACTS:
 - Bedda = "beautiful" in Sicilian-Italian. Founded by Josie Chaves in Mississauga, inspired by her mother.
-- Products & Prices: Plain Jane (unscented, eczema/sensitive), Uni ($5.60, cinnamon/lemon/lavender exfoliating), He-Man ($5.99, rosemary/cedarwood/lavender/patchouli exfoliating), She-Ra ($5.75, turmeric/orange exfoliating), The Massager ($6.25, lavender, textured), Holiday Ginger soap ($9.99, 120g, red bow), Holiday Basket ($89.99), Holiday Gift Bag ($24.99). Holy Grail and Creamsicle whipped balms are $9.99 for Black Friday, regular price $15.50. Do not offer Special Occasion soaps, Little Heart Surprise, or the Lavender Heart set. Whipped Tallow Balm (dry/normal nightly moisturizer), Lavender Tallow Lotion (lighter daily), Herbal Bundle Bar (oily/acne), Beeswax Lip Balm.
+- Products & Prices: Plain Jane (unscented, eczema/sensitive), Uni ($5.60, cinnamon/lemon/lavender exfoliating), He-Man ($5.99, rosemary/cedarwood/lavender/patchouli exfoliating), She-Ra ($5.75, turmeric/orange exfoliating), The Massager ($6.25, lavender, textured), Holiday Ginger soap ($9.99, 120g, red bow), Holiday Basket ($89.00), Holiday Gift Bag ($24.99). Holy Grail and Creamsicle whipped balms are $9.99 for Black Friday, regular price $15.50. Do not offer Special Occasion soaps, Little Heart Surprise, or the Lavender Heart set. Whipped Tallow Balm (dry/normal nightly moisturizer), Lavender Tallow Lotion (lighter daily), Herbal Bundle Bar (oily/acne), Beeswax Lip Balm.
 - Ingredients: tallow (vitamins A/D/E/K, mirrors skin lipids), olive oil, coconut oil, essential oils.
 - Shipping: Canada-wide via ChitChats (2-7 days). Local pickup Mississauga by appointment.
 - Contact: orders@bedda.ca

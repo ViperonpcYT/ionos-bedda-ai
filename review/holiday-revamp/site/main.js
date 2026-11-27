@@ -2199,9 +2199,9 @@ class CrossSellManager {
         // Prices/names synced with products.html catalog
         const productDatabase = {
             'Holy Grail Balm': { price: '15.50', image: 'holy grail.jpg', benefit: 'Repairs dry skin overnight' },
-            'Plain Jane Balm': { price: '14.75', image: 'Plane Jane Face body balm.jpg', benefit: 'Soothes sensitive skin instantly', displayName: 'Plain Jane Face Balm' },
-            'Plain Jane Face Balm': { price: '14.75', image: 'Plane Jane Face body balm.jpg', benefit: 'Soothes sensitive skin instantly' },
-            'Plain Jane Face & Body Balm': { price: '14.75', image: 'Plane Jane Face body balm.jpg', benefit: 'Soothes sensitive skin instantly', displayName: 'Plain Jane Face Balm' },
+            'Plain Jane Balm': { price: '15.50', image: 'Plane Jane Face body balm.jpg', benefit: 'Soothes sensitive skin instantly', displayName: 'Plain Jane Face Balm' },
+            'Plain Jane Face Balm': { price: '15.50', image: 'Plane Jane Face body balm.jpg', benefit: 'Soothes sensitive skin instantly' },
+            'Plain Jane Face & Body Balm': { price: '15.50', image: 'Plane Jane Face body balm.jpg', benefit: 'Soothes sensitive skin instantly', displayName: 'Plain Jane Face Balm' },
             'Uni Exfoliating Soap': { price: '5.60', image: 'Uni Soap.jpg', benefit: 'Smooths rough patches' },
             'Plain Jane Soap': { price: '4.05', image: 'Plain Jane Soap.jpg', benefit: 'Gentlest cleanse for sensitive types' },
             'Plain Jane Soap Loaf': { price: '38.99', image: 'Plain Jane Soap.jpg', benefit: 'Unscented bars for the whole family' },
